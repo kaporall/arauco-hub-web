@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matías Peralta Dev — Soluciones Digitales · Aimogasta · La Rioja</title>
+    <meta name="description" content="Desarrollador web, apps móviles, IA, ciberseguridad y soluciones digitales para negocios en Aimogasta, La Rioja y todo Argentina.">
+    <meta property="og:title" content="Matías Peralta Dev — Soluciones Digitales">
+    <meta property="og:description" content="Páginas web, apps PWA, delivery GPS, IA, ciberseguridad y más. Precios en pesos, soporte local.">
+    <meta property="og:type" content="website">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Share+Tech+Mono&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+    /* ══════════════════════════════════════════════════════
+       VARIABLES & RESET
+    ══════════════════════════════════════════════════════ */
+    :root {
+        --bg:       #05080d;
+        --bg2:      #0a0e18;
+        --surface:  rgba(15,22,35,0.95);
+        --surface2: rgba(20,28,45,0.9);
+        --border:   rgba(255,255,255,0.07);
+        --gold:     #c8a84b;
+        --gold2:    #f0d878;
+        --blue:     #58a6ff;
+        --blue2:    #a0c8ff;
+        --green:    #3fb950;
+        --ember:    #f0883e;
+        --purple:   #bc8cff;
+        --red:      #ea4335;
+        --teal:     #00b4d8;
+        --text:     #e6edf3;
+        --text2:    #c9d1d9;
+        --muted:    #7d8590;
+        --glow-gold: rgba(200,168,75,0.2);
+        --glow-blue: rgba(88,166,255,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+        font-family: 'Nunito', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    /* Fondo global */
+    body::before {
+        content: '';
+        position: fixed; inset: 0;
+        background:
+            radial-gradient(ellipse at 20% 20%, rgba(200,168,75,0.04) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 70%, rgba(88,166,255,0.04) 0%, transparent 50%),
+            repeating-linear-gradient(
+                -45deg,
+                transparent 0, transparent 80px,
+                rgba(255,255,255,0.008) 80px, rgba(255,255,255,0.008) 81px
+            );
+        pointer-events: none; z-index: 0;
+    }
+
+    /* ── UTILIDADES ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section-eyebrow {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.72rem; letter-spacing: 4px;
+        color: var(--gold); text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+    .section-title {
+        font-family: 'Cinzel', serif;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 700; color: var(--text);
+        line-height: 1.15; margin-bottom: 16px;
+    }
+    .section-title span { color: var(--gold); }
+    .section-sub {
+        font-size: 1.05rem; color: var(--muted);
+        max-width: 600px; line-height: 1.7;
+    }
+
+    /* Fade-in animation */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════════════════════════════
+       NAVBAR
+    ══════════════════════════════════════════════════════ */
+    .nav {
+        position: fixed; top: 0; left: 0; right: 0;
+        z-index: 1000;
+        background: rgba(5,8,13,0.92);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+        transition: all 0.3s;
+    }
+
+    .nav-inner {
+        max-width: 1100px; margin: 0 auto;
+        display: flex; align-items: center;
+        justify-content: space-between;
+        height: 64px;
+    }
+
+    .nav-brand {
+        font-family: 'Cinzel', serif;
+        font-size: 1.1rem; font-weight: 700;
+        color: var(--gold2);
+        text-decoration: none;
+        text-shadow: 0 0 20px var(--glow-gold);
+        letter-spacing: 1px;
+    }
+
+    .nav-brand small {
+        display: block;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.55rem; color: var(--muted);
+        letter-spacing: 3px; font-weight: 400;
+        margin-top: 1px;
+    }
+
+    .nav-links {
+        display: flex; gap: 32px; list-style: none;
+    }
+
+    .nav-links a {
+        font-size: 0.82rem; font-weight: 700;
+        color: var(--muted); text-decoration: none;
+        letter-spacing: 1px; text-transform: uppercase;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+        background: var(--gold);
+        color: var(--bg) !important;
+        padding: 8px 18px; border-radius: 6px;
+        font-weight: 800 !important;
+        transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--gold2) !important; color: var(--bg) !important; }
+
+    .nav-toggle {
+        display: none;
+        background: none; border: none;
+        color: var(--text); cursor: pointer;
+        font-size: 1.4rem;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════════ */
+    .hero {
+        min-height: 100vh;
+        display: flex; align-items: center;
+        padding: 100px 24px 60px;
+        position: relative; overflow: hidden;
+    }
+
+    /* Stars layer */
+    .stars { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .star {
+        position: absolute; border-radius: 50%; background: white;
+        animation: twinkle linear infinite;
+    }
+    @keyframes twinkle { 0%,100%{opacity:.8} 50%{opacity:.1} }
+
+    .hero-inner {
+        position: relative; z-index: 1;
+        max-width: 1100px; margin: 0 auto; width: 100%;
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: 60px; align-items: center;
+    }
+
+    .hero-left {}
+
+    .hero-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(200,168,75,0.1);
+        border: 1px solid rgba(200,168,75,0.25);
+        border-radius: 20px; padding: 6px 16px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.72rem; color: var(--gold);
+        letter-spacing: 2px; margin-bottom: 20px;
+        animation: fadeDown 0.5s ease-out both;
+    }
+
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+
+    .hero-title {
+        font-family: 'Cinzel', serif;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 900; line-height: 0.92;
+        letter-spacing: 1px; margin-bottom: 20px;
+        animation: heroEntry 0.7s ease-out 0.1s both;
+    }
+
+    @keyframes heroEntry { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+
+    .hero-title .line1 { color: var(--gold2); text-shadow: 0 0 40px var(--glow-gold); display: block; }
+    .hero-title .line2 { color: rgba(255,255,255,0.85); display: block; }
+    .hero-title .line3 {
+        color: var(--blue); font-size: 0.55em;
+        letter-spacing: 6px; display: block;
+        margin-top: 6px; font-weight: 600;
+        text-shadow: 0 0 20px var(--glow-blue);
+    }
+
+    .hero-desc {
+        font-size: 1.05rem; color: var(--muted);
+        line-height: 1.75; margin-bottom: 32px;
+        max-width: 480px;
+        animation: heroEntry 0.7s ease-out 0.2s both;
+    }
+
+    .hero-desc strong { color: var(--text); }
+
+    .hero-btns {
+        display: flex; gap: 14px; flex-wrap: wrap;
+        animation: heroEntry 0.7s ease-out 0.3s both;
+    }
+
+    .btn-primary {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, #b8860b, var(--gold));
+        border: none; border-radius: 8px;
+        color: var(--bg); font-family: 'Nunito', sans-serif;
+        font-size: 0.9rem; font-weight: 900;
+        letter-spacing: 1px; cursor: pointer;
+        text-decoration: none; transition: all 0.3s;
+        box-shadow: 0 4px 20px rgba(200,168,75,0.3);
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        box-shadow: 0 6px 30px rgba(200,168,75,0.5);
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 14px 28px;
+        background: transparent;
+        border: 1px solid rgba(88,166,255,0.3);
+        border-radius: 8px; color: var(--blue);
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.9rem; font-weight: 800;
+        cursor: pointer; text-decoration: none;
+        transition: all 0.25s;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(88,166,255,0.08);
+        border-color: var(--blue);
+        transform: translateY(-1px);
+    }
+
+    /* Hero right — stats card */
+    .hero-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px; padding: 32px;
+        box-shadow: 0 0 60px rgba(200,168,75,0.06), inset 0 1px 0 rgba(200,168,75,0.08);
+        animation: heroEntry 0.7s ease-out 0.4s both;
+    }
+
+    .hero-card-title {
+        font-family: 'Cinzel', serif;
+        font-size: 0.8rem; letter-spacing: 3px;
+        color: var(--gold); margin-bottom: 24px;
+        text-transform: uppercase;
+    }
+
+    .stats-grid {
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: 16px; margin-bottom: 24px;
+    }
+
+    .stat-item {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+        border-radius: 10px; padding: 16px;
+        text-align: center;
+    }
+
+    .stat-num {
+        font-family: 'Cinzel', serif;
+        font-size: 2rem; font-weight: 700;
+        color: var(--gold2); display: block;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.68rem; color: var(--muted);
+        letter-spacing: 1px; margin-top: 4px;
+        text-transform: uppercase;
+    }
+
+    .tech-tags {
+        display: flex; flex-wrap: wrap; gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .tech-tag {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+        border-radius: 20px; padding: 4px 12px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.68rem; color: var(--muted);
+    }
+
+    .online-indicator {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.78rem; color: var(--green);
+        font-weight: 700;
+    }
+
+    .online-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--green);
+        animation: dotPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+        0%,100%{box-shadow:0 0 0 0 rgba(63,185,80,0.7)}
+        50%{box-shadow:0 0 0 5px rgba(63,185,80,0)}
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SERVICIOS
+    ══════════════════════════════════════════════════════ */
+    .servicios-section {
+        padding: 100px 0;
+        position: relative; z-index: 1;
+    }
+
+    .servicios-header { text-align: center; margin-bottom: 60px; }
+    .servicios-header .section-sub { margin: 0 auto; }
+
+    /* Tabs de categoría */
+    .cat-tabs {
+        display: flex; gap: 8px; flex-wrap: wrap;
+        justify-content: center; margin-bottom: 48px;
+    }
+
+    .cat-tab {
+        padding: 9px 20px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.82rem; font-weight: 700;
+        color: var(--muted); cursor: pointer;
+        transition: all 0.2s; letter-spacing: 0.5px;
+    }
+
+    .cat-tab:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+    .cat-tab.active { color: var(--bg); background: var(--gold); border-color: var(--gold); }
+
+    /* Grid de servicios */
+    .servicios-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .svc-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px; padding: 24px;
+        position: relative; overflow: hidden;
+        transition: all 0.3s; cursor: default;
+        display: none;
+    }
+
+    .svc-card.visible { display: block; }
+
+    .svc-card::before {
+        content: '';
+        position: absolute; top: 0; left: 0; right: 0;
+        height: 3px;
+    }
+
+    .svc-card.c-gold::before   { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+    .svc-card.c-blue::before   { background: linear-gradient(90deg, var(--blue), var(--blue2)); }
+    .svc-card.c-green::before  { background: linear-gradient(90deg, var(--green), #6be490); }
+    .svc-card.c-ember::before  { background: linear-gradient(90deg, var(--ember), #f0d060); }
+    .svc-card.c-purple::before { background: linear-gradient(90deg, var(--purple), #d0a0ff); }
+    .svc-card.c-teal::before   { background: linear-gradient(90deg, var(--teal), #60d8f0); }
+    .svc-card.c-red::before    { background: linear-gradient(90deg, var(--red), #ff6b55); }
+
+    .svc-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        border-color: rgba(255,255,255,0.12);
+    }
+
+    .svc-icon-wrap {
+        width: 48px; height: 48px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem; margin-bottom: 16px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+    }
+
+    .svc-name {
+        font-family: 'Cinzel', serif;
+        font-size: 1rem; font-weight: 700;
+        color: var(--text); margin-bottom: 8px;
+        line-height: 1.3;
+    }
+
+    .svc-desc {
+        font-size: 0.82rem; color: var(--muted);
+        line-height: 1.65; margin-bottom: 16px;
+    }
+
+    .svc-price {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.85rem; font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .svc-card.c-gold   .svc-price { color: var(--gold); }
+    .svc-card.c-blue   .svc-price { color: var(--blue); }
+    .svc-card.c-green  .svc-price { color: var(--green); }
+    .svc-card.c-ember  .svc-price { color: var(--ember); }
+    .svc-card.c-purple .svc-price { color: var(--purple); }
+    .svc-card.c-teal   .svc-price { color: var(--teal); }
+    .svc-card.c-red    .svc-price { color: var(--red); }
+
+    .svc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .svc-tag {
+        font-size: 0.65rem; font-weight: 700;
+        padding: 3px 8px; border-radius: 10px; border: 1px solid;
+        letter-spacing: 0.5px;
+    }
+
+    .svc-tag.local   { color: var(--green); border-color: rgba(63,185,80,0.3); background: rgba(63,185,80,0.08); }
+    .svc-tag.prov    { color: var(--blue);  border-color: rgba(88,166,255,0.3); background: rgba(88,166,255,0.08); }
+    .svc-tag.nac     { color: var(--gold);  border-color: rgba(200,168,75,0.3); background: rgba(200,168,75,0.08); }
+
+    /* CTA de contacto en cada card */
+    .svc-cta {
+        display: inline-flex; align-items: center; gap: 6px;
+        margin-top: 14px; padding: 8px 14px;
+        background: rgba(37,211,102,0.07);
+        border: 1px solid rgba(37,211,102,0.2);
+        border-radius: 6px; color: #25d366;
+        font-size: 0.75rem; font-weight: 800;
+        text-decoration: none; transition: 0.2s;
+    }
+
+    .svc-cta:hover { background: rgba(37,211,102,0.15); }
+
+    /* ══════════════════════════════════════════════════════
+       PORTFOLIO
+    ══════════════════════════════════════════════════════ */
+    .portfolio-section {
+        padding: 100px 0;
+        background: linear-gradient(180deg, transparent, rgba(200,168,75,0.02) 50%, transparent);
+        position: relative; z-index: 1;
+        border-top: 1px solid var(--border);
+    }
+
+    .portfolio-header { text-align: center; margin-bottom: 56px; }
+
+    .portfolio-grid {
+        display: grid; grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    .project-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px; overflow: hidden;
+        transition: all 0.3s;
+    }
+
+    .project-card:hover {
+        border-color: rgba(200,168,75,0.25);
+        transform: translateY(-4px);
+        box-shadow: 0 16px 50px rgba(0,0,0,0.4);
+    }
+
+    .project-card.featured {
+        grid-column: 1 / span 2;
+        display: grid; grid-template-columns: 1fr 1fr;
+    }
+
+    .project-visual {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 32px;
+        display: flex; align-items: center;
+        justify-content: center;
+        min-height: 180px;
+        position: relative; overflow: hidden;
+    }
+
+    .project-card.featured .project-visual {
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+        min-height: 280px;
+    }
+
+    .project-emoji {
+        font-size: 4rem;
+        filter: drop-shadow(0 0 20px rgba(200,168,75,0.3));
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+    .project-body { padding: 24px; }
+    .project-card.featured .project-body { padding: 32px; }
+
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+
+    .proj-tag {
+        font-size: 0.62rem; font-weight: 800; letter-spacing: 1px;
+        padding: 3px 8px; border-radius: 10px;
+        text-transform: uppercase;
+    }
+
+    .proj-tag.live    { background: rgba(63,185,80,0.12); color: var(--green); border: 1px solid rgba(63,185,80,0.2); }
+    .proj-tag.featured-t { background: rgba(200,168,75,0.12); color: var(--gold); border: 1px solid rgba(200,168,75,0.2); }
+    .proj-tag.tech    { background: rgba(88,166,255,0.08); color: var(--blue); border: 1px solid rgba(88,166,255,0.15); }
+
+    .project-name {
+        font-family: 'Cinzel', serif;
+        font-size: 1.25rem; font-weight: 700;
+        color: var(--text); margin-bottom: 8px;
+        line-height: 1.2;
+    }
+
+    .project-desc {
+        font-size: 0.85rem; color: var(--muted);
+        line-height: 1.65; margin-bottom: 20px;
+    }
+
+    .project-links { display: flex; gap: 10px; }
+
+    .proj-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 8px 16px; border-radius: 6px;
+        font-size: 0.78rem; font-weight: 800;
+        text-decoration: none; transition: 0.2s;
+    }
+
+    .proj-link.primary {
+        background: var(--gold); color: var(--bg);
+    }
+    .proj-link.primary:hover { background: var(--gold2); }
+
+    .proj-link.secondary {
+        background: transparent;
+        border: 1px solid var(--border); color: var(--muted);
+    }
+    .proj-link.secondary:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* ══════════════════════════════════════════════════════
+       PRECIOS
+    ══════════════════════════════════════════════════════ */
+    .precios-section {
+        padding: 100px 0;
+        position: relative; z-index: 1;
+        border-top: 1px solid var(--border);
+    }
+
+    .precios-header { text-align: center; margin-bottom: 56px; }
+
+    .precios-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 20px; align-items: start;
+    }
+
+    .precio-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px; padding: 32px;
+        position: relative; transition: 0.3s;
+    }
+
+    .precio-card.featured-price {
+        border-color: rgba(200,168,75,0.35);
+        background: linear-gradient(135deg, rgba(200,168,75,0.06), rgba(200,100,0,0.04));
+        transform: scale(1.02);
+        box-shadow: 0 0 40px rgba(200,168,75,0.1);
+    }
+
+    .precio-card:hover { transform: translateY(-4px); }
+    .precio-card.featured-price:hover { transform: scale(1.02) translateY(-4px); }
+
+    .precio-badge {
+        position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+        background: var(--gold); color: var(--bg);
+        font-size: 0.65rem; font-weight: 900;
+        letter-spacing: 2px; text-transform: uppercase;
+        padding: 4px 14px; border-radius: 20px;
+        white-space: nowrap;
+    }
+
+    .precio-plan {
+        font-family: 'Cinzel', serif;
+        font-size: 1.1rem; font-weight: 700;
+        color: var(--text); margin-bottom: 8px;
+    }
+
+    .precio-plan-sub {
+        font-size: 0.78rem; color: var(--muted);
+        margin-bottom: 20px;
+    }
+
+    .precio-num {
+        font-family: 'Cinzel', serif;
+        font-size: 2.2rem; font-weight: 900;
+        color: var(--gold2); margin-bottom: 4px;
+        line-height: 1;
+    }
+
+    .precio-period {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.7rem; color: var(--muted);
+        margin-bottom: 24px; letter-spacing: 1px;
+    }
+
+    .precio-divider {
+        height: 1px; background: var(--border); margin-bottom: 20px;
+    }
+
+    .precio-features { list-style: none; margin-bottom: 28px; }
+
+    .precio-features li {
+        display: flex; align-items: flex-start; gap: 10px;
+        font-size: 0.83rem; color: var(--text2);
+        padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+        line-height: 1.4;
+    }
+
+    .precio-features li:last-child { border-bottom: none; }
+    .precio-features li::before { content: '✓'; color: var(--green); font-weight: 900; flex-shrink: 0; }
+
+    .btn-precio {
+        display: block; width: 100%; padding: 12px;
+        border: none; border-radius: 8px; cursor: pointer;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.88rem; font-weight: 900;
+        text-align: center; text-decoration: none;
+        transition: 0.2s; letter-spacing: 0.5px;
+    }
+
+    .btn-precio.gold-btn { background: var(--gold); color: var(--bg); }
+    .btn-precio.gold-btn:hover { background: var(--gold2); }
+    .btn-precio.outline-btn {
+        background: transparent;
+        border: 1px solid var(--border); color: var(--muted);
+    }
+    .btn-precio.outline-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* ══════════════════════════════════════════════════════
+       SOBRE MÍ
+    ══════════════════════════════════════════════════════ */
+    .bio-section {
+        padding: 100px 0;
+        border-top: 1px solid var(--border);
+        position: relative; z-index: 1;
+    }
+
+    .bio-grid {
+        display: grid; grid-template-columns: 1fr 1.4fr;
+        gap: 60px; align-items: center;
+    }
+
+    .bio-left {}
+
+    .bio-avatar-wrap {
+        width: 200px; height: 200px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(200,168,75,0.2), rgba(88,166,255,0.15));
+        border: 2px solid rgba(200,168,75,0.3);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 5rem;
+        margin-bottom: 24px;
+        box-shadow: 0 0 40px rgba(200,168,75,0.1);
+        animation: float 4s ease-in-out infinite;
+    }
+
+    .bio-skills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .bio-skill {
+        display: flex; align-items: center; gap: 6px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+        border-radius: 20px; padding: 6px 14px;
+        font-size: 0.78rem; font-weight: 700;
+        color: var(--muted);
+    }
+
+    .bio-right {}
+
+    .bio-text {
+        font-size: 0.95rem; color: var(--text2);
+        line-height: 1.8; margin-bottom: 16px;
+    }
+
+    .bio-text strong { color: var(--text); }
+    .bio-text em { color: var(--gold); font-style: normal; font-weight: 700; }
+
+    .bio-timeline { margin-top: 32px; }
+
+    .timeline-item {
+        display: flex; gap: 16px;
+        padding-bottom: 24px; position: relative;
+    }
+
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        left: 7px; top: 20px; bottom: 0;
+        width: 1px;
+        background: var(--border);
+    }
+
+    .timeline-item:last-child::after { display: none; }
+
+    .tl-dot {
+        width: 16px; height: 16px; border-radius: 50%;
+        background: var(--gold); flex-shrink: 0;
+        margin-top: 3px;
+        box-shadow: 0 0 8px rgba(200,168,75,0.4);
+    }
+
+    .tl-content {}
+
+    .tl-year {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.68rem; color: var(--gold);
+        letter-spacing: 2px; margin-bottom: 3px;
+    }
+
+    .tl-title {
+        font-size: 0.9rem; font-weight: 800;
+        color: var(--text); margin-bottom: 3px;
+    }
+
+    .tl-desc {
+        font-size: 0.78rem; color: var(--muted); line-height: 1.5;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       TESTIMONIOS
+    ══════════════════════════════════════════════════════ */
+    .testimonios-section {
+        padding: 100px 0;
+        border-top: 1px solid var(--border);
+        position: relative; z-index: 1;
+    }
+
+    .testimonios-header { text-align: center; margin-bottom: 56px; }
+
+    .testimonios-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .test-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px; padding: 24px;
+        position: relative; transition: 0.3s;
+    }
+
+    .test-card:hover { border-color: rgba(200,168,75,0.2); transform: translateY(-3px); }
+
+    .test-quote {
+        font-family: 'Cinzel', serif;
+        font-size: 2.5rem; color: rgba(200,168,75,0.2);
+        line-height: 0.8; margin-bottom: 14px;
+    }
+
+    .test-text {
+        font-size: 0.85rem; color: var(--text2);
+        line-height: 1.7; margin-bottom: 20px;
+        font-style: italic;
+    }
+
+    .test-author {
+        display: flex; align-items: center; gap: 12px;
+    }
+
+    .test-avatar {
+        width: 40px; height: 40px; border-radius: 50%;
+        background: linear-gradient(135deg, rgba(200,168,75,0.2), rgba(88,166,255,0.2));
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem; border: 1px solid rgba(200,168,75,0.2);
+        flex-shrink: 0;
+    }
+
+    .test-name {
+        font-size: 0.85rem; font-weight: 800; color: var(--text);
+    }
+
+    .test-role { font-size: 0.72rem; color: var(--muted); }
+
+    .stars-rating {
+        display: flex; gap: 3px; margin-top: 4px;
+        font-size: 0.75rem; color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       BLOG
+    ══════════════════════════════════════════════════════ */
+    .blog-section {
+        padding: 100px 0;
+        border-top: 1px solid var(--border);
+        position: relative; z-index: 1;
+    }
+
+    .blog-header { text-align: center; margin-bottom: 56px; }
+
+    .blog-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .blog-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px; overflow: hidden;
+        transition: 0.3s; cursor: pointer;
+    }
+
+    .blog-card:hover { border-color: rgba(88,166,255,0.25); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+
+    .blog-img {
+        height: 140px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 3.5rem;
+        position: relative; overflow: hidden;
+    }
+
+    .blog-body { padding: 20px; }
+
+    .blog-cat {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.65rem; letter-spacing: 3px;
+        text-transform: uppercase; margin-bottom: 8px;
+    }
+
+    .blog-title {
+        font-family: 'Cinzel', serif;
+        font-size: 0.95rem; font-weight: 700;
+        color: var(--text); margin-bottom: 8px;
+        line-height: 1.3;
+    }
+
+    .blog-excerpt {
+        font-size: 0.78rem; color: var(--muted);
+        line-height: 1.6; margin-bottom: 14px;
+    }
+
+    .blog-meta {
+        display: flex; justify-content: space-between;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.65rem; color: rgba(255,255,255,0.25);
+        letter-spacing: 1px;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       CONTACTO
+    ══════════════════════════════════════════════════════ */
+    .contacto-section {
+        padding: 100px 0;
+        border-top: 1px solid var(--border);
+        position: relative; z-index: 1;
+    }
+
+    .contacto-inner {
+        display: grid; grid-template-columns: 1fr 1.2fr;
+        gap: 60px; align-items: start;
+    }
+
+    .contacto-left {}
+
+    .contacto-info { margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+
+    .c-info-item {
+        display: flex; align-items: center; gap: 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px; padding: 14px 18px;
+        text-decoration: none; transition: 0.2s;
+    }
+
+    .c-info-item:hover { border-color: rgba(200,168,75,0.25); }
+
+    .c-info-icon {
+        font-size: 1.3rem; flex-shrink: 0;
+    }
+
+    .c-info-label {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.62rem; color: var(--muted);
+        letter-spacing: 2px; text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
+    .c-info-val {
+        font-size: 0.85rem; font-weight: 800; color: var(--text);
+    }
+
+    /* Formulario simulado → WhatsApp */
+    .contacto-form {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px; padding: 32px;
+        box-shadow: 0 0 40px rgba(200,168,75,0.05);
+    }
+
+    .form-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.1rem; font-weight: 700;
+        color: var(--text); margin-bottom: 6px;
+    }
+
+    .form-sub {
+        font-size: 0.8rem; color: var(--muted);
+        margin-bottom: 24px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-label {
+        display: block;
+        font-size: 0.72rem; font-weight: 800;
+        color: var(--muted); letter-spacing: 1px;
+        text-transform: uppercase; margin-bottom: 6px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+        width: 100%; padding: 12px 14px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px; color: var(--text);
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.9rem; transition: 0.2s; outline: none;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+        border-color: rgba(200,168,75,0.4);
+        box-shadow: 0 0 0 3px rgba(200,168,75,0.08);
+    }
+
+    .form-select option { background: #0a0e18; }
+    .form-textarea { resize: vertical; min-height: 100px; }
+
+    .btn-form-wa {
+        display: flex; align-items: center; justify-content: center;
+        gap: 10px; width: 100%; padding: 14px;
+        background: linear-gradient(135deg, #128c7e, #25d366);
+        border: none; border-radius: 8px;
+        color: white; font-family: 'Nunito', sans-serif;
+        font-size: 0.95rem; font-weight: 900;
+        cursor: pointer; transition: 0.3s;
+        box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+        letter-spacing: 0.5px;
+    }
+
+    .btn-form-wa:hover {
+        box-shadow: 0 6px 30px rgba(37,211,102,0.5);
+        transform: translateY(-2px);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════ */
+    .footer {
+        border-top: 1px solid var(--border);
+        padding: 48px 0 32px;
+        position: relative; z-index: 1;
+    }
+
+    .footer-inner {
+        display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 40px; margin-bottom: 40px;
+    }
+
+    .footer-brand-name {
+        font-family: 'Cinzel', serif;
+        font-size: 1.1rem; font-weight: 700;
+        color: var(--gold2); margin-bottom: 8px;
+    }
+
+    .footer-brand-desc {
+        font-size: 0.8rem; color: var(--muted);
+        line-height: 1.65; margin-bottom: 20px;
+    }
+
+    .footer-col-title {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.65rem; letter-spacing: 3px;
+        color: var(--muted); text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    .footer-links a {
+        font-size: 0.83rem; color: rgba(255,255,255,0.4);
+        text-decoration: none; transition: 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-bottom {
+        border-top: 1px solid var(--border);
+        padding-top: 24px;
+        display: flex; justify-content: space-between; align-items: center;
+        font-size: 0.75rem; color: rgba(255,255,255,0.2);
+    }
+
+    .footer-dots { display: flex; gap: 8px; }
+    .f-dot { width: 8px; height: 3px; border-radius: 2px; }
+
+    /* Stripe top del footer */
+    .stripe {
+        height: 4px;
+        background: linear-gradient(90deg,
+            var(--gold) 0%, var(--blue) 33%,
+            var(--green) 66%, var(--ember) 100%
+        );
+    }
+
+    /* ══════════════════════════════════════════════════════
+       WHATSAPP FLOAT
+    ══════════════════════════════════════════════════════ */
+    .wa-float {
+        position: fixed; bottom: 24px; right: 24px; z-index: 999;
+        display: flex; align-items: center; gap: 10px;
+        background: #25d366; color: white;
+        text-decoration: none; padding: 14px 22px;
+        border-radius: 50px; font-weight: 900;
+        font-size: 0.85rem; letter-spacing: 0.5px;
+        box-shadow: 0 4px 25px rgba(37,211,102,0.5);
+        animation: waPulse 2.5s ease-in-out infinite;
+        transition: 0.3s;
+    }
+
+    .wa-float:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 35px rgba(37,211,102,0.6); }
+
+    @keyframes waPulse {
+        0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4)}
+        50%{box-shadow:0 4px 35px rgba(37,211,102,0.7)}
+    }
+
+    /* ══════════════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+        .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+        .hero-card { display: none; }
+        .servicios-grid { grid-template-columns: repeat(2, 1fr); }
+        .portfolio-grid { grid-template-columns: 1fr; }
+        .project-card.featured { grid-column: 1; display: block; }
+        .precios-grid { grid-template-columns: 1fr; }
+        .precio-card.featured-price { transform: none; }
+        .bio-grid { grid-template-columns: 1fr; }
+        .bio-avatar-wrap { width: 120px; height: 120px; font-size: 3rem; }
+        .testimonios-grid { grid-template-columns: 1fr; }
+        .blog-grid { grid-template-columns: 1fr; }
+        .contacto-inner { grid-template-columns: 1fr; }
+        .footer-inner { grid-template-columns: 1fr 1fr; }
+        .nav-links { display: none; }
+        .nav-toggle { display: block; }
+    }
+
+    @media (max-width: 600px) {
+        .servicios-grid { grid-template-columns: 1fr; }
+        .footer-inner { grid-template-columns: 1fr; }
+        .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+        .wa-float span { display: none; }
+        .wa-float { padding: 14px; border-radius: 50%; }
+    }
+    </style>
+</head>
+<body>
+
+<!-- WA FLOTANTE -->
+<a href="https://wa.me/5493827432108?text=Hola%20Mat%C3%ADas!%20Vi%20tu%20portfolio%20y%20me%20interesa%20hablar%20sobre%20un%20proyecto%20%F0%9F%9A%80"
+   class="wa-float" target="_blank">
+    💬 <span>Hablemos</span>
+</a>
+
+<!-- NAVBAR -->
+<nav class="nav" id="navbar">
+    <div class="nav-inner">
+        <a href="#inicio" class="nav-brand">
+            Matías Peralta
+            <small>// dev · la rioja · argentina</small>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#precios">Precios</a></li>
+            <li><a href="#sobre-mi">Sobre mí</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#contacto" class="nav-cta">Contactar →</a></li>
+        </ul>
+        <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" style="display:none; position:fixed; top:64px; left:0; right:0; z-index:999; background:rgba(5,8,13,0.98); border-bottom:1px solid var(--border); padding:20px 24px;">
+    <ul style="list-style:none; display:flex; flex-direction:column; gap:16px;">
+        <li><a href="#servicios" onclick="toggleMenu()" style="color:var(--text2); text-decoration:none; font-weight:700;">Servicios</a></li>
+        <li><a href="#portfolio" onclick="toggleMenu()" style="color:var(--text2); text-decoration:none; font-weight:700;">Portfolio</a></li>
+        <li><a href="#precios" onclick="toggleMenu()" style="color:var(--text2); text-decoration:none; font-weight:700;">Precios</a></li>
+        <li><a href="#sobre-mi" onclick="toggleMenu()" style="color:var(--text2); text-decoration:none; font-weight:700;">Sobre mí</a></li>
+        <li><a href="#blog" onclick="toggleMenu()" style="color:var(--text2); text-decoration:none; font-weight:700;">Blog</a></li>
+        <li><a href="#contacto" onclick="toggleMenu()" style="color:var(--gold); text-decoration:none; font-weight:900;">Contactar →</a></li>
+    </ul>
+</div>
+
+<!-- ESTRELLAS -->
+<div class="stars" id="stars"></div>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="inicio">
+    <div class="hero-inner">
+        <div class="hero-left">
+            <div class="hero-badge">🛰️ Disponible para nuevos proyectos</div>
+            <h1 class="hero-title">
+                <span class="line1">MATÍAS</span>
+                <span class="line2">PERALTA</span>
+                <span class="line3">Full Stack Developer</span>
+            </h1>
+            <p class="hero-desc">
+                Creo <strong>soluciones digitales reales</strong> para negocios y emprendedores
+                de Aimogasta, La Rioja y todo Argentina. Páginas web, apps móviles,
+                sistemas con IA, ciberseguridad y más.
+                <em style="color:var(--gold); font-style:normal;"> Precios en pesos. Soporte local. Sin vueltas.</em>
+            </p>
+            <div class="hero-btns">
+                <a href="#contacto" class="btn-primary">🚀 Empezar proyecto</a>
+                <a href="#portfolio" class="btn-secondary">Ver portfolio →</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-card">
+                <div class="hero-card-title">▸ PERFIL TÉCNICO</div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-num">10+</span>
+                        <div class="stat-label">Proyectos</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">5+</span>
+                        <div class="stat-label">Años exp.</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">48h</span>
+                        <div class="stat-label">Entrega rápida</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">100%</span>
+                        <div class="stat-label">Satisfacción</div>
+                    </div>
+                </div>
+                <div class="tech-tags">
+                    <span class="tech-tag">HTML/CSS</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">MikroTik</span>
+                    <span class="tech-tag">Starlink</span>
+                    <span class="tech-tag">IA/LLM</span>
+                    <span class="tech-tag">PWA</span>
+                    <span class="tech-tag">Linux</span>
+                </div>
+                <div class="online-indicator">
+                    <div class="online-dot"></div>
+                    Disponible · Respondo en menos de 24hs
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ SERVICIOS ══ -->
+<section class="servicios-section" id="servicios">
+    <div class="container">
+        <div class="servicios-header fade-in">
+            <div class="section-eyebrow">// Lo que hago</div>
+            <h2 class="section-title">Servicios <span>Digitales</span></h2>
+            <p class="section-sub">
+                Desde una página web hasta sistemas complejos con IA. Elegí la categoría que más te interesa.
+            </p>
+        </div>
+
+        <div class="cat-tabs fade-in">
+            <button class="cat-tab active" onclick="filterSvc('all', this)">🔍 Todos</button>
+            <button class="cat-tab" onclick="filterSvc('frontend', this)">🎨 Web & Apps</button>
+            <button class="cat-tab" onclick="filterSvc('backend', this)">⚙️ Sistemas</button>
+            <button class="cat-tab" onclick="filterSvc('ia', this)">🤖 Inteligencia Artificial</button>
+            <button class="cat-tab" onclick="filterSvc('data', this)">📊 Data & Analytics</button>
+            <button class="cat-tab" onclick="filterSvc('security', this)">🔒 Ciberseguridad</button>
+            <button class="cat-tab" onclick="filterSvc('redes', this)">📡 Redes & WiFi</button>
+            <button class="cat-tab" onclick="filterSvc('marketing', this)">📱 Marketing Digital</button>
+        </div>
+
+        <div class="servicios-grid" id="svc-grid">
+
+            <!-- FRONTEND -->
+            <div class="svc-card c-gold visible" data-cat="frontend">
+                <div class="svc-icon-wrap">🌐</div>
+                <div class="svc-name">Páginas Web & Landings</div>
+                <div class="svc-desc">Sitios profesionales, rápidos y adaptados al celular. Con WhatsApp integrado, Google Maps, formulario de contacto y diseño único para tu negocio.</div>
+                <div class="svc-price">desde $40.000</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20una%20p%C3%A1gina%20web" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-blue visible" data-cat="frontend">
+                <div class="svc-icon-wrap">📱</div>
+                <div class="svc-name">Menú QR Digital</div>
+                <div class="svc-desc">Carta digital con fotos y precios actualizable en tiempo real. Sin imprimir nada. El cliente escanea el QR y ve todo desde el celular. Ideal para restaurantes y bares.</div>
+                <div class="svc-price">$25.000 + $8.000/mes</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20men%C3%BA%20QR" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-green visible" data-cat="frontend">
+                <div class="svc-icon-wrap">⚡</div>
+                <div class="svc-name">Apps PWA Móviles</div>
+                <div class="svc-desc">Aplicaciones que se instalan desde el browser sin pasar por Play Store. Funcionan sin internet. Perfectas para eventos masivos, hoteles y comercios con mucho flujo de gente.</div>
+                <div class="svc-price">desde $60.000</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20una%20app%20PWA" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <!-- BACKEND -->
+            <div class="svc-card c-ember visible" data-cat="backend">
+                <div class="svc-icon-wrap">🚚</div>
+                <div class="svc-name">App de Delivery con GPS</div>
+                <div class="svc-desc">El cliente ve al repartidor moviéndose en el mapa en tiempo real. Notificaciones automáticas por WhatsApp. Sin comisiones por pedido. Tu propio sistema, sin intermediarios.</div>
+                <div class="svc-price">desde $80.000 + $15.000/mes</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20sistema%20de%20delivery%20GPS" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-blue visible" data-cat="backend">
+                <div class="svc-icon-wrap">🤖</div>
+                <div class="svc-name">Bot de WhatsApp Automático</div>
+                <div class="svc-desc">Tu negocio responde solo las 24hs. Preguntas frecuentes, catálogo de productos, confirmación de turnos, notificaciones. Sin que vos tengas que estar pendiente del celular.</div>
+                <div class="svc-price">desde $50.000 + $8.000/mes</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20bot%20de%20WhatsApp" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-gold visible" data-cat="backend">
+                <div class="svc-icon-wrap">📅</div>
+                <div class="svc-name">Sistema de Turnos Online</div>
+                <div class="svc-desc">Los clientes sacan turno desde el celular a cualquier hora. Confirmación automática por WhatsApp. Recordatorio 1 hora antes. Panel para ver y gestionar todos los turnos del día.</div>
+                <div class="svc-price">desde $50.000 + $10.000/mes</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20sistema%20de%20turnos" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <!-- IA -->
+            <div class="svc-card c-purple visible" data-cat="ia">
+                <div class="svc-icon-wrap">🧠</div>
+                <div class="svc-name">Chatbot IA para tu Negocio</div>
+                <div class="svc-desc">Un asistente con inteligencia artificial que conoce tu negocio, responde preguntas, hace recomendaciones y cierra ventas. Integrado en tu web o WhatsApp. Aprende con el tiempo.</div>
+                <div class="svc-price">desde $70.000 + $12.000/mes</div>
+                <div class="svc-tags">
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20chatbot%20con%20IA" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-teal visible" data-cat="ia">
+                <div class="svc-icon-wrap">🎙️</div>
+                <div class="svc-name">Locución con IA (Voz Clonada)</div>
+                <div class="svc-desc">Spots de audio para publicidad en parlantes, radio o redes sociales. Voz natural generada con IA en minutos. Sin contratar locutor. Ideal para eventos y negocios locales.</div>
+                <div class="svc-price">$20.000/spot · $50.000 pack</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20la%20locuci%C3%B3n%20con%20IA" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-purple visible" data-cat="ia">
+                <div class="svc-icon-wrap">🖼️</div>
+                <div class="svc-name">Imágenes Fotorrealistas con IA</div>
+                <div class="svc-desc">Fotos de tus productos como si las sacó un fotógrafo profesional. Imágenes de comida, locales y servicios generadas con IA para publicidad en redes, menús y carteles.</div>
+                <div class="svc-price">$25.000 pack 10 imágenes</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesan%20las%20im%C3%A1genes%20con%20IA" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <!-- DATA -->
+            <div class="svc-card c-blue visible" data-cat="data">
+                <div class="svc-icon-wrap">📊</div>
+                <div class="svc-name">Dashboard de Ventas en Tiempo Real</div>
+                <div class="svc-desc">Panel visual con gráficos de ventas, productos más vendidos, horas pico y comparativas. Lo ves desde el celular en cualquier momento. Conectado a tu sistema actual.</div>
+                <div class="svc-price">desde $60.000 + $10.000/mes</div>
+                <div class="svc-tags">
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20dashboard%20de%20ventas" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-teal visible" data-cat="data">
+                <div class="svc-icon-wrap">📈</div>
+                <div class="svc-name">Análisis de Datos de Clientes</div>
+                <div class="svc-desc">¿Qué compran, cuándo vienen, qué buscan y cuándo no vuelven? Análisis de comportamiento de clientes para tomar mejores decisiones de negocio.</div>
+                <div class="svc-price">desde $50.000</div>
+                <div class="svc-tags">
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20an%C3%A1lisis%20de%20datos" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <!-- SEGURIDAD -->
+            <div class="svc-card c-red visible" data-cat="security">
+                <div class="svc-icon-wrap">🔍</div>
+                <div class="svc-name">Auditoría de Seguridad Web</div>
+                <div class="svc-desc">Revisión completa de tu sitio web o sistema para detectar vulnerabilidades antes de que alguien las aproveche. Reporte detallado con soluciones. Con contrato y autorización firmada.</div>
+                <div class="svc-price">desde $80.000</div>
+                <div class="svc-tags">
+                    <span class="svc-tag prov">Provincial</span>
+                    <span class="svc-tag nac">Nacional</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20la%20auditor%C3%ADa%20de%20seguridad" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-red visible" data-cat="security">
+                <div class="svc-icon-wrap">🛡️</div>
+                <div class="svc-name">Configuración Firewall & VPN</div>
+                <div class="svc-desc">Protección de tu red empresarial contra accesos no autorizados. VPN para que tu equipo trabaje desde cualquier lugar de forma segura. Configuración y soporte continuo.</div>
+                <div class="svc-price">desde $50.000</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20firewall%20y%20VPN" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-red visible" data-cat="security">
+                <div class="svc-icon-wrap">🔐</div>
+                <div class="svc-name">Capacitación en Seguridad Digital</div>
+                <div class="svc-desc">Taller práctico para vos y tu equipo sobre contraseñas seguras, phishing, protección de datos y buenas prácticas digitales. Presencial en Aimogasta o remoto.</div>
+                <div class="svc-price">$40.000/sesión</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20la%20capacitaci%C3%B3n%20en%20seguridad" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <!-- REDES -->
+            <div class="svc-card c-gold visible" data-cat="redes">
+                <div class="svc-icon-wrap">📶</div>
+                <div class="svc-name">Portal WiFi con Hotspot</div>
+                <div class="svc-desc">Sistema de WiFi pago o gratuito con portal cautivo personalizado con tu marca. Los usuarios ven tu publicidad antes de conectarse. Con vouchers, control de tiempo y estadísticas.</div>
+                <div class="svc-price">desde $50.000</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20portal%20WiFi%20hotspot" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-teal visible" data-cat="redes">
+                <div class="svc-icon-wrap">🛰️</div>
+                <div class="svc-name">Instalación Starlink Empresarial</div>
+                <div class="svc-desc">Internet satelital de alta velocidad para zonas rurales o sin señal. Configuración completa para negocios, eventos masivos y establecimientos agropecuarios.</div>
+                <div class="svc-price">desde $60.000 (instalación)</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20Starlink%20empresarial" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <!-- MARKETING -->
+            <div class="svc-card c-ember visible" data-cat="marketing">
+                <div class="svc-icon-wrap">💬</div>
+                <div class="svc-name">WhatsApp Business Completo</div>
+                <div class="svc-desc">Configuración profesional de WhatsApp Business: catálogo de productos, respuestas automáticas, etiquetas de clientes, horarios y mensajes de bienvenida. Lista en un día.</div>
+                <div class="svc-price">$15.000 (único pago)</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20WhatsApp%20Business" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+            <div class="svc-card c-blue visible" data-cat="marketing">
+                <div class="svc-icon-wrap">📍</div>
+                <div class="svc-name">Google Maps Optimization</div>
+                <div class="svc-desc">Tu negocio aparece en Google Maps con fotos, horarios, descripción y reseñas bien configuradas. Cuando alguien busca lo que ofrecés en Aimogasta, te encuentra a vos primero.</div>
+                <div class="svc-price">$18.000 (único pago)</div>
+                <div class="svc-tags">
+                    <span class="svc-tag local">Local</span>
+                    <span class="svc-tag prov">Provincial</span>
+                </div>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20Google%20Maps" class="svc-cta" target="_blank">💬 Consultar precio</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ PORTFOLIO ══ -->
+<section class="portfolio-section" id="portfolio">
+    <div class="container">
+        <div class="portfolio-header fade-in">
+            <div class="section-eyebrow">// Proyectos reales</div>
+            <h2 class="section-title">Portfolio <span>&</span> Trabajos</h2>
+            <p class="section-sub">Proyectos reales construidos y funcionando. Cada uno resolvió un problema concreto.</p>
+        </div>
+        <div class="portfolio-grid fade-in">
+
+            <!-- Featured -->
+            <div class="project-card featured">
+                <div class="project-visual" style="background:linear-gradient(135deg,#05080d,#0a1428);">
+                    <span class="project-emoji">🛰️</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-tags">
+                        <span class="proj-tag live">✓ Live</span>
+                        <span class="proj-tag featured-t">★ Destacado</span>
+                        <span class="proj-tag tech">PWA</span>
+                        <span class="proj-tag tech">MikroTik</span>
+                        <span class="proj-tag tech">Starlink</span>
+                    </div>
+                    <h3 class="project-name">Arauco Digital Hub</h3>
+                    <p class="project-desc">
+                        Nodo tecnológico completo para el Señor de la Peña — Semana Santa 2026.
+                        Portal WiFi cautivo con 9 páginas HTML, sistema de vouchers imprimibles,
+                        menú digital, cartelera de cine 4K, juego gamificado con 3 niveles,
+                        landing de prelanzamiento y app PWA instalable. Desplegado para 60.000 peregrinos
+                        en el desierto de Arauco sin señal 4G.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://kaporall.github.io/arauco-hub-web" target="_blank" class="proj-link primary">🌐 Ver en vivo</a>
+                        <a href="#contacto" class="proj-link secondary">¿Algo similar? →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proyecto 2 -->
+            <div class="project-card">
+                <div class="project-visual" style="background:linear-gradient(135deg,#0a1a10,#051008);">
+                    <span class="project-emoji">🍔</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-tags">
+                        <span class="proj-tag live">✓ Live</span>
+                        <span class="proj-tag tech">Menú QR</span>
+                        <span class="proj-tag tech">WhatsApp</span>
+                    </div>
+                    <h3 class="project-name">Menú QR — JYM Parrilla</h3>
+                    <p class="project-desc">Carta digital completa para restaurante con 6 secciones: entradas, parrilla, pizzas, postres, bebidas y combos. Con botón de pedido directo a WhatsApp y diseño de marca.</p>
+                    <div class="project-links">
+                        <a href="#contacto" class="proj-link primary">💬 Quiero algo así</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proyecto 3 -->
+            <div class="project-card">
+                <div class="project-visual" style="background:linear-gradient(135deg,#0a0520,#050010);">
+                    <span class="project-emoji">📊</span>
+                </div>
+                <div class="project-body">
+                    <div class="project-tags">
+                        <span class="proj-tag tech">Kit Redes</span>
+                        <span class="proj-tag tech">Flyers</span>
+                        <span class="proj-tag tech">Marketing</span>
+                    </div>
+                    <h3 class="project-name">Kit Marketing Digital Completo</h3>
+                    <p class="project-desc">Kit de difusión para eventos con posts listos para Instagram y Facebook, cartel A4 con QR generado automáticamente, textos para grupos de WhatsApp y hashtags optimizados.</p>
+                    <div class="project-links">
+                        <a href="#contacto" class="proj-link primary">💬 Quiero algo así</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ PRECIOS ══ -->
+<section class="precios-section" id="precios">
+    <div class="container">
+        <div class="precios-header fade-in">
+            <div class="section-eyebrow">// Planes y precios</div>
+            <h2 class="section-title">Precios <span>Claros</span></h2>
+            <p class="section-sub">Sin letra chica. Sin sorpresas. Precios en pesos argentinos. Ajustamos según tu necesidad.</p>
+        </div>
+        <div class="precios-grid fade-in">
+
+            <div class="precio-card">
+                <div class="precio-plan">🌱 Starter</div>
+                <div class="precio-plan-sub">Para arrancar con presencia digital</div>
+                <div class="precio-num">$25.000</div>
+                <div class="precio-period">pago único · sin mensualidad</div>
+                <div class="precio-divider"></div>
+                <ul class="precio-features">
+                    <li>Menú QR digital básico</li>
+                    <li>WhatsApp Business configurado</li>
+                    <li>Google Maps optimizado</li>
+                    <li>QR para imprimir en mesas</li>
+                    <li>Soporte por 30 días</li>
+                </ul>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20plan%20Starter" class="btn-precio outline-btn" target="_blank">Consultar →</a>
+            </div>
+
+            <div class="precio-card featured-price">
+                <div class="precio-badge">⭐ El más elegido</div>
+                <div class="precio-plan">🚀 Pro</div>
+                <div class="precio-plan-sub">La solución completa para tu negocio</div>
+                <div class="precio-num">$65.000</div>
+                <div class="precio-period">setup + $10.000/mes mantenimiento</div>
+                <div class="precio-divider"></div>
+                <ul class="precio-features">
+                    <li>Página web profesional completa</li>
+                    <li>Menú QR con fotos y precios</li>
+                    <li>WhatsApp Business profesional</li>
+                    <li>Google Maps optimizado</li>
+                    <li>Cartel QR diseñado para imprimir</li>
+                    <li>Soporte continuo por WhatsApp</li>
+                    <li>Actualizaciones incluidas</li>
+                </ul>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Me%20interesa%20el%20plan%20Pro" class="btn-precio gold-btn" target="_blank">Empezar ahora →</a>
+            </div>
+
+            <div class="precio-card">
+                <div class="precio-plan">🏢 Enterprise</div>
+                <div class="precio-plan-sub">Sistemas complejos a medida</div>
+                <div class="precio-num">A consultar</div>
+                <div class="precio-period">según alcance del proyecto</div>
+                <div class="precio-divider"></div>
+                <ul class="precio-features">
+                    <li>App de delivery con GPS</li>
+                    <li>Sistema de IA integrado</li>
+                    <li>Bot de WhatsApp automático</li>
+                    <li>Dashboard de analíticas</li>
+                    <li>Ciberseguridad y auditoría</li>
+                    <li>Portal WiFi hotspot</li>
+                    <li>Soporte prioritario</li>
+                </ul>
+                <a href="https://wa.me/5493827432108?text=Hola!%20Necesito%20una%20soluci%C3%B3n%20enterprise" class="btn-precio outline-btn" target="_blank">Hablar →</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ SOBRE MÍ ══ -->
+<section class="bio-section" id="sobre-mi">
+    <div class="container">
+        <div class="bio-grid">
+            <div class="bio-left fade-in">
+                <div class="bio-avatar-wrap">👨‍💻</div>
+                <div class="bio-skills">
+                    <div class="bio-skill">🌐 HTML/CSS/JS</div>
+                    <div class="bio-skill">🐍 Python</div>
+                    <div class="bio-skill">📡 MikroTik</div>
+                    <div class="bio-skill">🛰️ Starlink</div>
+                    <div class="bio-skill">🤖 IA / LLM</div>
+                    <div class="bio-skill">🔒 Seguridad</div>
+                    <div class="bio-skill">🐧 Linux</div>
+                    <div class="bio-skill">📱 PWA</div>
+                </div>
+            </div>
+            <div class="bio-right fade-in">
+                <div class="section-eyebrow">// Sobre mí</div>
+                <h2 class="section-title">Hola, soy <span>Matías</span></h2>
+                <p class="bio-text">
+                    Tengo 26 años y soy de <em>Aimogasta, La Rioja</em>. Me formé como
+                    <strong>Historiador y Analista Geopolítico</strong>, pero la tecnología
+                    siempre fue mi segunda carrera — la que aprendí solo, a fuerza de proyectos reales.
+                </p>
+                <p class="bio-text">
+                    Creo en hacer tecnología <strong>accesible para el interior del país</strong>.
+                    Muchos comercios y emprendedores de La Rioja no tienen presencia digital no porque
+                    no quieran, sino porque nadie les ofrece algo <em>a su precio, en su idioma y con soporte local</em>.
+                    Eso es lo que yo hago.
+                </p>
+                <p class="bio-text">
+                    Mi proyecto más grande hasta ahora fue el <strong>Arauco Digital Hub</strong>:
+                    llevar internet satelital Starlink al desierto del Barrial de Arauco para conectar
+                    a 60.000 peregrinos durante el Señor de la Peña 2026.
+                    Y el próximo capítulo es <em>Australia 🇦🇺</em> — Visa Work & Holiday 462 ya aprobada.
+                </p>
+
+                <div class="bio-timeline">
+                    <div class="timeline-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-content">
+                            <div class="tl-year">2026</div>
+                            <div class="tl-title">Arauco Digital Hub — Señor de la Peña</div>
+                            <div class="tl-desc">Portal WiFi + App PWA + Cine 4K + Gastronomía para 60.000 peregrinos</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-content">
+                            <div class="tl-year">2025</div>
+                            <div class="tl-title">Primeros clientes en La Rioja</div>
+                            <div class="tl-desc">Menús QR, páginas web y sistemas para negocios locales de Aimogasta</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-content">
+                            <div class="tl-year">2023–24</div>
+                            <div class="tl-title">Especialización en redes y seguridad</div>
+                            <div class="tl-desc">MikroTik, Starlink, Linux, ciberseguridad y redes WiFi para eventos</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-content">
+                            <div class="tl-year">2020</div>
+                            <div class="tl-title">Inicio en desarrollo web</div>
+                            <div class="tl-desc">Primeros proyectos HTML/CSS/JS y Python. Aprendizaje autodidacta.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ TESTIMONIOS ══ -->
+<section class="testimonios-section" id="testimonios">
+    <div class="container">
+        <div class="testimonios-header fade-in">
+            <div class="section-eyebrow">// Lo que dicen</div>
+            <h2 class="section-title">Clientes <span>Satisfechos</span></h2>
+        </div>
+        <div class="testimonios-grid fade-in">
+
+            <div class="test-card">
+                <div class="test-quote">"</div>
+                <p class="test-text">Matías nos armó el menú QR en un día. Ahora los clientes escanean el código y ven todo sin que tengamos que imprimir nada. Nos ahorró mucho tiempo y plata.</p>
+                <div class="test-author">
+                    <div class="test-avatar">🍔</div>
+                    <div>
+                        <div class="test-name">Dueño de JYM Parrilla</div>
+                        <div class="test-role">Restaurante · Aimogasta</div>
+                        <div class="stars-rating">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-card">
+                <div class="test-quote">"</div>
+                <p class="test-text">El Hub fue un éxito total en la peña. Gente que nunca había tenido internet en el Barrial se pudo conectar. Lo que armó Matías funcionó a la perfección.</p>
+                <div class="test-author">
+                    <div class="test-avatar">🛰️</div>
+                    <div>
+                        <div class="test-name">Peregrino del Señor de la Peña</div>
+                        <div class="test-role">Barrial de Arauco · La Rioja</div>
+                        <div class="stars-rating">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-card">
+                <div class="test-quote">"</div>
+                <p class="test-text">Me configuró el WhatsApp Business y Google Maps. Ahora cuando alguien busca mi negocio en el mapa me encuentra. Nunca pensé que era tan fácil y barato.</p>
+                <div class="test-author">
+                    <div class="test-avatar">🏪</div>
+                    <div>
+                        <div class="test-name">Comerciante local</div>
+                        <div class="test-role">Comercio · Aimogasta</div>
+                        <div class="stars-rating">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ BLOG ══ -->
+<section class="blog-section" id="blog">
+    <div class="container">
+        <div class="blog-header fade-in">
+            <div class="section-eyebrow">// Ideas & Conocimiento</div>
+            <h2 class="section-title">Blog <span>& Artículos</span></h2>
+            <p class="section-sub">Escribo sobre tecnología, negocios digitales y lo que aprendo en el camino.</p>
+        </div>
+        <div class="blog-grid fade-in">
+
+            <div class="blog-card">
+                <div class="blog-img" style="background:linear-gradient(135deg,#0a1428,#05080d);">📱</div>
+                <div class="blog-body">
+                    <div class="blog-cat" style="color:var(--blue)">// Apps & Mobile</div>
+                    <h3 class="blog-title">Por qué tu negocio necesita una app PWA en 2026</h3>
+                    <p class="blog-excerpt">Las apps que se instalan sin Play Store son el futuro del comercio local. Te explico cómo funcionan y por qué son más baratas que una app nativa.</p>
+                    <div class="blog-meta">
+                        <span>Mar 2026</span>
+                        <span>5 min lectura</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-img" style="background:linear-gradient(135deg,#1a0a00,#0a0500);">🤖</div>
+                <div class="blog-body">
+                    <div class="blog-cat" style="color:var(--purple)">// Inteligencia Artificial</div>
+                    <h3 class="blog-title">Cómo usé IA para conectar 60.000 peregrinos en el desierto</h3>
+                    <p class="blog-excerpt">El caso del Arauco Digital Hub: IA generativa para recomendaciones de productos, locución automatizada y sistemas inteligentes en un evento masivo sin señal.</p>
+                    <div class="blog-meta">
+                        <span>Abr 2026</span>
+                        <span>8 min lectura</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-img" style="background:linear-gradient(135deg,#0a0010,#050010);">🔒</div>
+                <div class="blog-body">
+                    <div class="blog-cat" style="color:var(--red)">// Seguridad</div>
+                    <h3 class="blog-title">5 errores de seguridad que cometen los negocios locales</h3>
+                    <p class="blog-excerpt">Contraseñas repetidas, WiFi sin segmentar, sin backup. Los errores más comunes que veo en comercios de Aimogasta y cómo evitarlos sin gastar mucho.</p>
+                    <div class="blog-meta">
+                        <span>Mar 2026</span>
+                        <span>6 min lectura</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ CONTACTO ══ -->
+<section class="contacto-section" id="contacto">
+    <div class="container">
+        <div class="contacto-inner">
+            <div class="contacto-left fade-in">
+                <div class="section-eyebrow">// Hablemos</div>
+                <h2 class="section-title">¿Listo para <span>empezar</span>?</h2>
+                <p class="section-sub" style="margin-bottom:0;">
+                    Contame qué necesitás y te respondo en menos de 24 horas con una propuesta concreta y un precio claro.
+                </p>
+                <div class="contacto-info">
+                    <a href="https://wa.me/5493827432108" class="c-info-item" target="_blank">
+                        <span class="c-info-icon">💬</span>
+                        <div>
+                            <div class="c-info-label">WhatsApp</div>
+                            <div class="c-info-val">+54 9 3827 432108</div>
+                        </div>
+                    </a>
+                    <div class="c-info-item">
+                        <span class="c-info-icon">📍</span>
+                        <div>
+                            <div class="c-info-label">Ubicación</div>
+                            <div class="c-info-val">Aimogasta · La Rioja · Argentina</div>
+                        </div>
+                    </div>
+                    <div class="c-info-item">
+                        <span class="c-info-icon">⚡</span>
+                        <div>
+                            <div class="c-info-label">Tiempo de respuesta</div>
+                            <div class="c-info-val">Menos de 24 horas</div>
+                        </div>
+                    </div>
+                    <div class="c-info-item">
+                        <span class="c-info-icon">🌐</span>
+                        <div>
+                            <div class="c-info-label">Atención</div>
+                            <div class="c-info-val">Local · Provincial · Nacional</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contacto-right fade-in">
+                <div class="contacto-form">
+                    <div class="form-title">Contame tu proyecto</div>
+                    <div class="form-sub">El mensaje se va a enviar directo a mi WhatsApp con todos los datos.</div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="f-nombre">Tu nombre</label>
+                        <input class="form-input" id="f-nombre" type="text" placeholder="Ej: Juan García">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="f-negocio">Tu negocio o empresa</label>
+                        <input class="form-input" id="f-negocio" type="text" placeholder="Ej: Restaurante El Fogón">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="f-servicio">¿Qué servicio te interesa?</label>
+                        <select class="form-select" id="f-servicio">
+                            <option value="">Seleccioná una opción</option>
+                            <option>Página web / Landing page</option>
+                            <option>Menú QR digital</option>
+                            <option>App PWA móvil</option>
+                            <option>App de delivery con GPS</option>
+                            <option>Bot de WhatsApp automático</option>
+                            <option>Sistema de turnos online</option>
+                            <option>Chatbot con IA</option>
+                            <option>Portal WiFi / Hotspot</option>
+                            <option>Auditoría de seguridad</option>
+                            <option>WhatsApp Business</option>
+                            <option>Otro / No sé bien todavía</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="f-mensaje">Contame más (opcional)</label>
+                        <textarea class="form-textarea" id="f-mensaje" placeholder="¿Qué necesitás? ¿Cuándo querés empezar? ¿Tenés presupuesto en mente?"></textarea>
+                    </div>
+
+                    <button class="btn-form-wa" onclick="sendToWA()">
+                        💬 Enviar por WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+    <div class="stripe" style="margin-bottom:40px;"></div>
+    <div class="container">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand-name">Matías Peralta Dev</div>
+                <p class="footer-brand-desc">Soluciones digitales reales para negocios y emprendedores. Aimogasta, La Rioja, Argentina. Precios en pesos. Soporte local.</p>
+                <div style="font-size:0.75rem; color:var(--muted);">🇦🇺 Camino a Australia — Visa 462 aprobada</div>
+            </div>
+            <div>
+                <div class="footer-col-title">Servicios</div>
+                <ul class="footer-links">
+                    <li><a href="#servicios">Páginas Web</a></li>
+                    <li><a href="#servicios">Menú QR</a></li>
+                    <li><a href="#servicios">Apps PWA</a></li>
+                    <li><a href="#servicios">Delivery GPS</a></li>
+                    <li><a href="#servicios">IA & Chatbots</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-col-title">Más servicios</div>
+                <ul class="footer-links">
+                    <li><a href="#servicios">Ciberseguridad</a></li>
+                    <li><a href="#servicios">WiFi Hotspot</a></li>
+                    <li><a href="#servicios">Data Analytics</a></li>
+                    <li><a href="#servicios">WhatsApp Business</a></li>
+                    <li><a href="#servicios">Starlink</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-col-title">Links</div>
+                <ul class="footer-links">
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#precios">Precios</a></li>
+                    <li><a href="#sobre-mi">Sobre mí</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="https://kaporall.github.io/arauco-hub-web" target="_blank">Arauco Hub →</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Matías E. Peralta · Aimogasta · La Rioja · Argentina</span>
+            <div class="footer-dots">
+                <div class="f-dot" style="background:var(--gold)"></div>
+                <div class="f-dot" style="background:var(--blue)"></div>
+                <div class="f-dot" style="background:var(--green)"></div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+// ── ESTRELLAS ──────────────────────────────────────────────
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${size}px;height:${size}px;animation-duration:${Math.random()*4+1.5}s;animation-delay:${Math.random()*4}s;opacity:${Math.random()*0.4+0.1};`;
+    starsEl.appendChild(s);
+}
+
+// ── FADE IN ON SCROLL ─────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── FILTRO SERVICIOS ──────────────────────────────────────
+function filterSvc(cat, btn) {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.svc-card').forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+            card.classList.add('visible');
+        } else {
+            card.classList.remove('visible');
+        }
+    });
+}
+
+// ── MOBILE MENU ───────────────────────────────────────────
+function toggleMenu() {
+    const m = document.getElementById('mobile-menu');
+    m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+
+// ── FORMULARIO → WHATSAPP ─────────────────────────────────
+function sendToWA() {
+    const nombre   = document.getElementById('f-nombre').value.trim() || 'Sin nombre';
+    const negocio  = document.getElementById('f-negocio').value.trim() || 'Sin especificar';
+    const servicio = document.getElementById('f-servicio').value || 'Sin especificar';
+    const mensaje  = document.getElementById('f-mensaje').value.trim() || '';
+
+    const text = `Hola Matías! Vi tu portfolio y quiero hablar sobre un proyecto.
+
+👤 Mi nombre: ${nombre}
+🏪 Negocio: ${negocio}
+💻 Servicio que me interesa: ${servicio}
+${mensaje ? `\n📝 Detalles: ${mensaje}` : ''}
+
+¿Cuándo podemos hablar? 🚀`;
+
+    const url = `https://wa.me/5493827432108?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+}
+
+// ── NAVBAR SCROLL ─────────────────────────────────────────
+window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+        nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.5)';
+    } else {
+        nav.style.boxShadow = 'none';
+    }
+});
+</script>
+</body>
+</html>
