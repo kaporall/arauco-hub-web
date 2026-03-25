@@ -1,669 +1,793 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
-    <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#58a6ff">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Arauco Hub">
-<link rel="icon" href="/icons/favicon.ico">
-    <link rel="apple-touch-icon" href="/icons/icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arauco Digital Hub - Señor de la Peña</title>
+    <title>Arauco Digital Hub — Semana Santa 2026</title>
+
+    <!-- OG Meta para cuando se comparte por WhatsApp/Instagram -->
+    <meta property="og:title" content="🛰️ Arauco Digital Hub — Señor de la Peña 2026">
+    <meta property="og:description" content="WiFi Satelital Starlink · Parrilla · Cine 4K bajo las estrellas · Barrial de Arauco · Semana Santa">
+    <meta property="og:image" content="https://i.imgur.com/placeholder.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        /* Fondo Animado Tech / Bajo Consumo */
+        :root {
+            --bg:      #05080d;
+            --gold:    #c8a84b;
+            --gold2:   #f0d878;
+            --blue:    #58a6ff;
+            --green:   #3fb950;
+            --ember:   #f0883e;
+            --fire:    #ff4500;
+            --text:    #e8dfc8;
+            --muted:   #6b7060;
+            --surface: rgba(18,22,14,0.9);
+            --border:  rgba(200,168,75,0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(-45deg, #0d1117, #161b22, #080c10, #1f6feb22);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #c9d1d9;
-            margin: 0;
-            padding: 10px;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── FONDO ANIMADO ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(200,168,75,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 60%, rgba(88,166,255,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(63,185,80,0.04) 0%, transparent 40%),
+                repeating-linear-gradient(
+                    -45deg,
+                    transparent 0, transparent 60px,
+                    rgba(200,168,75,0.01) 60px, rgba(200,168,75,0.01) 61px
+                );
+            pointer-events: none; z-index: 0;
+            animation: bgShift 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            from { opacity: 1; }
+            to   { opacity: 0.6; }
+        }
+
+        /* Estrellas */
+        .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .star {
+            position: absolute; border-radius: 50%; background: white;
+            animation: twinkle linear infinite;
+        }
+        @keyframes twinkle {
+            0%,100% { opacity:0.8; } 50% { opacity:0.1; }
+        }
+
+        .wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 16px; }
+
+        /* ── COUNTDOWN BANNER ── */
+        .countdown-bar {
+            background: var(--fire);
+            padding: 8px 16px;
             text-align: center;
-        }
-
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Contenedor Principal Translucido */
-        .container {
-            background: rgba(22, 27, 34, 0.85);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #30363d;
-            max-width: 450px;
-            margin: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-        }
-
-        /* Título con Efecto Glow */
-        h1 {
-            color: #58a6ff;
-            font-size: 1.6rem;
-            margin-bottom: 2px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
-            animation: glow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 5px #58a6ff;
-            }
-
-            to {
-                text-shadow: 0 0 15px #58a6ff, 0 0 25px #1f6feb;
-            }
-        }
-
-        .subtitle {
-            font-size: 0.85rem;
-            color: #8b949e;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-
-        /* Sección Login & Botón Pulsante */
-        .login-box {
-            background: rgba(28, 33, 40, 0.9);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px dashed #58a6ff;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: 1px solid #30363d;
-            background: #0d1117;
-            color: white;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        .btn-connect {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background: #238636;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            animation: pulse 2s infinite;
-            transition: 0.3s;
-        }
-
-        .btn-connect:hover {
-            background: #2ea043;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.7);
-            }
-
-            70% {
-                transform: scale(1.02);
-                box-shadow: 0 0 0 10px rgba(35, 134, 54, 0);
-            }
-
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(35, 134, 54, 0);
-            }
-        }
-
-        /* Grilla de Servicios */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .category {
-            grid-column: 1 / span 2;
-            background: rgba(35, 134, 54, 0.9);
-            color: white;
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .item {
-            background: rgba(33, 38, 45, 0.9);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            border: 1px solid #30363d;
-        }
-
-        .price {
-            color: #f0883e;
-            font-weight: bold;
-            display: block;
-            font-size: 0.95rem;
-            margin-top: 3px;
-        }
-
-        /* Cartelera de Cine */
-        .cinema-box {
-            grid-column: 1 / span 2;
-            background: rgba(28, 33, 40, 0.9);
-            border: 1px solid #58a6ff;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 5px;
-        }
-
-        .movie-entry {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px solid #30363d;
-            font-size: 0.8rem;
-        }
-
-        .movie-entry:last-child {
-            border-bottom: none;
-        }
-
-        /* API Boxes & Buttons */
-        .api-box {
-            background: rgba(13, 17, 23, 0.9);
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            margin-top: 15px;
-            padding: 15px;
-            font-size: 0.85rem;
-        }
-
-        .btn-gps {
-            background: #ea4335;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin: 5px 0;
-            font-weight: bold;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .btn-wa {
-            background: #25d366;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin: 5px 0;
-            font-weight: bold;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .footer {
-            margin-top: 25px;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 0.75rem;
-            color: #8b949e;
-            border-top: 1px solid #30363d;
-            padding-top: 15px;
-            line-height: 1.5;
+            letter-spacing: 2px;
+            color: white;
+            position: relative; z-index: 10;
+            animation: barPulse 2s ease-in-out infinite;
         }
 
-        .highlight-blue {
-            color: #58a6ff;
-            font-weight: bold;
+        @keyframes barPulse {
+            0%,100% { background: #ff4500; }
+            50%      { background: #ff6020; }
         }
 
-        /* Botón de Historia y Modal */
-        .btn-info-historia {
-            background: transparent;
-            color: #8b949e;
-            border: 1px dashed #30363d;
+        /* ── HERO ── */
+        .hero {
+            padding: 40px 16px 30px;
+            text-align: center;
+            position: relative; z-index: 1;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(200,168,75,0.1);
+            border: 1px solid rgba(200,168,75,0.3);
+            border-radius: 20px; padding: 5px 14px;
+            font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 16px;
+            animation: fadeDown 0.5s ease-out both;
+        }
+
+        @keyframes fadeDown {
+            from { opacity:0; transform:translateY(-10px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3.5rem, 16vw, 5.5rem);
+            line-height: 0.9; letter-spacing: 3px;
+            color: var(--gold2);
+            text-shadow:
+                0 0 30px rgba(200,168,75,0.5),
+                0 0 60px rgba(200,168,75,0.2),
+                4px 4px 0 rgba(200,100,0,0.3);
+            animation: titleEntry 0.6s ease-out 0.1s both;
+        }
+
+        @keyframes titleEntry {
+            from { opacity:0; transform:scale(0.8); }
+            to   { opacity:1; transform:scale(1); }
+        }
+
+        .hero-title-sub {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            letter-spacing: 8px; color: var(--blue);
+            margin-top: 4px;
+            animation: titleEntry 0.6s ease-out 0.2s both;
+        }
+
+        .hero-desc {
+            font-size: 0.85rem; color: var(--muted);
+            line-height: 1.7; margin: 16px 0 20px;
+            animation: titleEntry 0.6s ease-out 0.3s both;
+        }
+
+        /* ── COUNTDOWN WIDGET ── */
+        .countdown-widget {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 20px 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 40px rgba(200,168,75,0.08), inset 0 1px 0 rgba(200,168,75,0.1);
+            animation: titleEntry 0.6s ease-out 0.35s both;
+        }
+
+        .countdown-label {
+            font-size: 0.6rem; letter-spacing: 4px;
+            color: var(--muted); text-transform: uppercase; margin-bottom: 14px;
+        }
+
+        .countdown-digits {
+            display: flex; justify-content: center;
+            gap: 6px; align-items: center;
+        }
+
+        .cd-block {
+            text-align: center; flex: 1;
+        }
+
+        .cd-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.2rem, 10vw, 3rem);
+            color: var(--gold2); line-height: 1;
+            text-shadow: 0 0 20px rgba(200,168,75,0.4);
+            display: block;
+            animation: cdPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes cdPulse {
+            0%,100% { text-shadow: 0 0 15px rgba(200,168,75,0.3); }
+            50%      { text-shadow: 0 0 30px rgba(200,168,75,0.6); }
+        }
+
+        .cd-label {
+            font-size: 0.52rem; color: var(--muted);
+            letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;
+        }
+
+        .cd-sep {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem; color: rgba(200,168,75,0.3);
+            line-height: 1; margin-bottom: 18px;
+            animation: sepBlink 1s step-end infinite;
+        }
+
+        @keyframes sepBlink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+        /* ── FECHA BANNER ── */
+        .date-banner {
+            background: linear-gradient(135deg, rgba(200,100,0,0.15), rgba(200,168,75,0.08));
+            border: 1px solid rgba(200,168,75,0.3);
+            border-radius: 12px; padding: 14px 16px;
+            text-align: center; margin-bottom: 20px;
+            animation: titleEntry 0.6s ease-out 0.4s both;
+        }
+
+        .date-banner-main {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem; letter-spacing: 4px; color: var(--gold2);
+        }
+
+        .date-banner-sub {
+            font-size: 0.7rem; color: var(--muted); letter-spacing: 2px; margin-top: 3px;
+        }
+
+        /* ── FEATURE CARDS ── */
+        .features {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 10px; margin-bottom: 24px;
+            animation: titleEntry 0.6s ease-out 0.45s both;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px; padding: 16px 14px;
+            text-align: center; transition: 0.2s;
+            position: relative; overflow: hidden;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(200,168,75,0.3);
+            transform: translateY(-2px);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 2px;
+        }
+
+        .feature-card.blue::before   { background: var(--blue); }
+        .feature-card.gold::before   { background: var(--gold); }
+        .feature-card.green::before  { background: var(--green); }
+        .feature-card.ember::before  { background: var(--ember); }
+        .feature-card.fire::before   { background: var(--fire); }
+        .feature-card.purple::before { background: #bc8cff; }
+
+        .feature-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        .feature-title { font-size: 0.78rem; font-weight: 900; color: var(--text); margin-bottom: 3px; }
+        .feature-desc  { font-size: 0.6rem; color: var(--muted); line-height: 1.5; }
+
+        /* ── CINE PREVIEW ── */
+        .cine-preview {
+            background: linear-gradient(135deg, rgba(10,14,28,0.9), rgba(4,6,15,0.95));
+            border: 1px solid rgba(88,166,255,0.2);
+            border-radius: 16px; padding: 18px;
+            margin-bottom: 20px;
+            animation: titleEntry 0.6s ease-out 0.5s both;
+        }
+
+        .cine-title-row {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+        }
+
+        .cine-title-icon { font-size: 1.5rem; }
+
+        .cine-title-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem; letter-spacing: 3px; color: var(--blue);
+        }
+
+        .cine-title-sub { font-size: 0.58rem; color: var(--muted); letter-spacing: 2px; }
+
+        .movie-row {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 9px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.75rem;
+        }
+
+        .movie-row:last-child { border-bottom: none; }
+        .movie-day { color: var(--muted); font-size: 0.65rem; letter-spacing: 1px; width: 50px; }
+        .movie-name { color: var(--blue); font-weight: 800; flex: 1; margin: 0 8px; }
+        .movie-time { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; }
+
+        /* ── PRECIOS PREVIEW ── */
+        .precios-preview {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 18px;
+            margin-bottom: 20px;
+            animation: titleEntry 0.6s ease-out 0.55s both;
+        }
+
+        .precios-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem; letter-spacing: 3px;
+            color: var(--gold); margin-bottom: 14px;
+        }
+
+        .precio-row {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.75rem;
+        }
+
+        .precio-row:last-child { border-bottom: none; }
+        .precio-label { color: var(--muted); }
+        .precio-val   { color: var(--ember); font-weight: 800; font-family: 'Share Tech Mono', monospace; }
+        .precio-val.free { color: var(--green); }
+
+        /* ── MAPA MINI ── */
+        .mapa-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden;
+            margin-bottom: 20px;
+            animation: titleEntry 0.6s ease-out 0.6s both;
+        }
+
+        .mapa-header {
+            padding: 14px 16px 10px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem; letter-spacing: 3px; color: var(--text);
+        }
+
+        .mapa-ascii {
+            background: rgba(5,10,5,0.8);
+            padding: 14px 16px; font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem; line-height: 1.9; color: rgba(63,185,80,0.6);
+        }
+
+        .mapa-ascii .node { color: var(--gold); font-weight: bold; }
+        .mapa-ascii .you  { color: var(--green); font-weight: bold; animation: blinkYou 1s step-end infinite; }
+        @keyframes blinkYou { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        .mapa-footer {
+            padding: 12px 16px;
+        }
+
+        .btn-maps {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; width: 100%; padding: 11px;
+            background: rgba(234,67,53,0.1);
+            border: 1px solid rgba(234,67,53,0.3);
+            border-radius: 8px; color: #ff6b55;
+            text-decoration: none; font-weight: 800;
+            font-size: 0.75rem; letter-spacing: 1px; transition: 0.2s;
+        }
+
+        .btn-maps:hover { background: rgba(234,67,53,0.18); }
+
+        /* ── CTA PRINCIPAL ── */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(200,100,0,0.1), rgba(200,168,75,0.06));
+            border: 1px solid rgba(200,168,75,0.25);
+            border-radius: 18px; padding: 24px 20px;
+            text-align: center; margin-bottom: 24px;
+            animation: titleEntry 0.6s ease-out 0.65s both;
+        }
+
+        .cta-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem; letter-spacing: 3px;
+            color: var(--gold2); margin-bottom: 6px;
+        }
+
+        .cta-sub {
+            font-size: 0.72rem; color: var(--muted);
+            line-height: 1.6; margin-bottom: 18px;
+        }
+
+        .btn-wa-big {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; width: 100%; padding: 15px;
+            background: linear-gradient(135deg, #128c7e, #25d366);
+            border: none; border-radius: 12px;
+            color: white; font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem; font-weight: 900;
+            letter-spacing: 1px; cursor: pointer;
+            text-decoration: none; transition: 0.3s;
+            box-shadow: 0 4px 25px rgba(37,211,102,0.35);
             margin-bottom: 10px;
-            width: 100%;
-            font-size: 0.85rem;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
         }
 
-        .btn-info-historia:hover {
-            color: #58a6ff;
-            border-color: #58a6ff;
+        .btn-wa-big:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(37,211,102,0.5); }
+
+        .btn-share {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; width: 100%; padding: 12px;
+            background: rgba(88,166,255,0.08);
+            border: 1px solid rgba(88,166,255,0.25);
+            border-radius: 10px; color: var(--blue);
+            font-family: 'Nunito', sans-serif; font-size: 0.82rem;
+            font-weight: 800; cursor: pointer; transition: 0.2s;
+            letter-spacing: 1px;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(5px);
+        .btn-share:hover { background: rgba(88,166,255,0.15); }
+
+        /* ── HISTORIA MINI ── */
+        .historia-card {
+            background: var(--surface);
+            border: 1px solid rgba(200,168,75,0.15);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 14px 14px 0;
+            padding: 16px; margin-bottom: 20px;
+            font-size: 0.75rem; color: #b0a080;
+            line-height: 1.8;
+            animation: titleEntry 0.6s ease-out 0.7s both;
         }
 
-        .modal-content {
-            background-color: #161b22;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #58a6ff;
-            width: 85%;
-            max-width: 400px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.8);
+        .historia-card strong { color: var(--gold); }
+        .historia-card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem; letter-spacing: 3px;
+            color: var(--gold2); margin-bottom: 8px;
         }
 
-        .close-btn {
-            color: #8b949e;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: -10px;
+        /* ── MATIAS BIO ── */
+        .bio-card {
+            background: linear-gradient(135deg, rgba(0,50,100,0.12), rgba(0,80,40,0.08));
+            border: 1px solid rgba(88,166,255,0.18);
+            border-radius: 16px; padding: 18px;
+            margin-bottom: 24px;
+            animation: titleEntry 0.6s ease-out 0.75s both;
+        }
+
+        .bio-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+        }
+
+        .bio-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), var(--green));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0;
+            border: 2px solid rgba(88,166,255,0.3);
+        }
+
+        .bio-name {
+            font-weight: 900; font-size: 0.9rem; color: var(--text);
+        }
+
+        .bio-role {
+            font-size: 0.6rem; color: var(--blue); letter-spacing: 2px;
+            text-transform: uppercase; margin-top: 2px;
+        }
+
+        .bio-text {
+            font-size: 0.72rem; color: var(--muted); line-height: 1.7;
+        }
+
+        .bio-aus {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(88,166,255,0.1);
+            border: 1px solid rgba(88,166,255,0.2);
+            border-radius: 20px; padding: 4px 10px;
+            font-size: 0.62rem; color: var(--blue);
+            font-weight: 800; margin-top: 10px;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center; font-size: 0.6rem;
+            color: var(--muted); line-height: 2.2; letter-spacing: 1px;
+            padding: 20px 16px 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
     </style>
 </head>
-
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
-    localStorage.setItem('arauco-last-online', new Date().toISOString());
-  });
-}
-</script>
-
 <body>
 
-    <div class="container">
-        <h1>ARAUCO DIGITAL HUB</h1>
-        <div class="subtitle">Tecnología, Historia & Gastronomía</div>
+<!-- ESTRELLAS -->
+<div class="stars" id="stars"></div>
 
-        <div class="login-box">
-            <div style="font-size: 0.8rem; margin-bottom: 8px; color: #c9d1d9;">📶 CONECTAR A STARLINK SATELITAL</div>
-            <form name="login" action="$(link-login-only)" method="post">
-                <input type="hidden" name="dst" value="$(link-orig)" />
-                <input name="username" type="text" placeholder="Ingresá tu Código Aquí" required autofocus>
-                <input name="password" type="hidden">
-                <button type="submit" class="btn-connect">ACCEDER A INTERNET</button>
-            </form>
+<!-- COUNTDOWN BAR -->
+<div class="countdown-bar" id="top-bar">
+    🔥 SEMANA SANTA 2026 · BARRIAL DE ARAUCO · <span id="bar-count">Calculando...</span>
+</div>
+
+<div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-eyebrow">
+            🛰️ Señor de la Peña · Semana Santa
         </div>
+        <div class="hero-title">ARAUCO<br>DIGITAL<br>HUB</div>
+        <div class="hero-title-sub">Tecnología · Historia · Gastronomía</div>
+        <div class="hero-desc">
+            El primer nodo tecnológico del Barrial de Arauco.<br>
+            WiFi Satelital Starlink donde no hay señal,<br>
+            parrilla, cine 4K y mucho más.
+        </div>
+    </div>
 
-        <button type="button" class="btn-info-historia"
-            onclick="document.getElementById('modal-historia').style.display='block'">
-            📜 Leer Historia del Señor de la Peña & Mapa
+    <!-- COUNTDOWN -->
+    <div class="countdown-widget">
+        <div class="countdown-label">⏳ Empieza en</div>
+        <div class="countdown-digits">
+            <div class="cd-block">
+                <span class="cd-number" id="cd-days">--</span>
+                <div class="cd-label">días</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block">
+                <span class="cd-number" id="cd-hours">--</span>
+                <div class="cd-label">horas</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block">
+                <span class="cd-number" id="cd-mins">--</span>
+                <div class="cd-label">min</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block">
+                <span class="cd-number" id="cd-secs">--</span>
+                <div class="cd-label">seg</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FECHA -->
+    <div class="date-banner">
+        <div class="date-banner-main">JUEVES 2 AL DOMINGO 5</div>
+        <div class="date-banner-sub">📅 Abril 2026 · Barrial de Arauco · La Rioja</div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="features">
+        <div class="feature-card blue">
+            <span class="feature-icon">🛰️</span>
+            <div class="feature-title">WiFi Satelital</div>
+            <div class="feature-desc">Starlink donde la 4G no llega. Desde $4.000</div>
+        </div>
+        <div class="feature-card gold">
+            <span class="feature-icon">🥩</span>
+            <div class="feature-title">Parrilla & Combos</div>
+            <div class="feature-desc">Hamburguesas, combos y gastronomía regional</div>
+        </div>
+        <div class="feature-card ember">
+            <span class="feature-icon">🎬</span>
+            <div class="feature-title">Cine 4K</div>
+            <div class="feature-desc">Bajo las estrellas · TV 55" · Cada noche 21:30</div>
+        </div>
+        <div class="feature-card green">
+            <span class="feature-icon">🔋</span>
+            <div class="feature-title">Carga Celular</div>
+            <div class="feature-desc">Punto de carga seguro en el desierto</div>
+        </div>
+        <div class="feature-card fire">
+            <span class="feature-icon">📜</span>
+            <div class="feature-title">El Enigma</div>
+            <div class="feature-desc">Juego digital · Ganá descuentos reales</div>
+        </div>
+        <div class="feature-card purple">
+            <span class="feature-icon">🖨️</span>
+            <div class="feature-title">Oficina Digital</div>
+            <div class="feature-desc">Trámites, impresiones y escaneos</div>
+        </div>
+    </div>
+
+    <!-- CINE -->
+    <div class="cine-preview">
+        <div class="cine-title-row">
+            <span class="cine-title-icon">🎬</span>
+            <div>
+                <div class="cine-title-text">CARTELERA 4K</div>
+                <div class="cine-title-sub">Cada noche · 21:30 hs · Al aire libre</div>
+            </div>
+        </div>
+        <div class="movie-row">
+            <span class="movie-day">JUEVES</span>
+            <span class="movie-name">MUCHACHOS</span>
+            <span class="movie-time">21:30</span>
+        </div>
+        <div class="movie-row">
+            <span class="movie-day">VIERNES</span>
+            <span class="movie-name">LA PASIÓN DE CRISTO</span>
+            <span class="movie-time">21:30</span>
+        </div>
+        <div class="movie-row">
+            <span class="movie-day">SÁBADO</span>
+            <span class="movie-name">COCO / ESP. LA CARROZA</span>
+            <span class="movie-time">21:30</span>
+        </div>
+        <div class="movie-row">
+            <span class="movie-day">DOMINGO</span>
+            <span class="movie-name">PROJECT HAIL MARY</span>
+            <span class="movie-time">21:30</span>
+        </div>
+        <div style="font-size:0.62rem; color:var(--muted); text-align:center; margin-top:10px; letter-spacing:1px;">
+            ✓ Gratis con Combo Arauco &nbsp;·&nbsp; Individual $4.000
+        </div>
+    </div>
+
+    <!-- PRECIOS -->
+    <div class="precios-preview">
+        <div class="precios-title">💰 PRECIOS DEL HUB</div>
+        <div class="precio-row">
+            <span class="precio-label">📶 WiFi 30 minutos</span>
+            <span class="precio-val">$4.000</span>
+        </div>
+        <div class="precio-row">
+            <span class="precio-label">📶 WiFi 1 hora</span>
+            <span class="precio-val">$7.000</span>
+        </div>
+        <div class="precio-row">
+            <span class="precio-label">📶 WiFi 3 horas</span>
+            <span class="precio-val">$15.000</span>
+        </div>
+        <div class="precio-row">
+            <span class="precio-label">🍔 Combo Arauco (Burga+Soda+WiFi+Cine)</span>
+            <span class="precio-val">$19.500</span>
+        </div>
+        <div class="precio-row">
+            <span class="precio-label">🎬 Entrada Cine 4K</span>
+            <span class="precio-val">$4.000</span>
+        </div>
+        <div class="precio-row">
+            <span class="precio-label">🔋 Carga de celular</span>
+            <span class="precio-val">$4.000</span>
+        </div>
+        <div class="precio-row">
+            <span class="precio-label">🧉 Combo Mate (Agua caliente+WiFi)</span>
+            <span class="precio-val">$5.500</span>
+        </div>
+    </div>
+
+    <!-- MAPA -->
+    <div class="mapa-card">
+        <div class="mapa-header">📍 DÓNDE ESTAMOS</div>
+        <div class="mapa-ascii">
+<span class="node">⛰️ La Piedra (500m →)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+<span class="you">★ ARAUCO HUB ← ACÁ ESTAMOS</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+🚑 Sanitario (400m →)<br>
+🚌 Colectivos (↓ acceso)
+        </div>
+        <div class="mapa-footer">
+            <a class="btn-maps"
+               href="https://www.google.com/maps/search/?api=1&query=-28.82527094332069,-66.75592481914413"
+               target="_blank">
+                📍 Abrir en Google Maps
+            </a>
+        </div>
+    </div>
+
+    <!-- HISTORIA -->
+    <div class="historia-card">
+        <h3>⛰️ EL SEÑOR DE LA PEÑA</h3>
+        Antes de ser cristiano, fue <strong>Llastay</strong> — el dios tutelar de los cerros 
+        para los pueblos originarios. La roca, moldeada por siglos de viento del desierto, 
+        parece el perfil de Cristo. Hoy, más de <strong>60.000 peregrinos</strong> llegan 
+        cada Semana Santa para encontrarse con esa misma fe que lleva siglos en estas piedras.
+    </div>
+
+    <!-- BIO MATI -->
+    <div class="bio-card">
+        <div class="bio-header">
+            <div class="bio-avatar">👨‍💻</div>
+            <div>
+                <div class="bio-name">Matías E. Peralta</div>
+                <div class="bio-role">Historiador · Programador · Fundador del Hub</div>
+            </div>
+        </div>
+        <div class="bio-text">
+            26 años, Aimogasta. Llevé internet satelital al desierto para que ningún peregrino 
+            se quede sin señal. El Hub es mi proyecto para financiar el próximo capítulo: 
+            estudiar y trabajar en Australia.
+        </div>
+        <div class="bio-aus">🇦🇺 Visa Work & Holiday 462 aprobada</div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <div class="cta-title">¿VENÍS AL BARRIAL?</div>
+        <div class="cta-sub">
+            Guardá esta página antes de ir — la vas a necesitar.<br>
+            Sin señal 4G, el Hub es tu única conexión al mundo.
+        </div>
+        <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Ya%20guarde%20la%20p%C3%A1gina%20del%20Hub%20%F0%9F%9B%B0%EF%B8%8F%20Nos%20vemos%20en%20el%20Barrial!"
+           class="btn-wa-big" target="_blank">
+            💬 Avisarle a Matías que voy
+        </a>
+        <button class="btn-share" onclick="shareApp()">
+            📤 Compartir con quien va al Barrial
         </button>
+    </div>
 
-        <div class="grid">
-            <div class="category">🚀 WIFI VOUCHERS</div>
-            <div class="item">30 MIN EXPRESS <span class="price">$4.000</span></div>
-            <div class="item">1 HORA FULL <span class="price">$7.000</span></div>
-            <div class="item">3 HORAS RELAX <span class="price">$15.000</span></div>
-            <div class="item">DÍA COMERCIANTE <span class="price">$45.000</span></div>
+    <!-- FOOTER -->
+    <div class="footer">
+        <strong style="color:var(--gold); font-family:'Bebas Neue'; font-size:1.1rem; letter-spacing:3px;">
+            ARAUCO DIGITAL HUB
+        </strong><br>
+        Matías E. Peralta · Aimogasta · La Rioja · Argentina<br>
+        🛰️ Starlink Satelital · 🎬 Cine 4K · 🥩 Parrilla<br>
+        <span style="color:var(--gold); font-size:0.62rem;">🇦🇺 Camino a Australia — Visa 462 aprobada</span><br>
+        <span style="font-size:0.55rem; opacity:0.4;">
+            Página diseñada por Matías E. Peralta · Arauco Digital Hub 2026
+        </span>
+    </div>
 
-            <div class="category">🍔 COMBOS & COMIDA</div>
-            <div class="item"><b>Combo Arauco</b><br>Burga + Soda + WiFi <span class="price">$19.500</span></div>
-            <div class="item"><b>Combo Mate</b><br>Agua Caliente + WiFi <span class="price">$5.500</span></div>
-            <div class="item">Hamburguesa <span class="price">$12.500</span></div>
-            <div class="item">Licuados Frutales <span class="price">$5.000</span></div>
-            <div class="item">Café / Té Caliente <span class="price">$3.500</span></div>
-            <div class="item">🧊 Bolsa de Hielo <span class="price">$3.000</span></div>
+</div><!-- /wrap -->
 
-            <div class="category">⛺ TECH & LOGÍSTICA</div>
-            <div class="item">🔋 Carga Celular <span class="price">$4.000</span></div>
-            <div class="item">🖨️ Oficina (Trámites) <span class="price">$6.000</span></div>
-            <div class="item" style="grid-column: 1 / span 2;">
-                🪑 <b>Mesas y Sillas:</b> Uso exclusivo con consumición.<br>
-                ⛺ <b>Carpas VIP:</b> Consultar disponibilidad en caja.
-            </div>
-
-            <div class="category">🎬 CINE 4K BAJO LAS ESTRELLAS (21:30 HS)</div>
-            <div class="cinema-box">
-                <div class="movie-entry"><span>JUEVES:</span> <span class="highlight-blue">MUCHACHOS</span></div>
-                <div class="movie-entry"><span>VIERNES:</span> <span class="highlight-blue">LA PASIÓN DE CRISTO</span>
-                </div>
-                <div class="movie-entry"><span>SÁBADO:</span> <span class="highlight-blue">COCO / ESPERANDO LA
-                        CARROZA</span></div>
-                <div class="movie-entry"><span>DOMINGO:</span> <span class="highlight-blue">PROJECT HAIL MARY</span>
-                </div>
-                <div style="font-size: 0.7rem; margin-top: 8px; color: #8b949e; text-align: center;">
-                    * Entrada libre comprando Combo Arauco. Individual: $4.000
-                </div>
-            </div>
-        </div>
-
-        <div class="api-box">
-            <div style="margin-bottom: 10px;">📍 <b>¿TE PERDISTE? PRENDÉ TU GPS Y VOLVÉ AL HUB:</b></div>
-            <a href="https://www.google.com/maps/search/?api=1&query= -28.82527094332069, -66.75592481914413"
-                target="_blank" class="btn-gps">VER LA UBICACIÓN DEL HUB</a>
-
-            <div style="margin-top: 15px;">💬 <b>PEDÍ DESDE TU LUGAR Y ENCARGALO A CUALQUIER HORA:</b></div>
-            <a href="https://wa.me/5493827432108?text=Hola%20Mati%21%20Quiero%20hacer%20un%20pedido%20al%20Hub"
-                class="btn-wa">PEDIR POR WHATSAPP</a>
-        </div>
-
-
-
-        <div class="api-box" style="background: rgba(28, 33, 40, 0.9); border: 1px solid #f0883e; margin-top:15px;">
-            <div style="margin-bottom: 10px; color: #f0883e; font-weight: bold;">
-                🛰️ ESTADO DEL TIEMPO (ZONA CERO):
-            </div>
-
-            <div id="weather-data" style="font-size: 0.95rem;">
-                Cargando clima...
-            </div>
-        </div>
-
-
-
-
-        <div class="api-box" style="border: 1px solid #58a6ff;">
-            🧠 <b>RECOMENDACIÓN INTELIGENTE:</b><br>
-            <div id="smart-recommendation">Analizando condiciones...</div>
-        </div>
-
-        <div class="api-box" style="border: 1px solid #ea4335;">
-            🚨 <b>ALERTA DEL SISTEMA:</b><br>
-            <div id="weather-alert">Sin alertas</div>
-        </div>
-
-        <div class="api-box" style="border: 1px solid #f0883e;">
-            💰 <b>OFERTA DINÁMICA DEL MOMENTO:</b><br>
-            <div id="dynamic-offer">Calculando oferta...</div>
-        </div>
-
-        <div class="api-box" style="border: 1px solid #238636;">
-            📊 <b>TENDENCIA DE CONSUMO:</b><br>
-            <div id="demand-status">Analizando demanda...</div>
-        </div>
-
-        <div class="api-box" style="border: 1px solid #8b949e;">
-            👥 <b>USUARIOS CONECTADOS:</b><br>
-            <div id="users-online">Calculando...</div>
-        </div>
-
-        <div class="api-box" style="border: 1px solid #58a6ff;">
-            ⏱️ <b>ACTIVIDAD RECIENTE:</b><br>
-            <div id="recent-activity">Cargando actividad...</div>
-        </div>
-
-        <div class="api-box" style="border: 1px solid #f0883e;">
-            🕒 <b>PRECIO DINÁMICO (AHORA):</b><br>
-            <div id="time-pricing">Calculando precios...</div>
-        </div>
-
-        <div class="api-box" style="border: 1px solid #ea4335;">
-            🎪 <b>MODO EVENTO:</b><br>
-            <div id="event-mode">Analizando flujo...</div>
-        </div>
-
-
-        <script>
-            fetch("https://api.open-meteo.com/v1/forecast?latitude=-28.83&longitude=-66.75&current_weather=true")
-                .then(res => res.json())
-                .then(data => {
-                    const w = data.current_weather;
-
-                    const temp = w.temperature;
-                    const wind = w.windspeed;
-                    const code = w.weathercode;
-
-                    let estado = "Despejado";
-
-                    if (code > 2) estado = "Nublado";
-                    if (code > 50) estado = "Lluvia";
-                    if (code > 70) estado = "Tormenta";
-
-                    // CLIMA
-                    document.getElementById("weather-data").innerHTML = `
-            🌡️ Temperatura: <b>${temp}°C</b><br>
-            🌬️ Viento: <b>${wind} km/h</b><br>
-            ☁️ Estado: <b>${estado}</b>
+<script>
+    // ── ESTRELLAS ───────────────────────────────────────────────
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 100; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = Math.random() * 2.5 + 0.5;
+        s.style.cssText = `
+            left:${Math.random()*100}vw; top:${Math.random()*100}vh;
+            width:${size}px; height:${size}px;
+            animation-duration:${Math.random()*4+1.5}s;
+            animation-delay:${Math.random()*4}s;
+            opacity:${Math.random()*0.5+0.1};
         `;
+        starsEl.appendChild(s);
+    }
 
-                    // 🧠 RECOMENDACIONES
-                    let recomendacion = "";
+    // ── COUNTDOWN ───────────────────────────────────────────────
+    // Cambiar esta fecha al inicio real del evento
+    const TARGET = new Date('2026-04-02T00:00:00-03:00');
 
-                    if (temp >= 30) {
-                        recomendacion = "🔥 Hace calor: Promocionar LICUADOS + AGUA FRÍA + HIELO";
-                    } else if (temp <= 10) {
-                        recomendacion = "❄️ Hace frío: Promocionar CAFÉ, TÉ y COMBO MATE";
-                    } else {
-                        recomendacion = "👌 Clima ideal: Promocionar COMBO ARAUCO y HAMBURGUESAS";
-                    }
+    function pad(n) { return String(Math.max(0,n)).padStart(2,'0'); }
 
-                    if (wind > 30) {
-                        recomendacion += "<br>💨 Viento fuerte: Ofrecer CARPAS VIP";
-                    }
+    function updateCountdown() {
+        const diff = TARGET - new Date();
 
-                    document.getElementById("smart-recommendation").innerHTML = recomendacion;
+        if (diff <= 0) {
+            document.getElementById('cd-days').textContent  = '00';
+            document.getElementById('cd-hours').textContent = '00';
+            document.getElementById('cd-mins').textContent  = '00';
+            document.getElementById('cd-secs').textContent  = '00';
+            document.getElementById('bar-count').textContent = '🔥 EL HUB ESTÁ ACTIVO AHORA';
+            return;
+        }
 
-                    // 🚨 ALERTAS
-                    let alerta = "Sin alertas";
+        const days  = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins  = Math.floor((diff % 3600000) / 60000);
+        const secs  = Math.floor((diff % 60000) / 1000);
 
-                    if (code >= 61) {
-                        alerta = "🌧️ Posible lluvia: Proteger equipos y ofrecer zonas cubiertas";
-                    }
+        document.getElementById('cd-days').textContent  = pad(days);
+        document.getElementById('cd-hours').textContent = pad(hours);
+        document.getElementById('cd-mins').textContent  = pad(mins);
+        document.getElementById('cd-secs').textContent  = pad(secs);
+        document.getElementById('bar-count').textContent = `⏳ ${days}d ${pad(hours)}h ${pad(mins)}m`;
+    }
 
-                    if (wind > 50) {
-                        alerta = "⚠️ Viento fuerte peligroso: Asegurar carpas y estructuras";
-                    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-                    if (temp > 38) {
-                        alerta = "🔥 Calor extremo: Riesgo de deshidratación";
-                    }
-
-                    document.getElementById("weather-alert").innerHTML = alerta;
-
-                    // 💰 OFERTA DINÁMICA
-                    let oferta = "";
-
-                    if (temp >= 32) {
-                        oferta = "🥤 PROMO CALOR: Licuado + Hielo = $7.000";
-                    } else if (temp <= 12) {
-                        oferta = "☕ PROMO FRÍO: Café + WiFi = $5.000";
-                    } else {
-                        oferta = "🍔 PROMO FULL: Combo Arauco con descuento HOY";
-                    }
-
-                    document.getElementById("dynamic-offer").innerHTML = oferta;
-
-                    // 📊 DEMANDA SIMULADA
-                    let demanda = "";
-
-                    if (temp >= 30) {
-                        demanda = "🔥 Alta demanda en bebidas frías (Quedan pocas unidades)";
-                    } else if (temp <= 10) {
-                        demanda = "❄️ Alta demanda en bebidas calientes";
-                    } else {
-                        demanda = "📈 Flujo constante de clientes";
-                    }
-
-                    if (wind > 35) {
-                        demanda += "<br>⛺ Alta demanda de carpas";
-                    }
-
-                    document.getElementById("demand-status").innerHTML = demanda;
-                })
-                .catch(() => {
-                    document.getElementById("weather-data").innerText = "Clima no disponible";
-                });
-        </script>
-
-        <script>
-            /* 👥 USUARIOS CONECTADOS (simulado inteligente) */
-            let baseUsers = Math.floor(Math.random() * 25) + 15;
-
-            setInterval(() => {
-                let variacion = Math.floor(Math.random() * 5);
-                document.getElementById("users-online").innerHTML =
-                    baseUsers + variacion + " personas en línea";
-            }, 4000);
-
-
-            /* ⏱️ ACTIVIDAD RECIENTE (gatillo psicológico) */
-            const actividades = [
-                "🧑 Compraron Combo Arauco hace 2 min",
-                "🥤 Pedido de licuado recién entregado",
-                "📶 Nuevo usuario conectado",
-                "🍔 Hamburguesa en preparación",
-                "☕ Café servido hace instantes",
-                "⛺ Reserva de carpa confirmada"
-            ];
-
-            setInterval(() => {
-                const random = actividades[Math.floor(Math.random() * actividades.length)];
-                document.getElementById("recent-activity").innerHTML = random;
-            }, 5000);
-
-
-            /* 🕒 PRECIOS SEGÚN HORA */
-            function actualizarPrecios() {
-                const hora = new Date().getHours();
-                let mensaje = "";
-
-                if (hora >= 12 && hora <= 15) {
-                    mensaje = "🍔 Hora pico: Combos con alta demanda";
-                } else if (hora >= 18 && hora <= 23) {
-                    mensaje = "🌙 Noche activa: Cine + Combo Arauco recomendado";
-                } else if (hora >= 6 && hora <= 10) {
-                    mensaje = "☀️ Desayuno: Café + WiFi con promo";
-                } else {
-                    mensaje = "🕓 Horario tranquilo: Descuentos disponibles";
-                }
-
-                document.getElementById("time-pricing").innerHTML = mensaje;
-            }
-
-            setInterval(actualizarPrecios, 60000);
-            actualizarPrecios();
-
-
-            /* 🎪 MODO EVENTO MASIVO */
-            function detectarEvento() {
-                const hora = new Date().getHours();
-                let evento = "";
-
-                if (hora >= 20 && hora <= 2) {
-                    evento = "🔥 ALTA AFLUENCIA: Activar modo ventas intensivas";
-                } else if (hora >= 10 && hora <= 18) {
-                    evento = "📈 Flujo constante de peregrinos";
-                } else {
-                    evento = "🌙 Baja actividad";
-                }
-
-                document.getElementById("event-mode").innerHTML = evento;
-            }
-
-            setInterval(detectarEvento, 60000);
-            detectarEvento();
-        </script>
-
-        <div class="api-box" style="border-left: 4px solid #f0883e; background: rgba(240, 136, 62, 0.05);">
-            📢 <b>INFORMACIÓN AL PEREGRINO:</b> <br>
-            <div style="text-align: left; margin-top: 10px; font-size: 0.85rem; line-height: 1.6;">
-                ⏰ <b>MISA CENTRAL:</b> <span class="highlight-blue">10:00 hs / 17:00 hs</span><br>
-                🚌 <b>COLECTIVOS:</b> <span style="color: #3fb950;">Salidas cada 30 min</span> (Sector Principal)<br>
-                🚑 <b>PUESTO SANITARIO:</b> A 400 mts (Frente a la Comisaría)<br>
-                📡 <b>ESTADO SEÑAL 4G/5G:</b> <span style="color: #da3633; font-weight: bold;">CRÍTICA / SIN
-                    SEÑAL</span>
-            </div>
-            <div
-                style="margin-top: 10px; font-size: 0.75rem; border-top: 1px dashed #30363d; padding-top: 8px; color: #8b949e;">
-                * Información actualizada por el Arauco Digital Hub - Matias E. Peralta.
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-historia" class="modal">
-        <div class="modal-content">
-            <span class="close-btn"
-                onclick="document.getElementById('modal-historia').style.display='none'">&times;</span>
-            <h2 style="color: #58a6ff; margin-top: 0;">EL SEÑOR DE LA PEÑA</h2>
-            <p style="font-style: italic; color: #8b949e; font-size: 0.85rem;">Breve reseña histórica e información del
-                predio.</p>
-
-            <div style="text-align: left; font-size: 0.85rem; line-height: 1.5; color: #c9d1d9;">
-                <p><b>La Historia:</b> Esta formación rocosa, que asemeja el perfil de Cristo, era venerada por las
-                    poblaciones originarias mucho antes de la llegada de los españoles. Fue llamada "Llastay" (Dios
-                    tutelar de los cerros).</p>
-                <p>Con la evangelización, la fe cristiana se sincretizó con la geografía local, convirtiéndose en el
-                    punto de peregrinación de Semana Santa más importante de la región.</p>
-
-                <hr style="border: 0; border-top: 1px dashed #30363d; margin: 15px 0;">
-
-                <p style="color: #f0883e; font-weight: bold;">📍 MAPA MENTAL DEL PREDIO:</p>
-                <ul style="padding-left: 20px;">
-                    <li><b>La Piedra:</b> A 500 mts al norte del Hub.</li>
-                    <li><b>Baños y Agua:</b> Sector central.</li>
-                    <li><b>Vía Crucis:</b> Sendero hacia el oeste.</li>
-                    <li><b>Asistencia Médica:</b> Acceso principal.</li>
-                </ul>
-            </div>
-
-            <button type="button"
-                style="background: #21262d; border: 1px solid #30363d; margin-top: 15px; width: 100%; color: white; padding: 10px; border-radius: 6px;"
-                onclick="document.getElementById('modal-historia').style.display='none'">CERRAR</button>
-        </div>
-    </div>
-
-    <script>
-        // Script Mikhmon: Copia username a password silenciosamente
-        document.login.onsubmit = function () {
-            if (document.login.password.value === "") {
-                document.login.password.value = document.login.username.value;
-            }
+    // ── SHARE ───────────────────────────────────────────────────
+    function shareApp() {
+        const data = {
+            title: '🛰️ Arauco Digital Hub — Señor de la Peña',
+            text:  '¡WiFi Satelital en el Barrial de Arauco! Cine 4K, parrilla y más. Guardá esta página antes de ir, no hay señal 4G.',
+            url:   window.location.href,
         };
 
-        // Ticker Crypto en tiempo real (Para el toque analista)
-        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ars')
-            .then(response => response.json())
-            .then(data => {
-                const price = data.bitcoin.ars.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
-                document.getElementById('btc-price').innerText = price;
-            })
-            .catch(() => { document.getElementById('btc-price').innerText = "Cotización Offline"; });
-    </script>
+        if (navigator.share) {
+            navigator.share(data).catch(() => copyFallback());
+        } else {
+            copyFallback();
+        }
+    }
+
+    function copyFallback() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            const btn = document.querySelector('.btn-share');
+            btn.textContent = '✓ Link copiado — mandalo por WhatsApp';
+            btn.style.color = 'var(--green)';
+            btn.style.borderColor = 'rgba(63,185,80,0.4)';
+            setTimeout(() => {
+                btn.textContent = '📤 Compartir con quien va al Barrial';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }, 2500);
+        });
+    }
+</script>
 
 </body>
-
 </html>
