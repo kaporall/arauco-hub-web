@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin conexión — Arauco Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:    #05080d;
+            --gold:  #c8a84b;
+            --blue:  #58a6ff;
+            --muted: #6b7c93;
+            --text:  #c9d1d9;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background: radial-gradient(ellipse at 50% 40%, rgba(88,166,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .wrap {
+            position: relative; z-index: 1;
+            max-width: 380px;
+        }
+
+        .icon {
+            font-size: 4rem; margin-bottom: 16px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 12px rgba(88,166,255,0.3));
+        }
+
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-8px); }
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem; font-weight: 900;
+            color: var(--blue); margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .sub {
+            font-size: 0.72rem; color: var(--muted);
+            line-height: 1.7; margin-bottom: 24px;
+            letter-spacing: 1px;
+        }
+
+        .info-box {
+            background: rgba(15,20,30,0.9);
+            border: 1px solid rgba(88,166,255,0.15);
+            border-radius: 12px; padding: 18px;
+            margin-bottom: 20px; text-align: left;
+        }
+
+        .info-row {
+            display: flex; justify-content: space-between;
+            padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.7rem;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: var(--muted); }
+        .info-value { color: var(--text); }
+        .info-value.good { color: #3fb950; }
+
+        .btn {
+            display: block; width: 100%; padding: 13px;
+            background: linear-gradient(135deg, #1a5fa8, var(--blue));
+            border: none; border-radius: 8px; color: #05080d;
+            font-family: 'Cinzel', serif; font-size: 0.85rem;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer;
+            margin-bottom: 10px; transition: 0.3s;
+        }
+
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(88,166,255,0.35); }
+
+        .pages-cached {
+            font-size: 0.62rem; color: var(--muted);
+            margin-top: 16px; line-height: 2; letter-spacing: 1px;
+        }
+
+        .pages-cached a {
+            color: var(--gold); text-decoration: none; margin: 0 6px;
+        }
+
+        .footer {
+            margin-top: 24px; font-size: 0.58rem;
+            color: rgba(107,124,147,0.5); letter-spacing: 1px;
+        }
+    </style>
+
+    <!-- ═══ PWA: ARAUCO DIGITAL HUB ═══ -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#58a6ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Arauco Hub">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <link rel="icon" href="/icons/favicon.ico">
+    <!-- ═══════════════════════════════ -->
+</head>
+<body>
+
+<div class="wrap">
+    <span class="icon">📡</span>
+
+    <h1>SIN SEÑAL</h1>
+    <div class="sub">
+        No hay conexión a internet en este momento.<br>
+        Pero el Hub sigue funcionando — algunas<br>
+        páginas están disponibles sin conexión.
+    </div>
+
+    <div class="info-box">
+        <div class="info-row">
+            <span class="info-label">📶 Estado WiFi Hub</span>
+            <span class="info-value" id="wifi-status">Verificando...</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🛰️ Starlink</span>
+            <span class="info-value">Puede estar reiniciando</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">⏱️ Última vez online</span>
+            <span class="info-value" id="last-online">—</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📱 Páginas en caché</span>
+            <span class="info-value good" id="cached-count">Calculando...</span>
+        </div>
+    </div>
+
+    <button class="btn" onclick="location.reload()">
+        ↺ Reintentar conexión
+    </button>
+
+    <div class="pages-cached">
+        Disponibles sin internet:<br>
+        <a href="/menu.html">Menú</a> ·
+        <a href="/cine.html">Cine</a> ·
+        <a href="/info.html">Info</a> ·
+        <a href="/pista1.html">Enigma</a>
+    </div>
+
+    <div class="footer">
+        ARAUCO DIGITAL HUB · Señor de la Peña<br>
+        🛰️ Starlink Satelital · Matías E. Peralta
+    </div>
+</div>
+
+<script>
+    // Estado de conexión
+    document.getElementById('wifi-status').textContent =
+        navigator.onLine ? '✓ Conectado a la red local' : '✗ Sin red';
+    document.getElementById('wifi-status').style.color =
+        navigator.onLine ? '#3fb950' : '#ea4335';
+
+    // Última vez online
+    const lastOnline = localStorage.getItem('arauco-last-online');
+    if (lastOnline) {
+        const d = new Date(lastOnline);
+        document.getElementById('last-online').textContent =
+            d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Contar páginas cacheadas
+    if ('caches' in window) {
+        caches.open('arauco-hub-v1').then(cache =>
+            cache.keys().then(keys => {
+                document.getElementById('cached-count').textContent =
+                    keys.length + ' páginas disponibles';
+            })
+        );
+    }
+
+    // Escuchar cuando vuelve la conexión
+    window.addEventListener('online', () => {
+        document.getElementById('wifi-status').textContent = '✓ Conexión restaurada — redirigiendo...';
+        document.getElementById('wifi-status').style.color = '#3fb950';
+        setTimeout(() => window.location.href = '/login.html', 1500);
+    });
+</script>
+
+
+    <script>
+    // ── PWA: Registrar Service Worker ──
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/service-worker.js')
+          .then(reg => {
+            console.log('[PWA] SW registrado:', reg.scope);
+            localStorage.setItem('arauco-last-online', new Date().toISOString());
+          })
+          .catch(err => console.warn('[PWA] Error SW:', err));
+      });
+    }
+    </script>
+</body>
+</html>

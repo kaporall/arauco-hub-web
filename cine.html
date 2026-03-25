@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cine 4K — Arauco Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #04060f;
+            --surface: rgba(10,14,28,0.96);
+            --surface2:rgba(16,20,38,0.9);
+            --border:  rgba(88,166,255,0.12);
+            --blue:    #58a6ff;
+            --blue2:   #a0c8ff;
+            --gold:    #c8a84b;
+            --gold2:   #f0d878;
+            --green:   #3fb950;
+            --ember:   #f0883e;
+            --red:     #ea4335;
+            --purple:  #bc8cff;
+            --text:    #ccd8f0;
+            --muted:   #5a6880;
+            --glow:    rgba(88,166,255,0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Fondo cielo estrellado */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(88,166,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 60%, rgba(188,140,255,0.04) 0%, transparent 45%),
+                radial-gradient(ellipse at 80% 40%, rgba(200,168,75,0.03) 0%, transparent 40%);
+            pointer-events: none; z-index: 0;
+            animation: skyShift 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes skyShift {
+            from { opacity: 1; }
+            to   { opacity: 0.7; }
+        }
+
+        /* Estrellas parpadeantes */
+        .stars-layer {
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 0;
+            overflow: hidden;
+        }
+
+        .star-dot {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%,100% { opacity: 0.8; transform: scale(1); }
+            50%      { opacity: 0.2; transform: scale(0.5); }
+        }
+
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0, transparent 3px,
+                rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+            );
+            pointer-events: none; z-index: 1;
+        }
+
+        .wrap {
+            position: relative; z-index: 2;
+            max-width: 440px; margin: 0 auto;
+            padding: 0 14px;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(4,6,15,0.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 14px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin: 0 -14px;
+        }
+
+        .brand {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem; font-weight: 700;
+            color: var(--blue); letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        .brand small {
+            display: block; font-family: 'DM Mono', monospace;
+            font-size: 0.52rem; color: var(--muted);
+            letter-spacing: 3px; font-weight: 400; margin-top: 1px;
+        }
+
+        .live-badge {
+            display: flex; align-items: center; gap: 5px;
+            background: rgba(88,166,255,0.1);
+            border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 20px; padding: 4px 10px;
+            font-size: 0.58rem; color: var(--blue);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        .live-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--blue);
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(88,166,255,0.6); }
+            50%      { opacity:0.7; box-shadow: 0 0 0 4px rgba(88,166,255,0); }
+        }
+
+        /* ── HERO ── */
+        .hero {
+            text-align: center;
+            padding: 28px 0 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 22px;
+        }
+
+        .hero-icon {
+            font-size: 3.2rem;
+            display: block; margin-bottom: 10px;
+            animation: float 3.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 16px rgba(88,166,255,0.4));
+        }
+
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-7px); }
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.7rem; font-weight: 900;
+            background: linear-gradient(135deg, #2060b0, var(--blue), var(--blue2), var(--blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; background-size: 200% 100%;
+            animation: shimmer 4s ease-in-out infinite;
+            line-height: 1.15;
+        }
+
+        @keyframes shimmer {
+            0%,100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+
+        .hero-sub {
+            font-size: 0.68rem; color: var(--muted);
+            margin-top: 6px; letter-spacing: 2px; line-height: 1.6;
+        }
+
+        /* Info técnica inline */
+        .tech-pills {
+            display: flex; justify-content: center;
+            gap: 8px; margin-top: 12px; flex-wrap: wrap;
+        }
+
+        .tech-pill {
+            background: rgba(88,166,255,0.07);
+            border: 1px solid rgba(88,166,255,0.2);
+            border-radius: 20px; padding: 3px 10px;
+            font-size: 0.58rem; color: var(--blue);
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        /* ── CARTELERA HOY ── */
+        .today-banner {
+            background: linear-gradient(135deg, rgba(88,100,255,0.1), rgba(88,166,255,0.06));
+            border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 14px; padding: 20px;
+            margin-bottom: 18px; position: relative;
+            overflow: hidden;
+        }
+
+        .today-banner::before {
+            content: 'ESTA NOCHE';
+            position: absolute; top: 10px; right: 14px;
+            font-size: 0.52rem; letter-spacing: 3px;
+            color: rgba(88,166,255,0.4); text-transform: uppercase;
+        }
+
+        .today-eyebrow {
+            font-size: 0.58rem; letter-spacing: 4px;
+            color: var(--blue); text-transform: uppercase;
+            margin-bottom: 8px; opacity: 0.7;
+        }
+
+        .today-movie {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem; font-weight: 900;
+            color: #e0f0ff; line-height: 1.15;
+            text-shadow: 0 0 20px rgba(88,166,255,0.3);
+            margin-bottom: 6px;
+        }
+
+        .today-meta {
+            font-size: 0.68rem; color: var(--muted);
+            line-height: 1.6; margin-bottom: 14px;
+        }
+
+        .today-time-row {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px; padding: 10px 14px;
+        }
+
+        .today-time {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem; font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(200,168,75,0.4);
+        }
+
+        .today-countdown {
+            text-align: right;
+        }
+
+        .today-countdown-label {
+            font-size: 0.55rem; color: var(--muted);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        .today-countdown-val {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem; font-weight: 700; color: var(--ember);
+        }
+
+        /* Entrada badge */
+        .entrada-row {
+            display: flex; gap: 8px; margin-top: 12px;
+        }
+
+        .entrada-badge {
+            flex: 1; text-align: center; border-radius: 6px;
+            padding: 8px; font-size: 0.62rem; letter-spacing: 1px;
+        }
+
+        .entrada-badge.free {
+            background: rgba(63,185,80,0.08);
+            border: 1px solid rgba(63,185,80,0.25);
+            color: var(--green);
+        }
+
+        .entrada-badge.paid {
+            background: rgba(240,136,62,0.07);
+            border: 1px solid rgba(240,136,62,0.2);
+            color: var(--ember);
+        }
+
+        .entrada-badge strong {
+            display: block; font-family: 'Cinzel', serif;
+            font-size: 0.9rem; margin-top: 3px;
+        }
+
+        /* ── CARTELERA SEMANAL ── */
+        .section-label {
+            font-size: 0.58rem; letter-spacing: 4px;
+            color: var(--muted); text-transform: uppercase;
+            margin: 22px 0 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .section-label::after {
+            content: ''; flex: 1; height: 1px;
+            background: var(--border);
+        }
+
+        .movie-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px;
+            margin-bottom: 10px; position: relative;
+            overflow: hidden; transition: 0.25s;
+            display: flex; gap: 14px; align-items: center;
+        }
+
+        .movie-card:hover { border-color: rgba(88,166,255,0.3); }
+
+        .movie-card.today-card {
+            border-color: rgba(88,166,255,0.3);
+            background: rgba(88,166,255,0.04);
+        }
+
+        .movie-card.today-card::after {
+            content: 'HOY';
+            position: absolute; top: 0; right: 14px;
+            background: var(--blue); color: #04060f;
+            font-size: 0.5rem; font-weight: 700;
+            letter-spacing: 2px; padding: 2px 8px;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .movie-day-col {
+            text-align: center; flex-shrink: 0; width: 50px;
+        }
+
+        .movie-day-name {
+            font-size: 0.58rem; letter-spacing: 2px;
+            color: var(--muted); text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .movie-day-num {
+            font-family: 'Cinzel', serif; font-size: 1.5rem;
+            font-weight: 900; color: var(--blue); line-height: 1;
+        }
+
+        .movie-divider {
+            width: 1px; background: var(--border);
+            align-self: stretch; flex-shrink: 0;
+        }
+
+        .movie-info { flex: 1; }
+
+        .movie-genre {
+            font-size: 0.55rem; letter-spacing: 2px;
+            color: var(--muted); text-transform: uppercase; margin-bottom: 4px;
+        }
+
+        .movie-title {
+            font-family: 'Cinzel', serif; font-size: 1rem;
+            font-weight: 700; color: var(--text); line-height: 1.2;
+            margin-bottom: 5px;
+        }
+
+        .movie-desc {
+            font-size: 0.62rem; color: var(--muted);
+            line-height: 1.5; margin-bottom: 6px;
+        }
+
+        .movie-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+
+        .mtag {
+            font-size: 0.52rem; letter-spacing: 1px;
+            text-transform: uppercase; padding: 2px 6px;
+            border-radius: 8px; border: 1px solid;
+        }
+
+        .mtag-blue  { color: var(--blue);   border-color: rgba(88,166,255,0.25);  background: rgba(88,166,255,0.06); }
+        .mtag-gold  { color: var(--gold);   border-color: rgba(200,168,75,0.25);  background: rgba(200,168,75,0.06); }
+        .mtag-green { color: var(--green);  border-color: rgba(63,185,80,0.25);   background: rgba(63,185,80,0.06); }
+        .mtag-ember { color: var(--ember);  border-color: rgba(240,136,62,0.25);  background: rgba(240,136,62,0.06); }
+        .mtag-purple{ color: var(--purple); border-color: rgba(188,140,255,0.25); background: rgba(188,140,255,0.06); }
+
+        .movie-time {
+            text-align: right; flex-shrink: 0;
+        }
+
+        .movie-time-val {
+            font-family: 'Cinzel', serif; font-size: 1rem;
+            font-weight: 700; color: var(--gold);
+        }
+
+        .movie-time-label {
+            font-size: 0.5rem; color: var(--muted); margin-top: 2px;
+        }
+
+        /* ── INFO TÉCNICA ── */
+        .tech-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px;
+            margin-top: 20px; margin-bottom: 14px;
+        }
+
+        .tech-title {
+            font-size: 0.58rem; letter-spacing: 3px;
+            color: var(--blue); text-transform: uppercase; margin-bottom: 12px;
+        }
+
+        .tech-row {
+            display: flex; justify-content: space-between;
+            padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.7rem;
+        }
+
+        .tech-row:last-child { border-bottom: none; }
+        .tech-label { color: var(--muted); }
+        .tech-value { color: var(--text); }
+        .tech-value.good { color: var(--green); }
+        .tech-value.gold { color: var(--gold); }
+
+        /* ── BOTÓN WA FLOTANTE ── */
+        .wa-float {
+            position: fixed; bottom: 20px; right: 16px; z-index: 200;
+            display: flex; align-items: center; gap: 8px;
+            background: #25d366; color: white; text-decoration: none;
+            padding: 12px 18px; border-radius: 50px;
+            font-family: 'DM Mono', monospace; font-size: 0.72rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+            animation: waPulse 2.5s ease-in-out infinite; transition: 0.3s;
+        }
+
+        .wa-float:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(37,211,102,0.5); }
+
+        @keyframes waPulse {
+            0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+            50%      { box-shadow: 0 4px 30px rgba(37,211,102,0.7); }
+        }
+
+        /* Fade in cards */
+        .movie-card { animation: fadeUp 0.4s ease-out both; }
+        .movie-card:nth-child(1) { animation-delay: 0.05s; }
+        .movie-card:nth-child(2) { animation-delay: 0.10s; }
+        .movie-card:nth-child(3) { animation-delay: 0.15s; }
+        .movie-card:nth-child(4) { animation-delay: 0.20s; }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(12px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+    </style>
+
+
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#58a6ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arauco Hub">
+<link rel="icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+    localStorage.setItem('arauco-last-online', new Date().toISOString());
+  });
+}
+</script>
+<body>
+
+<!-- Estrellas del cielo -->
+<div class="stars-layer" id="stars"></div>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="brand">
+        ARAUCO HUB
+        <small>🎬 cine 4k bajo las estrellas</small>
+    </div>
+    <div class="live-badge">
+        <span class="live-dot"></span>
+        21:30 HS
+    </div>
+</div>
+
+<div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero">
+        <span class="hero-icon">🎬</span>
+        <div class="hero-title">CINE 4K<br>BAJO LAS ESTRELLAS</div>
+        <div class="hero-sub">TV Samsung 55" · Audio envolvente · Al aire libre</div>
+        <div class="tech-pills">
+            <span class="tech-pill">📺 4K UHD</span>
+            <span class="tech-pill">🔊 Surround</span>
+            <span class="tech-pill">🌙 21:30 hs</span>
+            <span class="tech-pill">🌟 Al aire libre</span>
+        </div>
+    </div>
+
+    <!-- PELÍCULA DE HOY -->
+    <div class="today-banner">
+        <div class="today-eyebrow">▸ En pantalla hoy</div>
+        <div class="today-movie" id="today-title">MUCHACHOS</div>
+        <div class="today-meta" id="today-meta">Documental · Argentina 2022 · El camino al Mundial de Qatar</div>
+        <div class="today-time-row">
+            <div>
+                <div style="font-size:0.55rem;color:var(--muted);letter-spacing:2px;margin-bottom:2px;">FUNCIÓN</div>
+                <div class="today-time">21:30</div>
+            </div>
+            <div class="today-countdown">
+                <div class="today-countdown-label">Empieza en</div>
+                <div class="today-countdown-val" id="countdown-display">--:--:--</div>
+            </div>
+        </div>
+        <div class="entrada-row">
+            <div class="entrada-badge free">
+                🍔 Con Combo Arauco
+                <strong>GRATIS</strong>
+            </div>
+            <div class="entrada-badge paid">
+                🎟️ Entrada individual
+                <strong>$4.000</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARTELERA COMPLETA -->
+    <div class="section-label">Cartelera de la semana</div>
+
+    <!-- JUEVES -->
+    <div class="movie-card today-card" id="card-jueves">
+        <div class="movie-day-col">
+            <div class="movie-day-name">JUE</div>
+            <div class="movie-day-num" id="day-jueves">—</div>
+        </div>
+        <div class="movie-divider"></div>
+        <div class="movie-info">
+            <div class="movie-genre">Documental · Fútbol</div>
+            <div class="movie-title">MUCHACHOS</div>
+            <div class="movie-desc">El camino de la Selección Argentina al Mundial de Qatar 2022. Emoción pura.</div>
+            <div class="movie-tags">
+                <span class="mtag mtag-blue">⚽ Fútbol</span>
+                <span class="mtag mtag-gold">★ Épico</span>
+                <span class="mtag mtag-green">Apto todo</span>
+            </div>
+        </div>
+        <div class="movie-time">
+            <div class="movie-time-val">21:30</div>
+            <div class="movie-time-label">hs · hoy</div>
+        </div>
+    </div>
+
+    <!-- VIERNES -->
+    <div class="movie-card" id="card-viernes">
+        <div class="movie-day-col">
+            <div class="movie-day-name">VIE</div>
+            <div class="movie-day-num" id="day-viernes">—</div>
+        </div>
+        <div class="movie-divider"></div>
+        <div class="movie-info">
+            <div class="movie-genre">Drama · Fe · Semana Santa</div>
+            <div class="movie-title">LA PASIÓN DE CRISTO</div>
+            <div class="movie-desc">Mel Gibson. Las últimas horas de Jesús con una potencia visual sin igual. Especial Viernes Santo.</div>
+            <div class="movie-tags">
+                <span class="mtag mtag-purple">✝️ Fe</span>
+                <span class="mtag mtag-gold">★ Clásico</span>
+                <span class="mtag mtag-ember">+16</span>
+            </div>
+        </div>
+        <div class="movie-time">
+            <div class="movie-time-val">21:30</div>
+            <div class="movie-time-label">hs</div>
+        </div>
+    </div>
+
+    <!-- SÁBADO -->
+    <div class="movie-card" id="card-sabado">
+        <div class="movie-day-col">
+            <div class="movie-day-name">SÁB</div>
+            <div class="movie-day-num" id="day-sabado">—</div>
+        </div>
+        <div class="movie-divider"></div>
+        <div class="movie-info">
+            <div class="movie-genre">Animación / Comedia Familiar</div>
+            <div class="movie-title">COCO / ESPERANDO LA CARROZA</div>
+            <div class="movie-desc">Doble función: Disney·Pixar para los chicos + el clásico argentino infaltable para los grandes.</div>
+            <div class="movie-tags">
+                <span class="mtag mtag-ember">🎭 Doble</span>
+                <span class="mtag mtag-green">Familiar</span>
+                <span class="mtag mtag-gold">★ Argentina</span>
+            </div>
+        </div>
+        <div class="movie-time">
+            <div class="movie-time-val">21:30</div>
+            <div class="movie-time-label">hs</div>
+        </div>
+    </div>
+
+    <!-- DOMINGO -->
+    <div class="movie-card" id="card-domingo">
+        <div class="movie-day-col">
+            <div class="movie-day-name">DOM</div>
+            <div class="movie-day-num" id="day-domingo">—</div>
+        </div>
+        <div class="movie-divider"></div>
+        <div class="movie-info">
+            <div class="movie-genre">Ciencia Ficción · Aventura</div>
+            <div class="movie-title">PROJECT HAIL MARY</div>
+            <div class="movie-desc">Basada en la novela de Andy Weir. Un astronauta despierta solo en el espacio y debe salvar a la humanidad.</div>
+            <div class="movie-tags">
+                <span class="mtag mtag-blue">🚀 Sci-Fi</span>
+                <span class="mtag mtag-gold">★ Bestseller</span>
+                <span class="mtag mtag-green">Apto todo</span>
+            </div>
+        </div>
+        <div class="movie-time">
+            <div class="movie-time-val">21:30</div>
+            <div class="movie-time-label">hs</div>
+        </div>
+    </div>
+
+    <!-- FICHA TÉCNICA -->
+    <div class="tech-card">
+        <div class="tech-title">▸ Ficha técnica del cine</div>
+        <div class="tech-row">
+            <span class="tech-label">Pantalla</span>
+            <span class="tech-value good">Samsung 55" 4K UHD</span>
+        </div>
+        <div class="tech-row">
+            <span class="tech-label">Resolución</span>
+            <span class="tech-value">3840 × 2160 px</span>
+        </div>
+        <div class="tech-row">
+            <span class="tech-label">Audio</span>
+            <span class="tech-value">Sistema de parlantes externos</span>
+        </div>
+        <div class="tech-row">
+            <span class="tech-label">Lugar</span>
+            <span class="tech-value good">Al aire libre · Arauco Hub</span>
+        </div>
+        <div class="tech-row">
+            <span class="tech-label">Capacidad</span>
+            <span class="tech-value gold">Limitada · llegar antes de las 21:00</span>
+        </div>
+        <div class="tech-row">
+            <span class="tech-label">Entrada c/ Combo</span>
+            <span class="tech-value good">GRATIS</span>
+        </div>
+        <div class="tech-row">
+            <span class="tech-label">Entrada individual</span>
+            <span class="tech-value gold">$4.000</span>
+        </div>
+    </div>
+
+</div><!-- /wrap -->
+
+<!-- BOTÓN WA -->
+<a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Quiero%20reservar%20lugar%20para%20el%20cine%20de%20hoy%20%F0%9F%8E%AC"
+   class="wa-float" target="_blank">
+   🎬 Reservar lugar
+</a>
+
+<script>
+    // ── ESTRELLAS DEL CIELO ────────────────────────────────────
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div');
+        s.className = 'star-dot';
+        const size = Math.random() * 2.5 + 0.5;
+        s.style.cssText = `
+            left: ${Math.random()*100}vw;
+            top:  ${Math.random()*100}vh;
+            width: ${size}px; height: ${size}px;
+            animation-duration: ${Math.random()*3+1.5}s;
+            animation-delay: ${Math.random()*3}s;
+            opacity: ${Math.random()*0.6+0.2};
+        `;
+        starsContainer.appendChild(s);
+    }
+
+    // ── FECHAS DE LA SEMANA ────────────────────────────────────
+    // Calcula el jueves de Semana Santa próximo o actual
+    const today = new Date();
+    const day   = today.getDay(); // 0=Dom ... 4=Jue
+
+    // Encontrar el jueves más cercano (hacia adelante o actual si es jue)
+    const daysToThursday = (4 - day + 7) % 7 || 0;
+    const thursday = new Date(today);
+    thursday.setDate(today.getDate() + (daysToThursday === 0 && day === 4 ? 0 : daysToThursday > 0 ? daysToThursday : daysToThursday + 7));
+
+    const getDate = (base, offset) => {
+        const d = new Date(base);
+        d.setDate(base.getDate() + offset);
+        return d;
+    };
+
+    const thu = getDate(thursday, 0);
+    const fri = getDate(thursday, 1);
+    const sat = getDate(thursday, 2);
+    const sun = getDate(thursday, 3);
+
+    document.getElementById('day-jueves').textContent = thu.getDate();
+    document.getElementById('day-viernes').textContent = fri.getDate();
+    document.getElementById('day-sabado').textContent  = sat.getDate();
+    document.getElementById('day-domingo').textContent = sun.getDate();
+
+    // Resaltar la película de hoy según el día actual
+    const todayDay = today.getDay(); // 4=Jue, 5=Vie, 6=Sab, 0=Dom
+    const movieMap = {
+        4: { id: 'card-jueves',  title: 'MUCHACHOS',               meta: 'Documental · Argentina 2022 · El camino al Mundial de Qatar' },
+        5: { id: 'card-viernes', title: 'LA PASIÓN DE CRISTO',      meta: 'Drama · Fe · Mel Gibson · Especial Viernes Santo' },
+        6: { id: 'card-sabado',  title: 'COCO / ESPERANDO LA CARROZA', meta: 'Doble función · Animación Pixar + Clásico argentino' },
+        0: { id: 'card-domingo', title: 'PROJECT HAIL MARY',        meta: 'Ciencia Ficción · Basada en la novela de Andy Weir' },
+    };
+
+    // Quitar clase today-card de todos y asignar al de hoy
+    document.querySelectorAll('.movie-card').forEach(c => {
+        c.classList.remove('today-card');
+        // Quitar el ::after "HOY"
+    });
+
+    const todayMovie = movieMap[todayDay];
+    if (todayMovie) {
+        document.getElementById(todayMovie.id).classList.add('today-card');
+        document.getElementById('today-title').textContent = todayMovie.title;
+        document.getElementById('today-meta').textContent  = todayMovie.meta;
+    }
+
+    // ── COUNTDOWN A LAS 21:30 ──────────────────────────────────
+    function updateCountdown() {
+        const now      = new Date();
+        const showTime = new Date(now);
+        showTime.setHours(21, 30, 0, 0);
+
+        let diff = showTime - now;
+
+        if (diff < 0) {
+            document.getElementById('countdown-display').textContent = '¡EN PANTALLA!';
+            document.getElementById('countdown-display').style.color = 'var(--green)';
+            return;
+        }
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        const pad = n => String(n).padStart(2,'0');
+        document.getElementById('countdown-display').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>

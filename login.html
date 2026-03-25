@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#58a6ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arauco Hub">
+<link rel="icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arauco Digital Hub - Señor de la Peña</title>
+    <style>
+        /* Fondo Animado Tech / Bajo Consumo */
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(-45deg, #0d1117, #161b22, #080c10, #1f6feb22);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Contenedor Principal Translucido */
+        .container {
+            background: rgba(22, 27, 34, 0.85);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #30363d;
+            max-width: 450px;
+            margin: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Título con Efecto Glow */
+        h1 {
+            color: #58a6ff;
+            font-size: 1.6rem;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #58a6ff;
+            }
+
+            to {
+                text-shadow: 0 0 15px #58a6ff, 0 0 25px #1f6feb;
+            }
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Sección Login & Botón Pulsante */
+        .login-box {
+            background: rgba(28, 33, 40, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px dashed #58a6ff;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: white;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .btn-connect {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #238636;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+            transition: 0.3s;
+        }
+
+        .btn-connect:hover {
+            background: #2ea043;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.7);
+            }
+
+            70% {
+                transform: scale(1.02);
+                box-shadow: 0 0 0 10px rgba(35, 134, 54, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(35, 134, 54, 0);
+            }
+        }
+
+        /* Grilla de Servicios */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .category {
+            grid-column: 1 / span 2;
+            background: rgba(35, 134, 54, 0.9);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .item {
+            background: rgba(33, 38, 45, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            border: 1px solid #30363d;
+        }
+
+        .price {
+            color: #f0883e;
+            font-weight: bold;
+            display: block;
+            font-size: 0.95rem;
+            margin-top: 3px;
+        }
+
+        /* Cartelera de Cine */
+        .cinema-box {
+            grid-column: 1 / span 2;
+            background: rgba(28, 33, 40, 0.9);
+            border: 1px solid #58a6ff;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        .movie-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #30363d;
+            font-size: 0.8rem;
+        }
+
+        .movie-entry:last-child {
+            border-bottom: none;
+        }
+
+        /* API Boxes & Buttons */
+        .api-box {
+            background: rgba(13, 17, 23, 0.9);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            margin-top: 15px;
+            padding: 15px;
+            font-size: 0.85rem;
+        }
+
+        .btn-gps {
+            background: #ea4335;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px 0;
+            font-weight: bold;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-wa {
+            background: #25d366;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px 0;
+            font-weight: bold;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+            padding-top: 15px;
+            line-height: 1.5;
+        }
+
+        .highlight-blue {
+            color: #58a6ff;
+            font-weight: bold;
+        }
+
+        /* Botón de Historia y Modal */
+        .btn-info-historia {
+            background: transparent;
+            color: #8b949e;
+            border: 1px dashed #30363d;
+            margin-bottom: 10px;
+            width: 100%;
+            font-size: 0.85rem;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-info-historia:hover {
+            color: #58a6ff;
+            border-color: #58a6ff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #161b22;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #58a6ff;
+            width: 85%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.8);
+        }
+
+        .close-btn {
+            color: #8b949e;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: -10px;
+        }
+    </style>
+</head>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+    localStorage.setItem('arauco-last-online', new Date().toISOString());
+  });
+}
+</script>
+
+<body>
+
+    <div class="container">
+        <h1>ARAUCO DIGITAL HUB</h1>
+        <div class="subtitle">Tecnología, Historia & Gastronomía</div>
+
+        <div class="login-box">
+            <div style="font-size: 0.8rem; margin-bottom: 8px; color: #c9d1d9;">📶 CONECTAR A STARLINK SATELITAL</div>
+            <form name="login" action="$(link-login-only)" method="post">
+                <input type="hidden" name="dst" value="$(link-orig)" />
+                <input name="username" type="text" placeholder="Ingresá tu Código Aquí" required autofocus>
+                <input name="password" type="hidden">
+                <button type="submit" class="btn-connect">ACCEDER A INTERNET</button>
+            </form>
+        </div>
+
+        <button type="button" class="btn-info-historia"
+            onclick="document.getElementById('modal-historia').style.display='block'">
+            📜 Leer Historia del Señor de la Peña & Mapa
+        </button>
+
+        <div class="grid">
+            <div class="category">🚀 WIFI VOUCHERS</div>
+            <div class="item">30 MIN EXPRESS <span class="price">$4.000</span></div>
+            <div class="item">1 HORA FULL <span class="price">$7.000</span></div>
+            <div class="item">3 HORAS RELAX <span class="price">$15.000</span></div>
+            <div class="item">DÍA COMERCIANTE <span class="price">$45.000</span></div>
+
+            <div class="category">🍔 COMBOS & COMIDA</div>
+            <div class="item"><b>Combo Arauco</b><br>Burga + Soda + WiFi <span class="price">$19.500</span></div>
+            <div class="item"><b>Combo Mate</b><br>Agua Caliente + WiFi <span class="price">$5.500</span></div>
+            <div class="item">Hamburguesa <span class="price">$12.500</span></div>
+            <div class="item">Licuados Frutales <span class="price">$5.000</span></div>
+            <div class="item">Café / Té Caliente <span class="price">$3.500</span></div>
+            <div class="item">🧊 Bolsa de Hielo <span class="price">$3.000</span></div>
+
+            <div class="category">⛺ TECH & LOGÍSTICA</div>
+            <div class="item">🔋 Carga Celular <span class="price">$4.000</span></div>
+            <div class="item">🖨️ Oficina (Trámites) <span class="price">$6.000</span></div>
+            <div class="item" style="grid-column: 1 / span 2;">
+                🪑 <b>Mesas y Sillas:</b> Uso exclusivo con consumición.<br>
+                ⛺ <b>Carpas VIP:</b> Consultar disponibilidad en caja.
+            </div>
+
+            <div class="category">🎬 CINE 4K BAJO LAS ESTRELLAS (21:30 HS)</div>
+            <div class="cinema-box">
+                <div class="movie-entry"><span>JUEVES:</span> <span class="highlight-blue">MUCHACHOS</span></div>
+                <div class="movie-entry"><span>VIERNES:</span> <span class="highlight-blue">LA PASIÓN DE CRISTO</span>
+                </div>
+                <div class="movie-entry"><span>SÁBADO:</span> <span class="highlight-blue">COCO / ESPERANDO LA
+                        CARROZA</span></div>
+                <div class="movie-entry"><span>DOMINGO:</span> <span class="highlight-blue">PROJECT HAIL MARY</span>
+                </div>
+                <div style="font-size: 0.7rem; margin-top: 8px; color: #8b949e; text-align: center;">
+                    * Entrada libre comprando Combo Arauco. Individual: $4.000
+                </div>
+            </div>
+        </div>
+
+        <div class="api-box">
+            <div style="margin-bottom: 10px;">📍 <b>¿TE PERDISTE? PRENDÉ TU GPS Y VOLVÉ AL HUB:</b></div>
+            <a href="https://www.google.com/maps/search/?api=1&query= -28.82527094332069, -66.75592481914413"
+                target="_blank" class="btn-gps">VER LA UBICACIÓN DEL HUB</a>
+
+            <div style="margin-top: 15px;">💬 <b>PEDÍ DESDE TU LUGAR Y ENCARGALO A CUALQUIER HORA:</b></div>
+            <a href="https://wa.me/5493827432108?text=Hola%20Mati%21%20Quiero%20hacer%20un%20pedido%20al%20Hub"
+                class="btn-wa">PEDIR POR WHATSAPP</a>
+        </div>
+
+
+
+        <div class="api-box" style="background: rgba(28, 33, 40, 0.9); border: 1px solid #f0883e; margin-top:15px;">
+            <div style="margin-bottom: 10px; color: #f0883e; font-weight: bold;">
+                🛰️ ESTADO DEL TIEMPO (ZONA CERO):
+            </div>
+
+            <div id="weather-data" style="font-size: 0.95rem;">
+                Cargando clima...
+            </div>
+        </div>
+
+
+
+
+        <div class="api-box" style="border: 1px solid #58a6ff;">
+            🧠 <b>RECOMENDACIÓN INTELIGENTE:</b><br>
+            <div id="smart-recommendation">Analizando condiciones...</div>
+        </div>
+
+        <div class="api-box" style="border: 1px solid #ea4335;">
+            🚨 <b>ALERTA DEL SISTEMA:</b><br>
+            <div id="weather-alert">Sin alertas</div>
+        </div>
+
+        <div class="api-box" style="border: 1px solid #f0883e;">
+            💰 <b>OFERTA DINÁMICA DEL MOMENTO:</b><br>
+            <div id="dynamic-offer">Calculando oferta...</div>
+        </div>
+
+        <div class="api-box" style="border: 1px solid #238636;">
+            📊 <b>TENDENCIA DE CONSUMO:</b><br>
+            <div id="demand-status">Analizando demanda...</div>
+        </div>
+
+        <div class="api-box" style="border: 1px solid #8b949e;">
+            👥 <b>USUARIOS CONECTADOS:</b><br>
+            <div id="users-online">Calculando...</div>
+        </div>
+
+        <div class="api-box" style="border: 1px solid #58a6ff;">
+            ⏱️ <b>ACTIVIDAD RECIENTE:</b><br>
+            <div id="recent-activity">Cargando actividad...</div>
+        </div>
+
+        <div class="api-box" style="border: 1px solid #f0883e;">
+            🕒 <b>PRECIO DINÁMICO (AHORA):</b><br>
+            <div id="time-pricing">Calculando precios...</div>
+        </div>
+
+        <div class="api-box" style="border: 1px solid #ea4335;">
+            🎪 <b>MODO EVENTO:</b><br>
+            <div id="event-mode">Analizando flujo...</div>
+        </div>
+
+
+        <script>
+            fetch("https://api.open-meteo.com/v1/forecast?latitude=-28.83&longitude=-66.75&current_weather=true")
+                .then(res => res.json())
+                .then(data => {
+                    const w = data.current_weather;
+
+                    const temp = w.temperature;
+                    const wind = w.windspeed;
+                    const code = w.weathercode;
+
+                    let estado = "Despejado";
+
+                    if (code > 2) estado = "Nublado";
+                    if (code > 50) estado = "Lluvia";
+                    if (code > 70) estado = "Tormenta";
+
+                    // CLIMA
+                    document.getElementById("weather-data").innerHTML = `
+            🌡️ Temperatura: <b>${temp}°C</b><br>
+            🌬️ Viento: <b>${wind} km/h</b><br>
+            ☁️ Estado: <b>${estado}</b>
+        `;
+
+                    // 🧠 RECOMENDACIONES
+                    let recomendacion = "";
+
+                    if (temp >= 30) {
+                        recomendacion = "🔥 Hace calor: Promocionar LICUADOS + AGUA FRÍA + HIELO";
+                    } else if (temp <= 10) {
+                        recomendacion = "❄️ Hace frío: Promocionar CAFÉ, TÉ y COMBO MATE";
+                    } else {
+                        recomendacion = "👌 Clima ideal: Promocionar COMBO ARAUCO y HAMBURGUESAS";
+                    }
+
+                    if (wind > 30) {
+                        recomendacion += "<br>💨 Viento fuerte: Ofrecer CARPAS VIP";
+                    }
+
+                    document.getElementById("smart-recommendation").innerHTML = recomendacion;
+
+                    // 🚨 ALERTAS
+                    let alerta = "Sin alertas";
+
+                    if (code >= 61) {
+                        alerta = "🌧️ Posible lluvia: Proteger equipos y ofrecer zonas cubiertas";
+                    }
+
+                    if (wind > 50) {
+                        alerta = "⚠️ Viento fuerte peligroso: Asegurar carpas y estructuras";
+                    }
+
+                    if (temp > 38) {
+                        alerta = "🔥 Calor extremo: Riesgo de deshidratación";
+                    }
+
+                    document.getElementById("weather-alert").innerHTML = alerta;
+
+                    // 💰 OFERTA DINÁMICA
+                    let oferta = "";
+
+                    if (temp >= 32) {
+                        oferta = "🥤 PROMO CALOR: Licuado + Hielo = $7.000";
+                    } else if (temp <= 12) {
+                        oferta = "☕ PROMO FRÍO: Café + WiFi = $5.000";
+                    } else {
+                        oferta = "🍔 PROMO FULL: Combo Arauco con descuento HOY";
+                    }
+
+                    document.getElementById("dynamic-offer").innerHTML = oferta;
+
+                    // 📊 DEMANDA SIMULADA
+                    let demanda = "";
+
+                    if (temp >= 30) {
+                        demanda = "🔥 Alta demanda en bebidas frías (Quedan pocas unidades)";
+                    } else if (temp <= 10) {
+                        demanda = "❄️ Alta demanda en bebidas calientes";
+                    } else {
+                        demanda = "📈 Flujo constante de clientes";
+                    }
+
+                    if (wind > 35) {
+                        demanda += "<br>⛺ Alta demanda de carpas";
+                    }
+
+                    document.getElementById("demand-status").innerHTML = demanda;
+                })
+                .catch(() => {
+                    document.getElementById("weather-data").innerText = "Clima no disponible";
+                });
+        </script>
+
+        <script>
+            /* 👥 USUARIOS CONECTADOS (simulado inteligente) */
+            let baseUsers = Math.floor(Math.random() * 25) + 15;
+
+            setInterval(() => {
+                let variacion = Math.floor(Math.random() * 5);
+                document.getElementById("users-online").innerHTML =
+                    baseUsers + variacion + " personas en línea";
+            }, 4000);
+
+
+            /* ⏱️ ACTIVIDAD RECIENTE (gatillo psicológico) */
+            const actividades = [
+                "🧑 Compraron Combo Arauco hace 2 min",
+                "🥤 Pedido de licuado recién entregado",
+                "📶 Nuevo usuario conectado",
+                "🍔 Hamburguesa en preparación",
+                "☕ Café servido hace instantes",
+                "⛺ Reserva de carpa confirmada"
+            ];
+
+            setInterval(() => {
+                const random = actividades[Math.floor(Math.random() * actividades.length)];
+                document.getElementById("recent-activity").innerHTML = random;
+            }, 5000);
+
+
+            /* 🕒 PRECIOS SEGÚN HORA */
+            function actualizarPrecios() {
+                const hora = new Date().getHours();
+                let mensaje = "";
+
+                if (hora >= 12 && hora <= 15) {
+                    mensaje = "🍔 Hora pico: Combos con alta demanda";
+                } else if (hora >= 18 && hora <= 23) {
+                    mensaje = "🌙 Noche activa: Cine + Combo Arauco recomendado";
+                } else if (hora >= 6 && hora <= 10) {
+                    mensaje = "☀️ Desayuno: Café + WiFi con promo";
+                } else {
+                    mensaje = "🕓 Horario tranquilo: Descuentos disponibles";
+                }
+
+                document.getElementById("time-pricing").innerHTML = mensaje;
+            }
+
+            setInterval(actualizarPrecios, 60000);
+            actualizarPrecios();
+
+
+            /* 🎪 MODO EVENTO MASIVO */
+            function detectarEvento() {
+                const hora = new Date().getHours();
+                let evento = "";
+
+                if (hora >= 20 && hora <= 2) {
+                    evento = "🔥 ALTA AFLUENCIA: Activar modo ventas intensivas";
+                } else if (hora >= 10 && hora <= 18) {
+                    evento = "📈 Flujo constante de peregrinos";
+                } else {
+                    evento = "🌙 Baja actividad";
+                }
+
+                document.getElementById("event-mode").innerHTML = evento;
+            }
+
+            setInterval(detectarEvento, 60000);
+            detectarEvento();
+        </script>
+
+        <div class="api-box" style="border-left: 4px solid #f0883e; background: rgba(240, 136, 62, 0.05);">
+            📢 <b>INFORMACIÓN AL PEREGRINO:</b> <br>
+            <div style="text-align: left; margin-top: 10px; font-size: 0.85rem; line-height: 1.6;">
+                ⏰ <b>MISA CENTRAL:</b> <span class="highlight-blue">10:00 hs / 17:00 hs</span><br>
+                🚌 <b>COLECTIVOS:</b> <span style="color: #3fb950;">Salidas cada 30 min</span> (Sector Principal)<br>
+                🚑 <b>PUESTO SANITARIO:</b> A 400 mts (Frente a la Comisaría)<br>
+                📡 <b>ESTADO SEÑAL 4G/5G:</b> <span style="color: #da3633; font-weight: bold;">CRÍTICA / SIN
+                    SEÑAL</span>
+            </div>
+            <div
+                style="margin-top: 10px; font-size: 0.75rem; border-top: 1px dashed #30363d; padding-top: 8px; color: #8b949e;">
+                * Información actualizada por el Arauco Digital Hub - Matias E. Peralta.
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-historia" class="modal">
+        <div class="modal-content">
+            <span class="close-btn"
+                onclick="document.getElementById('modal-historia').style.display='none'">&times;</span>
+            <h2 style="color: #58a6ff; margin-top: 0;">EL SEÑOR DE LA PEÑA</h2>
+            <p style="font-style: italic; color: #8b949e; font-size: 0.85rem;">Breve reseña histórica e información del
+                predio.</p>
+
+            <div style="text-align: left; font-size: 0.85rem; line-height: 1.5; color: #c9d1d9;">
+                <p><b>La Historia:</b> Esta formación rocosa, que asemeja el perfil de Cristo, era venerada por las
+                    poblaciones originarias mucho antes de la llegada de los españoles. Fue llamada "Llastay" (Dios
+                    tutelar de los cerros).</p>
+                <p>Con la evangelización, la fe cristiana se sincretizó con la geografía local, convirtiéndose en el
+                    punto de peregrinación de Semana Santa más importante de la región.</p>
+
+                <hr style="border: 0; border-top: 1px dashed #30363d; margin: 15px 0;">
+
+                <p style="color: #f0883e; font-weight: bold;">📍 MAPA MENTAL DEL PREDIO:</p>
+                <ul style="padding-left: 20px;">
+                    <li><b>La Piedra:</b> A 500 mts al norte del Hub.</li>
+                    <li><b>Baños y Agua:</b> Sector central.</li>
+                    <li><b>Vía Crucis:</b> Sendero hacia el oeste.</li>
+                    <li><b>Asistencia Médica:</b> Acceso principal.</li>
+                </ul>
+            </div>
+
+            <button type="button"
+                style="background: #21262d; border: 1px solid #30363d; margin-top: 15px; width: 100%; color: white; padding: 10px; border-radius: 6px;"
+                onclick="document.getElementById('modal-historia').style.display='none'">CERRAR</button>
+        </div>
+    </div>
+
+    <script>
+        // Script Mikhmon: Copia username a password silenciosamente
+        document.login.onsubmit = function () {
+            if (document.login.password.value === "") {
+                document.login.password.value = document.login.username.value;
+            }
+        };
+
+        // Ticker Crypto en tiempo real (Para el toque analista)
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ars')
+            .then(response => response.json())
+            .then(data => {
+                const price = data.bitcoin.ars.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
+                document.getElementById('btc-price').innerText = price;
+            })
+            .catch(() => { document.getElementById('btc-price').innerText = "Cotización Offline"; });
+    </script>
+
+</body>
+
+</html>

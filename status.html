@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Conexión — Arauco Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #05080d;
+            --surface: rgba(15,22,14,0.95);
+            --border:  rgba(63,185,80,0.15);
+            --gold:    #c8a84b;
+            --green:   #3fb950;
+            --green2:  #5aaa3a;
+            --blue:    #58a6ff;
+            --ember:   #f0883e;
+            --red:     #ea4335;
+            --text:    #d4e8d0;
+            --muted:   #6b7c6a;
+            --glow:    rgba(63,185,80,0.25);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 14px 14px 90px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(63,185,80,0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 100% 100%, rgba(88,166,255,0.04) 0%, transparent 45%),
+                repeating-linear-gradient(60deg, transparent, transparent 50px, rgba(63,185,80,0.012) 50px, rgba(63,185,80,0.012) 51px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanlines {
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+            pointer-events: none; z-index: 1;
+        }
+
+        .wrap {
+            position: relative; z-index: 2;
+            max-width: 440px; margin: 0 auto;
+        }
+
+        /* Animaciones de entrada */
+        .wrap > * { animation: fadeUp 0.4s ease-out both; }
+        .timer-card  { animation-delay: 0.05s; }
+        .stats-grid  { animation-delay: 0.1s; }
+        .speed-card  { animation-delay: 0.15s; }
+        .aus-card    { animation-delay: 0.2s; }
+        .quick-grid  { animation-delay: 0.25s; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── TOP BAR ── */
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0 16px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+
+        .brand {
+            font-family: 'Cinzel', serif; font-size: 0.9rem;
+            font-weight: 700; color: var(--green); letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        .brand small {
+            display: block; font-family: 'DM Mono', monospace;
+            font-size: 0.55rem; color: var(--muted);
+            letter-spacing: 3px; font-weight: 400; margin-top: 1px;
+        }
+
+        .online-pill {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.3);
+            border-radius: 20px; padding: 5px 12px;
+            font-size: 0.62rem; color: var(--green); letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+            animation: pulseDot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%,100% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(63,185,80,0.7); }
+            50%      { opacity:0.8; transform:scale(1.1); box-shadow: 0 0 0 5px rgba(63,185,80,0); }
+        }
+
+        /* ── RING TIMER ── */
+        .timer-card {
+            background: var(--surface);
+            border: 1px solid rgba(63,185,80,0.25);
+            border-radius: 16px; padding: 24px 20px;
+            text-align: center; margin-bottom: 14px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 40px rgba(63,185,80,0.05), inset 0 1px 0 rgba(63,185,80,0.08);
+        }
+
+        .timer-card::before {
+            content: 'SESSION_ACTIVE';
+            position: absolute; top: 10px; right: 14px;
+            font-size: 0.5rem; color: rgba(63,185,80,0.2); letter-spacing: 2px;
+        }
+
+        .ring-container {
+            position: relative; width: 160px; height: 160px; margin: 0 auto 16px;
+        }
+
+        .ring-svg { transform: rotate(-90deg); width: 160px; height: 160px; }
+        .ring-bg { fill: none; stroke: rgba(63,185,80,0.1); stroke-width: 10; }
+        .ring-progress {
+            fill: none; stroke: url(#ringGrad); stroke-width: 10;
+            stroke-linecap: round; stroke-dasharray: 440; stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .ring-center {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .time-remaining {
+            font-family: 'Cinzel', serif; font-size: 2rem;
+            font-weight: 900; color: var(--green);
+            text-shadow: 0 0 20px var(--glow);
+            line-height: 1; letter-spacing: 2px;
+        }
+
+        .time-label { font-size: 0.55rem; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
+
+        .plan-name-display { font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: 1px; }
+        .plan-pct { font-size: 0.65rem; color: var(--muted); margin-top: 4px; letter-spacing: 2px; }
+
+        /* ── STATS ── */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+
+        .stat-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 14px 12px; text-align: center; transition: 0.25s;
+        }
+
+        .stat-card:hover { border-color: rgba(63,185,80,0.3); }
+        .stat-icon { font-size: 1.4rem; margin-bottom: 6px; display: block; }
+
+        .stat-value {
+            font-family: 'Cinzel', serif; font-size: 1.1rem;
+            font-weight: 700; color: var(--green); letter-spacing: 1px;
+        }
+
+        .stat-label { font-size: 0.55rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 3px; }
+
+        /* ── VELOCIDAD ── */
+        .speed-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px; margin-bottom: 14px;
+        }
+
+        .speed-title { font-size: 0.6rem; letter-spacing: 3px; color: var(--green); text-transform: uppercase; margin-bottom: 12px; }
+
+        .speed-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .speed-row:last-child { margin-bottom: 0; }
+        .speed-dir { font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; width: 45px; flex-shrink: 0; }
+
+        .speed-bar-wrap { flex: 1; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+
+        .speed-bar { height: 100%; border-radius: 3px; animation: speedAnim 3s ease-in-out infinite; }
+        .speed-bar.down { background: linear-gradient(90deg, var(--blue), var(--green)); }
+        .speed-bar.up   { background: linear-gradient(90deg, var(--ember), #f0d060); }
+
+        @keyframes speedAnim { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+        .speed-val { font-size: 0.7rem; color: var(--text); width: 55px; text-align: right; flex-shrink: 0; }
+
+        /* ── CAMINO A AUSTRALIA ── */
+        .aus-card {
+            background: linear-gradient(135deg, rgba(0,50,100,0.2), rgba(0,100,50,0.1));
+            border: 1px solid rgba(88,166,255,0.25);
+            border-radius: 14px; padding: 18px; margin-bottom: 14px;
+            position: relative; overflow: hidden;
+        }
+
+        .aus-card::before {
+            content: '🇦🇺';
+            position: absolute; font-size: 5rem; right: -10px; top: 50%;
+            transform: translateY(-50%); opacity: 0.07;
+        }
+
+        .aus-title { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: var(--blue); margin-bottom: 4px; letter-spacing: 1px; }
+        .aus-sub { font-size: 0.65rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+
+        .meta-bar-wrap { margin-bottom: 10px; }
+
+        .meta-bar-labels { display: flex; justify-content: space-between; font-size: 0.58rem; color: var(--muted); margin-bottom: 5px; }
+        .meta-bar-labels span:last-child { color: var(--blue); }
+
+        .meta-bar-bg { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+
+        .meta-bar-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--blue), var(--green));
+            border-radius: 4px;
+            transition: width 1.5s cubic-bezier(0.25,0.46,0.45,0.94);
+        }
+
+        .propina-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 12px; }
+
+        .propina-btn {
+            background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.2);
+            border-radius: 8px; padding: 8px 4px;
+            color: var(--blue); font-family: 'Cinzel', serif;
+            font-size: 0.75rem; font-weight: 700;
+            cursor: pointer; text-align: center; text-decoration: none;
+            display: block; transition: 0.2s;
+        }
+
+        .propina-btn:hover { background: rgba(88,166,255,0.15); border-color: rgba(88,166,255,0.4); transform: translateY(-1px); }
+
+        .propina-btn small {
+            display: block; font-family: 'DM Mono', monospace;
+            font-size: 0.5rem; color: var(--muted); font-weight: 400; margin-top: 2px;
+        }
+
+        /* ── ACCESOS RÁPIDOS ── */
+        .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+
+        .quick-btn {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 14px 12px;
+            text-align: center; text-decoration: none; color: var(--text);
+            font-family: 'DM Mono', monospace; font-size: 0.65rem;
+            letter-spacing: 1px; transition: 0.2s; display: block;
+        }
+
+        .quick-btn:hover { border-color: rgba(63,185,80,0.3); background: rgba(63,185,80,0.04); }
+        .quick-btn-icon { font-size: 1.4rem; display: block; margin-bottom: 5px; }
+
+        /* ── ACTIVIDAD ── */
+        .activity-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px; margin-bottom: 14px;
+        }
+
+        .activity-title { font-size: 0.6rem; letter-spacing: 3px; color: var(--green); text-transform: uppercase; margin-bottom: 12px; }
+
+        .activity-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.7rem;
+        }
+
+        .activity-item:last-child { border-bottom: none; }
+
+        .activity-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .activity-dot.green { background: var(--green); }
+        .activity-dot.blue  { background: var(--blue); }
+        .activity-dot.ember { background: var(--ember); }
+
+        .activity-text { flex: 1; color: var(--muted); }
+        .activity-time { color: rgba(255,255,255,0.2); font-size: 0.6rem; }
+
+        /* ── LOGOUT ── */
+        .logout-btn {
+            display: block; width: 100%; padding: 13px;
+            background: transparent; border: 1px solid rgba(234,67,53,0.3);
+            border-radius: 10px; color: rgba(234,67,53,0.7);
+            font-family: 'DM Mono', monospace; font-size: 0.75rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; text-align: center; text-decoration: none;
+            transition: 0.25s; margin-bottom: 14px;
+        }
+
+        .logout-btn:hover { background: rgba(234,67,53,0.08); border-color: rgba(234,67,53,0.5); color: var(--red); }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center; font-size: 0.58rem; color: var(--muted);
+            line-height: 2; letter-spacing: 1px;
+            padding-top: 10px; border-top: 1px solid var(--border);
+        }
+    </style>
+
+    <!-- ═══ PWA: ARAUCO DIGITAL HUB ═══ -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#58a6ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Arauco Hub">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <link rel="icon" href="/icons/favicon.ico">
+    <!-- ═══════════════════════════════ -->
+</head>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+    localStorage.setItem('arauco-last-online', new Date().toISOString());
+  });
+}
+</script>
+
+
+
+
+
+<body>
+
+<div class="scanlines"></div>
+
+<div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="brand">
+            ARAUCO HUB
+            <small>🛰️ starlink · señor de la peña</small>
+        </div>
+        <div class="online-pill">
+            <span class="pulse-dot"></span>
+            EN LÍNEA
+        </div>
+    </div>
+
+    <!-- RING TIMER -->
+    <div class="timer-card">
+        <div class="ring-container">
+            <svg class="ring-svg" viewBox="0 0 160 160">
+                <defs>
+                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%"   stop-color="#3fb950"/>
+                        <stop offset="100%" stop-color="#58a6ff"/>
+                    </linearGradient>
+                </defs>
+                <circle class="ring-bg"       cx="80" cy="80" r="70"/>
+                <circle class="ring-progress" id="ring" cx="80" cy="80" r="70"/>
+            </svg>
+            <div class="ring-center">
+                <div class="time-remaining" id="time-display">--:--</div>
+                <div class="time-label">restante</div>
+            </div>
+        </div>
+        <div class="plan-name-display" id="plan-display">Cargando plan...</div>
+        <div class="plan-pct"          id="plan-pct">— % consumido</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-icon">⏱️</span>
+            <div class="stat-value" id="stat-used">--:--</div>
+            <div class="stat-label">Tiempo usado</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">📅</span>
+            <div class="stat-value" id="stat-expire">--:--</div>
+            <div class="stat-label">Vence a las</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">🌐</span>
+            <div class="stat-value" id="stat-ip">$(ip)</div>
+            <div class="stat-label">Tu IP local</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">📶</span>
+            <div class="stat-value" id="stat-signal">ÓPTIMA</div>
+            <div class="stat-label">Señal Starlink</div>
+        </div>
+    </div>
+
+    <!-- VELOCIDAD -->
+    <div class="speed-card">
+        <div class="speed-title">▸ Velocidad de red</div>
+        <div class="speed-row">
+            <div class="speed-dir">↓ Bajada</div>
+            <div class="speed-bar-wrap"><div class="speed-bar down" id="bar-down" style="width:0%"></div></div>
+            <div class="speed-val" id="val-down">— Mbps</div>
+        </div>
+        <div class="speed-row">
+            <div class="speed-dir">↑ Subida</div>
+            <div class="speed-bar-wrap"><div class="speed-bar up" id="bar-up" style="width:0%"></div></div>
+            <div class="speed-val" id="val-up">— Mbps</div>
+        </div>
+    </div>
+
+    <!-- CAMINO A AUSTRALIA -->
+    <div class="aus-card">
+        <div class="aus-title">🇦🇺 Camino a Australia</div>
+        <div class="aus-sub">
+            Matías lleva este emprendimiento a otro nivel.<br>
+            Si el Hub te ayudó, ayudalo a llegar 🙌
+        </div>
+        <div class="meta-bar-wrap">
+            <div class="meta-bar-labels">
+                <span>Meta del evento</span>
+                <span id="aus-pct">Calculando...</span>
+            </div>
+            <div class="meta-bar-bg">
+                <div class="meta-bar-fill" id="aus-bar"></div>
+            </div>
+        </div>
+        <div class="propina-btns">
+            <a class="propina-btn"
+               href="https://wa.me/5493827432108?text=Hola%20Mati!%20Te%20mando%20una%20propina%20de%20%245.000%20para%20Australia%20%F0%9F%87%A6%F0%9F%87%BA"
+               target="_blank">
+                $5.000<small>gracias 🙌</small>
+            </a>
+            <a class="propina-btn"
+               href="https://wa.me/5493827432108?text=Hola%20Mati!%20Te%20mando%20una%20propina%20de%20%2410.000%20para%20Australia%20%F0%9F%87%A6%F0%9F%87%BA"
+               target="_blank">
+                $10.000<small>crack 🔥</small>
+            </a>
+            <a class="propina-btn"
+               href="https://wa.me/5493827432108?text=Hola%20Mati!%20Te%20mando%20una%20propina%20de%20%2420.000%20para%20Australia%20%F0%9F%87%A6%F0%9F%87%BA"
+               target="_blank">
+                $20.000<small>leyenda 🏆</small>
+            </a>
+        </div>
+    </div>
+
+    <!-- ACCESOS RÁPIDOS -->
+    <div class="quick-grid">
+        <a href="menu.html" class="quick-btn">
+            <span class="quick-btn-icon">🍔</span>Ver Menú
+        </a>
+        <a href="#cine" class="quick-btn">
+            <span class="quick-btn-icon">🎬</span>Cine 4K Hoy
+        </a>
+        <a href="pista1.html" class="quick-btn">
+            <span class="quick-btn-icon">📜</span>El Enigma
+        </a>
+        <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Quiero%20hacer%20un%20pedido" target="_blank" class="quick-btn">
+            <span class="quick-btn-icon">💬</span>Pedir x WA
+        </a>
+    </div>
+
+    <!-- ACTIVIDAD -->
+    <div class="activity-card">
+        <div class="activity-title">▸ Actividad de sesión</div>
+        <div class="activity-item">
+            <span class="activity-dot green"></span>
+            <span class="activity-text">Sesión iniciada correctamente</span>
+            <span class="activity-time" id="act-start">--:--</span>
+        </div>
+        <div class="activity-item">
+            <span class="activity-dot blue"></span>
+            <span class="activity-text" id="act-plan-text">Plan activo</span>
+            <span class="activity-time">HOY</span>
+        </div>
+        <div class="activity-item">
+            <span class="activity-dot ember"></span>
+            <span class="activity-text">Señal Starlink satelital</span>
+            <span class="activity-time">ONLINE</span>
+        </div>
+        <div class="activity-item">
+            <span class="activity-dot green"></span>
+            <span class="activity-text" id="act-climate">Clima cargando...</span>
+            <span class="activity-time">LIVE</span>
+        </div>
+    </div>
+
+    <!-- LOGOUT -->
+    <a href="$(link-logout)" class="logout-btn">⏻ Desconectar sesión</a>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        ARAUCO DIGITAL HUB · Matías E. Peralta<br>
+        🛰️ Starlink Satelital · Señor de la Peña · Semana Santa<br>
+        <span style="color:var(--gold);">🇦🇺 Camino a Australia — Visa 462 aprobada</span>
+    </div>
+
+</div>
+
+<script>
+// ── VARIABLES MIKROTIK ─────────────────────────────────────────
+// MikroTik reemplaza $(variable) automáticamente en el status.html real.
+// Para preview en browser funcionan los valores de ejemplo.
+
+const RAW_UPTIME   = "$(uptime)";
+const RAW_TIMELEFT = "$(session-time-left)";
+const RAW_IP       = "$(ip)";
+
+const isPreview = RAW_UPTIME.includes('$') || RAW_UPTIME === '';
+
+// ── PARSEAR TIEMPO ─────────────────────────────────────────────
+function parseTime(str) {
+    if (!str || str.includes('$')) return null;
+    const p = str.split(':').map(Number);
+    if (p.length === 3) return p[0]*3600 + p[1]*60 + p[2];
+    if (p.length === 2) return p[0]*60  + p[1];
+    return 0;
+}
+
+function formatTime(s) {
+    if (!s || s < 0) s = 0;
+    const h = Math.floor(s/3600);
+    const m = Math.floor((s%3600)/60);
+    const ss = s % 60;
+    return h > 0
+        ? `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`
+        : `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+}
+
+// ── ESTADO INICIAL ─────────────────────────────────────────────
+let remainingSecs, usedSecs, totalSecs;
+
+if (isPreview) {
+    totalSecs     = 3600;
+    usedSecs      = 1080;
+    remainingSecs = totalSecs - usedSecs;
+} else {
+    remainingSecs = parseTime(RAW_TIMELEFT) || 0;
+    usedSecs      = parseTime(RAW_UPTIME)   || 0;
+    totalSecs     = remainingSecs + usedSecs;
+}
+
+// IP
+if (!isPreview) {
+    document.getElementById('stat-ip').textContent = RAW_IP;
+} else {
+    document.getElementById('stat-ip').textContent = '192.168.10.42';
+}
+
+// ── HORA DE INICIO Y VENCIMIENTO ──────────────────────────────
+const now        = new Date();
+const startTime  = new Date(now - usedSecs * 1000);
+const expireTime = new Date(now.getTime() + remainingSecs * 1000);
+
+const pad = n => String(n).padStart(2,'0');
+
+document.getElementById('act-start').textContent =
+    pad(startTime.getHours()) + ':' + pad(startTime.getMinutes());
+
+document.getElementById('stat-expire').textContent =
+    pad(expireTime.getHours()) + ':' + pad(expireTime.getMinutes());
+
+// ── DETECTAR PLAN ─────────────────────────────────────────────
+function getPlan(totalMin) {
+    if (totalMin <= 32)  return { name: 'EXPRESS 30 MIN', down: 5,  up: 2 };
+    if (totalMin <= 65)  return { name: '1 HORA FULL',    down: 10, up: 5 };
+    if (totalMin <= 185) return { name: '3 HORAS RELAX',  down: 10, up: 5 };
+    return                      { name: 'DÍA COMERCIANTE',down: 15, up: 8 };
+}
+
+const planMin  = Math.round(totalSecs / 60);
+const plan     = getPlan(planMin);
+
+document.getElementById('plan-display').textContent  = '📶 ' + plan.name;
+document.getElementById('act-plan-text').textContent  = 'Plan: ' + plan.name;
+
+// ── RING + COUNTDOWN ──────────────────────────────────────────
+const ring         = document.getElementById('ring');
+const CIRCUMF      = 2 * Math.PI * 70; // ~439.8
+ring.style.strokeDasharray  = CIRCUMF;
+ring.style.strokeDashoffset = CIRCUMF;
+
+function updateDisplay(secs) {
+    document.getElementById('time-display').textContent = formatTime(secs);
+    document.getElementById('stat-used').textContent    = formatTime(usedSecs);
+
+    const pct    = totalSecs > 0 ? secs / totalSecs : 0;
+    const offset = CIRCUMF * (1 - pct);
+    ring.style.strokeDashoffset = offset;
+
+    const pctUsed = Math.round((1 - pct) * 100);
+    document.getElementById('plan-pct').textContent = pctUsed + '% consumido';
+
+    // Color de urgencia
+    if (pct < 0.2) {
+        ring.style.stroke = '#ea4335';
+        document.getElementById('time-display').style.color = '#ea4335';
+    } else if (pct < 0.4) {
+        ring.style.stroke = '#f0883e';
+        document.getElementById('time-display').style.color = '#f0883e';
+    }
+}
+
+setTimeout(() => updateDisplay(remainingSecs), 300);
+
+let countdown = remainingSecs;
+setInterval(() => {
+    if (countdown > 0) {
+        countdown--;
+        usedSecs++;
+        updateDisplay(countdown);
+    } else {
+        document.getElementById('time-display').textContent = '00:00';
+        document.getElementById('plan-display').textContent = '⏰ Sesión vencida';
+    }
+}, 1000);
+
+// ── BARRAS DE VELOCIDAD ───────────────────────────────────────
+function animateBars() {
+    const v = (base, range) => (base + (Math.random() * range - range/2)).toFixed(1);
+    const d = v(plan.down, plan.down * 0.2);
+    const u = v(plan.up,   plan.up   * 0.2);
+
+    document.getElementById('bar-down').style.width = Math.min((plan.down/20)*100, 100) + '%';
+    document.getElementById('bar-up'  ).style.width = Math.min((plan.up  /10)*100, 100) + '%';
+    document.getElementById('val-down').textContent = d + ' Mbps';
+    document.getElementById('val-up'  ).textContent = u + ' Mbps';
+}
+
+setTimeout(animateBars, 600);
+setInterval(animateBars, 5000);
+
+// ── BARRA AUSTRALIA ───────────────────────────────────────────
+// Actualizá metaActual manualmente cada vez que querés mostrar el progreso
+const metaTotal  = 150000;
+const metaActual = 47500;
+const metaPct    = Math.min(Math.round((metaActual / metaTotal) * 100), 100);
+
+setTimeout(() => {
+    document.getElementById('aus-bar').style.width = metaPct + '%';
+    document.getElementById('aus-pct').textContent = metaPct + '% completado';
+}, 800);
+
+// ── SEÑAL ALTERNANTE ──────────────────────────────────────────
+const signals = ['ÓPTIMA', 'EXCELENTE', 'BUENA'];
+setInterval(() => {
+    document.getElementById('stat-signal').textContent =
+        signals[Math.floor(Math.random() * signals.length)];
+}, 8000);
+
+// ── CLIMA ─────────────────────────────────────────────────────
+fetch("https://api.open-meteo.com/v1/forecast?latitude=-28.83&longitude=-66.75&current_weather=true")
+    .then(r => r.json())
+    .then(d => {
+        const temp = d.current_weather.temperature;
+        const wind = d.current_weather.windspeed;
+        let txt = `🌡️ ${temp}°C · 💨 ${wind} km/h`;
+        if (temp >= 32) txt += ' · 🥤 Pedí un licuado';
+        else if (temp <= 10) txt += ' · ☕ Pedí un café';
+        document.getElementById('act-climate').textContent = txt;
+    })
+    .catch(() => {
+        document.getElementById('act-climate').textContent = 'Clima · Barrial de Arauco';
+    });
+</script>
+
+</body>
+</html>

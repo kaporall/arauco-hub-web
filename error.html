@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#58a6ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arauco Hub">
+<link rel="icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error — Arauco Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #080506;
+            --surface: rgba(22,12,10,0.95);
+            --border:  rgba(234,67,53,0.15);
+            --red:     #ea4335;
+            --red2:    #ff6b5b;
+            --gold:    #c8a84b;
+            --green:   #3fb950;
+            --blue:    #58a6ff;
+            --ember:   #f0883e;
+            --text:    #e8d0ce;
+            --muted:   #7a5e5a;
+            --glow:    rgba(234,67,53,0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fondo rojo pulsante de fondo */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 40%, rgba(234,67,53,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(200,168,75,0.03) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+            animation: bgBreath 4s ease-in-out infinite;
+        }
+
+        @keyframes bgBreath {
+            0%,100% { opacity: 1; }
+            50%      { opacity: 0.6; }
+        }
+
+        /* Scanlines */
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0, transparent 3px,
+                rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px
+            );
+            pointer-events: none; z-index: 1;
+        }
+
+        .wrap {
+            position: relative; z-index: 2;
+            max-width: 420px; width: 100%;
+            animation: entryShake 0.5s ease-out;
+        }
+
+        @keyframes entryShake {
+            0%   { transform: translateX(-8px); opacity: 0; }
+            20%  { transform: translateX(6px); }
+            40%  { transform: translateX(-4px); }
+            60%  { transform: translateX(3px); }
+            80%  { transform: translateX(-1px); }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ── CARD PRINCIPAL ── */
+        .card {
+            background: var(--surface);
+            border: 1px solid rgba(234,67,53,0.3);
+            border-radius: 14px;
+            padding: 28px 22px 22px;
+            box-shadow:
+                0 0 60px rgba(234,67,53,0.08),
+                0 0 120px rgba(234,67,53,0.04),
+                inset 0 1px 0 rgba(234,67,53,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ── ÍCONO DE ERROR ── */
+        .error-icon {
+            text-align: center;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .icon-ring {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid rgba(234,67,53,0.3);
+            background: rgba(234,67,53,0.06);
+            font-size: 2.2rem;
+            position: relative;
+            animation: iconPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(234,67,53,0.3); }
+            50%      { box-shadow: 0 0 0 14px rgba(234,67,53,0); }
+        }
+
+        /* ── CÓDIGO DE ERROR ── */
+        .error-code {
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .error-code-number {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--red);
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(234,67,53,0.5), 0 0 60px rgba(234,67,53,0.2);
+            animation: codeGlow 3s ease-in-out infinite alternate;
+            letter-spacing: 4px;
+        }
+
+        @keyframes codeGlow {
+            from { text-shadow: 0 0 15px rgba(234,67,53,0.4); }
+            to   { text-shadow: 0 0 35px rgba(234,67,53,0.8), 0 0 70px rgba(234,67,53,0.3); }
+        }
+
+        .error-code-label {
+            font-size: 0.6rem;
+            letter-spacing: 5px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* ── TÍTULO Y MENSAJE ── */
+        .error-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f0d0ce;
+            text-align: center;
+            margin: 14px 0 6px;
+            letter-spacing: 1px;
+        }
+
+        .error-subtitle {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* ── CAJA DE CAUSA DINÁMICA ── */
+        .cause-box {
+            background: rgba(234,67,53,0.05);
+            border: 1px solid rgba(234,67,53,0.2);
+            border-left: 3px solid var(--red);
+            border-radius: 0 8px 8px 0;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+
+        .cause-label {
+            font-size: 0.58rem;
+            letter-spacing: 3px;
+            color: var(--red);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .cause-text {
+            font-size: 0.78rem;
+            color: #c0a0a0;
+            line-height: 1.6;
+        }
+
+        .cause-text strong { color: var(--text); }
+
+        /* ── ERRORES COMUNES ── */
+        .errors-list {
+            margin-bottom: 20px;
+        }
+
+        .error-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.72rem;
+        }
+
+        .error-item:last-child { border-bottom: none; }
+
+        .error-item-icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .error-item-text { flex: 1; }
+        .error-item-title { color: var(--text); margin-bottom: 2px; }
+        .error-item-desc  { color: var(--muted); font-size: 0.65rem; line-height: 1.5; }
+
+        /* ── BOTONES ── */
+        .btn-primary {
+            display: block; width: 100%; padding: 13px;
+            background: linear-gradient(135deg, #b02820, var(--red));
+            border: none; border-radius: 8px;
+            color: white; font-family: 'Cinzel', serif;
+            font-size: 0.85rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; text-align: center;
+            text-decoration: none; transition: 0.3s;
+            margin-bottom: 8px;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--red), var(--red2));
+            box-shadow: 0 4px 20px rgba(234,67,53,0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            display: block; width: 100%; padding: 12px;
+            background: transparent;
+            border: 1px solid rgba(200,168,75,0.3);
+            border-radius: 8px; color: var(--gold);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem; letter-spacing: 2px;
+            text-transform: uppercase; cursor: pointer;
+            text-align: center; text-decoration: none;
+            transition: 0.25s; margin-bottom: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(200,168,75,0.07);
+            border-color: rgba(200,168,75,0.5);
+        }
+
+        .btn-wa {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; width: 100%; padding: 12px;
+            background: rgba(37,211,102,0.08);
+            border: 1px solid rgba(37,211,102,0.25);
+            border-radius: 8px; color: #25d366;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem; letter-spacing: 2px;
+            text-transform: uppercase; cursor: pointer;
+            text-align: center; text-decoration: none;
+            transition: 0.25s; margin-bottom: 20px;
+        }
+
+        .btn-wa:hover { background: rgba(37,211,102,0.14); border-color: rgba(37,211,102,0.4); }
+
+        /* ── SEPARADOR ── */
+        .divider {
+            display: flex; align-items: center; gap: 10px;
+            margin: 16px 0;
+            font-size: 0.55rem; color: var(--muted); letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: ''; flex: 1; height: 1px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        /* ── TIPO DE ERROR dinámico ── */
+        .error-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(234,67,53,0.1);
+            border: 1px solid rgba(234,67,53,0.25);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.6rem;
+            color: var(--red2);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 0 auto 14px;
+            display: table;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            font-size: 0.58rem;
+            color: var(--muted);
+            line-height: 2; letter-spacing: 1px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Glitch en el número */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+        }
+
+        .glitch::before {
+            color: rgba(88,166,255,0.5);
+            animation: glitch1 4s infinite;
+            clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+        }
+
+        .glitch::after {
+            color: rgba(234,67,53,0.5);
+            animation: glitch2 4s infinite;
+            clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+        }
+
+        @keyframes glitch1 {
+            0%,95%,100% { transform: translateX(0); }
+            96%          { transform: translateX(-3px); }
+            97%          { transform: translateX(3px); }
+            98%          { transform: translateX(-2px); }
+        }
+
+        @keyframes glitch2 {
+            0%,93%,100% { transform: translateX(0); }
+            94%          { transform: translateX(3px); }
+            95%          { transform: translateX(-3px); }
+            96%          { transform: translateX(2px); }
+        }
+
+        /* ── CONTADOR DE REINTENTO ── */
+        .retry-timer {
+            text-align: center;
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .retry-timer span { color: var(--red2); font-weight: 500; }
+    </style>
+</head>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+    localStorage.setItem('arauco-last-online', new Date().toISOString());
+  });
+}
+</script>
+<body>
+
+<div class="wrap">
+<div class="card">
+
+    <!-- Ícono -->
+    <div class="error-icon">
+        <div class="icon-ring">⛔</div>
+    </div>
+
+    <!-- Código de error con glitch -->
+    <div class="error-code">
+        <div class="error-code-number glitch" data-text="ERROR" id="error-code-display">ERROR</div>
+        <div class="error-code-label" id="error-code-label">Código de acceso rechazado</div>
+    </div>
+
+    <!-- Badge tipo error -->
+    <div class="error-type-badge" id="error-badge">
+        ✕ &nbsp; ACCESO DENEGADO
+    </div>
+
+    <!-- Título -->
+    <div class="error-title" id="error-title">No pudimos conectarte</div>
+    <div class="error-subtitle" id="error-subtitle">
+        Hubo un problema al validar tu sesión en el Arauco Digital Hub.
+        Revisá los motivos posibles y volvé a intentarlo.
+    </div>
+
+    <!-- Causa -->
+    <div class="cause-box">
+        <div class="cause-label">▸ Causa probable</div>
+        <div class="cause-text" id="cause-text">
+            <strong>Código de voucher incorrecto o ya utilizado.</strong><br>
+            Los códigos son de un solo uso. Si ya lo usaste antes, necesitás comprar uno nuevo en el puesto del Hub.
+        </div>
+    </div>
+
+    <!-- Errores comunes -->
+    <div class="errors-list">
+        <div class="error-item">
+            <span class="error-item-icon">🔡</span>
+            <div class="error-item-text">
+                <div class="error-item-title">Código mal escrito</div>
+                <div class="error-item-desc">Revisá mayúsculas y guiones. Ej: ABCD-1234</div>
+            </div>
+        </div>
+        <div class="error-item">
+            <span class="error-item-icon">♻️</span>
+            <div class="error-item-text">
+                <div class="error-item-title">Voucher ya usado</div>
+                <div class="error-item-desc">Cada código es de un solo uso. Comprá uno nuevo.</div>
+            </div>
+        </div>
+        <div class="error-item">
+            <span class="error-item-icon">⏰</span>
+            <div class="error-item-text">
+                <div class="error-item-title">Sesión expirada</div>
+                <div class="error-item-desc">Tu tiempo se agotó. Comprá un nuevo voucher para continuar.</div>
+            </div>
+        </div>
+        <div class="error-item">
+            <span class="error-item-icon">📵</span>
+            <div class="error-item-text">
+                <div class="error-item-title">Dispositivo ya conectado</div>
+                <div class="error-item-desc">El código está activo en otro dispositivo.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer de reintento -->
+    <div class="retry-timer">
+        Podés reintentar en <span id="retry-countdown">5</span> segundos...
+    </div>
+
+    <!-- Botones -->
+    <a href="$(link-login-only)" class="btn-primary">
+        ↩ Volver a intentar
+    </a>
+
+    <div class="divider">o</div>
+
+    <a href="menu.html" class="btn-secondary">
+        🍔 Ver menú mientras esperás
+    </a>
+
+    <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Tengo%20un%20problema%20para%20conectarme%20al%20Hub%20%F0%9F%93%A1"
+       class="btn-wa"
+       target="_blank">
+        💬 Reportar problema por WhatsApp
+    </a>
+
+    <div class="footer">
+        ARAUCO DIGITAL HUB · Señor de la Peña · Semana Santa<br>
+        🛰️ Starlink Satelital · Matías E. Peralta<br>
+        <span style="color:rgba(234,67,53,0.4); font-size:0.55rem;">
+            Error registrado: <span id="error-timestamp">--</span>
+        </span>
+    </div>
+
+</div>
+</div>
+
+<script>
+    // ── TIMESTAMP DEL ERROR ────────────────────────────────────
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    document.getElementById('error-timestamp').textContent =
+        `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())} hs`;
+
+    // ── DETECTAR TIPO DE ERROR POR URL ─────────────────────────
+    // MikroTik puede pasar el error como parámetro en la URL
+    // Ej: error.html?error=invalid-username
+    const params  = new URLSearchParams(window.location.search);
+    const errType = params.get('error') || '$(error)';
+
+    const errorMap = {
+        'invalid-username': {
+            code:     'ERROR',
+            label:    'Código de voucher rechazado',
+            badge:    '✕ CÓDIGO INVÁLIDO',
+            title:    'Código incorrecto',
+            subtitle: 'El código que ingresaste no existe en nuestro sistema. Revisá que esté bien escrito.',
+            cause:    '<strong>Código no reconocido.</strong><br>Verificá que copiaste bien el código del voucher, incluyendo el guión del medio. Ej: ABCD-1234',
+        },
+        'invalid-password': {
+            code:     'ERROR',
+            label:    'Contraseña incorrecta',
+            badge:    '✕ CONTRASEÑA INVÁLIDA',
+            title:    'Código incorrecto',
+            subtitle: 'El código que ingresaste no coincide con nuestros registros.',
+            cause:    '<strong>Código mal ingresado.</strong><br>El código del voucher actúa como contraseña. Copialo exactamente como aparece en el papel.',
+        },
+        'user-session-limit': {
+            code:     'LÍMITE',
+            label:    'Sesiones simultáneas agotadas',
+            badge:    '✕ DISPOSITIVO EN USO',
+            title:    'Ya hay una sesión activa',
+            subtitle: 'Este código ya está siendo usado en otro dispositivo en este momento.',
+            cause:    '<strong>Código activo en otro dispositivo.</strong><br>Cada voucher solo puede usarse en un dispositivo a la vez. Esperá a que esa sesión finalice o comprá un nuevo voucher.',
+        },
+        'user-time-limit': {
+            code:     'VENCIDO',
+            label:    'Tiempo de sesión agotado',
+            badge:    '⏰ SESIÓN EXPIRADA',
+            title:    'Tu tiempo se agotó',
+            subtitle: 'El tiempo de tu voucher llegó a su fin. Gracias por usar el Hub.',
+            cause:    '<strong>Plan de tiempo completado.</strong><br>Tu sesión terminó correctamente. Si querés continuar navegando, acercate al puesto y comprá un nuevo voucher.',
+        },
+        'user-disabled': {
+            code:     'BLOQUEADO',
+            label:    'Cuenta suspendida temporalmente',
+            badge:    '🔒 ACCESO BLOQUEADO',
+            title:    'Código suspendido',
+            subtitle: 'Este código fue desactivado. Consultá en el puesto del Hub.',
+            cause:    '<strong>Voucher deshabilitado manualmente.</strong><br>Si crees que es un error, acercate al puesto del Hub y hablá con Matías.',
+        },
+        'user-kicked': {
+            code:     'SESIÓN',
+            label:    'Sesión cerrada por el servidor',
+            badge:    '⚡ SESIÓN TERMINADA',
+            title:    'Sesión cerrada',
+            subtitle: 'Tu sesión fue cerrada por el sistema. Podés volver a conectarte con el mismo código si aún tiene tiempo.',
+            cause:    '<strong>Desconexión del servidor.</strong><br>Esto puede pasar por inactividad prolongada o por reinicio del sistema. Volvé a ingresar tu código.',
+        },
+    };
+
+    // Aplicar info del error si se reconoce
+    const errInfo = errorMap[errType];
+    if (errInfo) {
+        document.getElementById('error-code-display').textContent = errInfo.code;
+        document.getElementById('error-code-display').setAttribute('data-text', errInfo.code);
+        document.getElementById('error-code-label').textContent   = errInfo.label;
+        document.getElementById('error-badge').innerHTML          = errInfo.badge;
+        document.getElementById('error-title').textContent        = errInfo.title;
+        document.getElementById('error-subtitle').textContent     = errInfo.subtitle;
+        document.getElementById('cause-text').innerHTML           = errInfo.cause;
+    }
+
+    // ── CONTADOR DE REINTENTO ──────────────────────────────────
+    let count = 5;
+    const countEl = document.getElementById('retry-countdown');
+    const interval = setInterval(() => {
+        count--;
+        countEl.textContent = count;
+        if (count <= 0) {
+            clearInterval(interval);
+            countEl.parentElement.textContent = '✓ Ya podés reintentar';
+            countEl.parentElement.style.color = 'var(--green)';
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>

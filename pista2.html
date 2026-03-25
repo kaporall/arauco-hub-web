@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Enigma del Historiador — Nivel II</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05080d;
+            --surface: rgba(15, 20, 30, 0.92);
+            --border: #1e3a5f;
+            --accent: #58a6ff;
+            --accent-warm: #c8a84b;
+            --text: #c9d8ea;
+            --muted: #6b7c93;
+            --success: #3fb950;
+            --danger: #ea4335;
+            --glow: rgba(88, 166, 255, 0.25);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 70% 30%, rgba(88, 166, 255, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(200, 168, 75, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Grid tech de fondo */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(88,166,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(88,166,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 3px,
+                rgba(0,0,0,0.06) 3px,
+                rgba(0,0,0,0.06) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 440px;
+            width: 100%;
+        }
+
+        /* Animación de entrada */
+        .container { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .level-badge {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .level-number {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 6px;
+            color: var(--accent);
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .level-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid var(--muted);
+        }
+
+        .dot.done {
+            background: var(--accent-warm);
+            border-color: var(--accent-warm);
+            box-shadow: 0 0 6px var(--accent-warm);
+        }
+
+        .dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { box-shadow: 0 0 5px var(--accent); }
+            50% { box-shadow: 0 0 15px var(--accent), 0 0 25px var(--glow); }
+        }
+
+        /* Badge de nivel superado */
+        .cleared-badge {
+            background: rgba(200, 168, 75, 0.08);
+            border: 1px solid rgba(200, 168, 75, 0.2);
+            border-radius: 6px;
+            padding: 8px 14px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--accent-warm);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 20px;
+            box-shadow:
+                0 0 40px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(88, 166, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .title-block {
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 18px;
+            margin-bottom: 20px;
+        }
+
+        .eyebrow {
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d8eaff;
+            text-shadow: 0 0 20px rgba(88,166,255,0.4), 0 0 40px rgba(88,166,255,0.15);
+            line-height: 1.2;
+            animation: titleGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 10px rgba(88,166,255,0.2); }
+            to { text-shadow: 0 0 25px rgba(88,166,255,0.6), 0 0 50px rgba(88,166,255,0.2); }
+        }
+
+        .subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 6px; letter-spacing: 1px; }
+
+        /* Diagrama de la antena */
+        .antenna-diagram {
+            background: rgba(5, 10, 20, 0.9);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--muted);
+            line-height: 2;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .antenna-diagram::before {
+            content: 'STARLINK_NET_NODE';
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            font-size: 0.55rem;
+            color: rgba(88,166,255,0.3);
+        }
+
+        .antenna-art {
+            font-size: 0.75rem;
+            line-height: 1.6;
+            color: rgba(88,166,255,0.7);
+            margin: 8px 0;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .antenna-art .label {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .antenna-art .unknown {
+            color: var(--accent-warm);
+            animation: blink 1.5s step-end infinite;
+        }
+
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* Lore */
+        .lore {
+            background: rgba(88, 166, 255, 0.04);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 6px 6px 0;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            font-size: 0.78rem;
+            line-height: 1.7;
+            color: #8fa8c8;
+            font-style: italic;
+        }
+
+        .enigma-box {
+            background: rgba(5, 10, 20, 0.8);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enigma-box::before {
+            content: '//ENIGMA_02';
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 0.6rem;
+            color: var(--muted);
+            opacity: 0.5;
+        }
+
+        .enigma-title {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .enigma-text {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #c8d8f0;
+            font-weight: 400;
+        }
+
+        .enigma-text .keyword { color: var(--accent); font-weight: 700; }
+
+        .hint-box {
+            background: rgba(63, 185, 80, 0.04);
+            border: 1px dashed rgba(63, 185, 80, 0.3);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            font-size: 0.75rem;
+            color: #5ab96a;
+            line-height: 1.6;
+        }
+
+        .hint-box strong {
+            display: block;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            opacity: 0.8;
+        }
+
+        .input-label {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(5, 10, 20, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--accent);
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            text-align: center;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            outline: none;
+            margin-bottom: 14px;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
+        }
+
+        input[type="text"].error {
+            border-color: var(--danger);
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #1a5fa8, var(--accent));
+            border: none;
+            border-radius: 6px;
+            color: #05080d;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, var(--accent), #80c4ff);
+            box-shadow: 0 4px 20px rgba(88, 166, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .error-msg {
+            display: none;
+            text-align: center;
+            color: var(--danger);
+            font-size: 0.75rem;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        .attempts {
+            text-align: center;
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-top: 12px;
+            letter-spacing: 1px;
+        }
+
+        .attempts span { color: var(--accent); }
+
+        .card-footer {
+            text-align: center;
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            font-size: 0.65rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+            line-height: 1.8;
+        }
+
+        .symbol {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 14px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px var(--glow));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Señal pulsante */
+        .signal-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            margin-right: 6px;
+            animation: signalPulse 1.5s ease-in-out infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes signalPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+    </style>
+
+    <!-- ═══ PWA: ARAUCO DIGITAL HUB ═══ -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#58a6ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Arauco Hub">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <link rel="icon" href="/icons/favicon.ico">
+    <!-- ═══════════════════════════════ -->
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<div class="container">
+
+    <div class="cleared-badge">
+        ✓ NIVEL I SUPERADO — Llastay identificado
+    </div>
+
+    <div class="level-badge">
+        <div class="level-number">◈ ARAUCO DIGITAL HUB — ENIGMA DEL HISTORIADOR ◈</div>
+        <div class="level-dots">
+            <div class="dot done"></div>
+            <div class="dot active"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="symbol">🛰️</div>
+
+        <div class="title-block">
+            <div class="eyebrow">// NIVEL II DE III //</div>
+            <h1>LA TORRE<br>DEL DESIERTO</h1>
+            <div class="subtitle">Donde la señal vence al silencio</div>
+        </div>
+
+        <div class="antenna-diagram">
+            <div class="antenna-art">
+            ═══[ STARLINK ]═══<br>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+           &nbsp;&nbsp;[ WiFi 6 EAP610 ]<br>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  ← <span class="label">mástil</span><br>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  altura: <span class="unknown">?</span> metros<br>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+        ▓▓▓▓▓▓▓▓▓▓▓▓<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">ARAUCO HUB</span>
+            </div>
+            <div style="font-size:0.6rem; color: var(--muted); margin-top:4px;">
+                <span class="signal-dot"></span>STARLINK ONLINE · LATENCIA &lt;50ms
+            </div>
+        </div>
+
+        <div class="lore">
+            "En el desierto sin señal, la antena es el faro. 
+            Levantada sobre un mástil visible desde lejos, es el punto 
+            de referencia tecnológico de toda la festividad. 
+            Su altura no es casualidad — fue calculada para maximizar 
+            la cobertura sobre los 60.000 peregrinos."
+        </div>
+
+        <div class="enigma-box">
+            <div class="enigma-title">▸ SEGUNDO ENIGMA</div>
+            <div class="enigma-text">
+                ¿A cuántos <span class="keyword">metros de altura</span> 
+                está instalada la antena WiFi 6 del Arauco Hub?<br><br>
+                La misma que te está dando señal 
+                en este momento.
+            </div>
+        </div>
+
+        <div class="hint-box">
+            <strong>📡 Pista de Campo</strong>
+            Buscá el mástil físico del Hub — tiene un cartel 
+            con la altura en metros. Mirá hacia arriba.<br>
+            Respuesta: un número en letras (ej: TRES, SEIS...).
+        </div>
+
+        <label class="input-label" for="answer">→ Ingresá la altura en letras</label>
+        <input type="text" id="answer" placeholder="_ _ _ _ _" maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false">
+
+        <button class="btn-submit" onclick="checkAnswer()">
+            TRANSMITIR ›
+        </button>
+
+        <div class="error-msg" id="error-msg">
+            ✗ Señal incorrecta — Revisá la antena
+        </div>
+
+        <div class="attempts">
+            Intentos restantes: <span id="attempts-count">5</span>
+        </div>
+
+        <div class="card-footer">
+            ARAUCO DIGITAL HUB · Señor de la Peña · Semana Santa<br>
+            <span style="color: var(--accent);">1 nivel más para el premio ›</span>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let attempts = 5;
+    // Mástil de 5 metros — respuesta: CINCO
+    const VALID = ["CINCO", "5"];
+
+    function checkAnswer() {
+        const input = document.getElementById('answer');
+        const val = input.value.trim().toUpperCase();
+        const errorMsg = document.getElementById('error-msg');
+        const attemptsDisplay = document.getElementById('attempts-count');
+
+        if (VALID.includes(val)) {
+            input.style.borderColor = '#3fb950';
+            input.style.boxShadow = '0 0 20px rgba(63, 185, 80, 0.4)';
+            input.style.color = '#3fb950';
+            document.querySelector('.btn-submit').textContent = '✓ SEÑAL CONFIRMADA — ACCEDIENDO...';
+            document.querySelector('.btn-submit').style.background = 'linear-gradient(135deg, #238636, #3fb950)';
+            document.querySelector('.btn-submit').style.color = 'white';
+            setTimeout(() => {
+                window.location.href = 'premio.html';
+            }, 1200);
+        } else {
+            attempts--;
+            attemptsDisplay.textContent = attempts;
+            input.classList.add('error');
+            errorMsg.style.display = 'block';
+            setTimeout(() => input.classList.remove('error'), 500);
+            input.value = '';
+
+            if (attempts <= 0) {
+                document.querySelector('.btn-submit').disabled = true;
+                document.querySelector('.btn-submit').textContent = 'BLOQUEADO — Mirá el mástil';
+                document.querySelector('.btn-submit').style.background = '#333';
+                attempts = 5;
+                setTimeout(() => {
+                    document.querySelector('.btn-submit').disabled = false;
+                    document.querySelector('.btn-submit').textContent = 'TRANSMITIR ›';
+                    document.querySelector('.btn-submit').style.background = 'linear-gradient(135deg, #1a5fa8, var(--accent))';
+                    attemptsDisplay.textContent = attempts;
+                }, 15000);
+            }
+        }
+    }
+
+    document.getElementById('answer').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkAnswer();
+    });
+</script>
+
+
+    <script>
+    // ── PWA: Registrar Service Worker ──
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/service-worker.js')
+          .then(reg => {
+            console.log('[PWA] SW registrado:', reg.scope);
+            localStorage.setItem('arauco-last-online', new Date().toISOString());
+          })
+          .catch(err => console.warn('[PWA] Error SW:', err));
+      });
+    }
+    </script>
+</body>
+</html>

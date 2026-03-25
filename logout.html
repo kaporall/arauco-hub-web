@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#58a6ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arauco Hub">
+<link rel="icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasta luego — Arauco Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #05080d;
+            --surface: rgba(14,20,12,0.96);
+            --border:  rgba(200,168,75,0.15);
+            --gold:    #c8a84b;
+            --gold2:   #f0d878;
+            --green:   #3fb950;
+            --blue:    #58a6ff;
+            --ember:   #f0883e;
+            --text:    #d8e8d0;
+            --muted:   #6a7860;
+            --glow:    rgba(200,168,75,0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fondo cálido de despedida */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 30%, rgba(200,168,75,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 10% 90%, rgba(63,185,80,0.04) 0%, transparent 45%),
+                radial-gradient(ellipse at 90% 10%, rgba(88,166,255,0.03) 0%, transparent 40%);
+            pointer-events: none; z-index: 0;
+            animation: bgWave 8s ease-in-out infinite;
+        }
+
+        @keyframes bgWave {
+            0%,100% { opacity: 1; }
+            50%      { opacity: 0.7; }
+        }
+
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0, transparent 3px,
+                rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+            );
+            pointer-events: none; z-index: 1;
+        }
+
+        /* Partículas de despedida */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 3;
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+            10%  { opacity: 0.6; }
+            90%  { opacity: 0.3; }
+            100% { transform: translateY(-20px) scale(1); opacity: 0; }
+        }
+
+        .wrap {
+            position: relative; z-index: 2;
+            max-width: 420px; width: 100%;
+            animation: entryFloat 0.7s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+
+        @keyframes entryFloat {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--surface);
+            border: 1px solid rgba(200,168,75,0.25);
+            border-radius: 16px;
+            padding: 28px 22px 22px;
+            box-shadow:
+                0 0 60px rgba(200,168,75,0.06),
+                0 0 120px rgba(200,168,75,0.03),
+                inset 0 1px 0 rgba(200,168,75,0.1);
+            backdrop-filter: blur(12px);
+        }
+
+        /* ── ÍCONO CENTRAL ── */
+        .farewell-icon {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .icon-ring {
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            width: 86px; height: 86px; border-radius: 50%;
+            border: 2px solid rgba(200,168,75,0.3);
+            background: rgba(200,168,75,0.06);
+            font-size: 2.6rem;
+            animation: iconFloat 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        .icon-ring::before {
+            content: '';
+            position: absolute; inset: -8px;
+            border-radius: 50%;
+            border: 1px solid rgba(200,168,75,0.1);
+            animation: ringExpand 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%,100% { transform: translateY(0); box-shadow: 0 0 0 0 rgba(200,168,75,0.2); }
+            50%      { transform: translateY(-6px); box-shadow: 0 0 20px rgba(200,168,75,0.15); }
+        }
+
+        @keyframes ringExpand {
+            0%,100% { transform: scale(1); opacity: 0.5; }
+            50%      { transform: scale(1.1); opacity: 0.15; }
+        }
+
+        /* ── TITLE BLOCK ── */
+        .title-block {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eyebrow {
+            font-size: 0.6rem; letter-spacing: 5px;
+            color: var(--gold); text-transform: uppercase;
+            margin-bottom: 8px; opacity: 0.8;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.7rem; font-weight: 900;
+            background: linear-gradient(135deg, #8a6a10, var(--gold), var(--gold2), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: shimmer 4s ease-in-out infinite;
+            line-height: 1.15; letter-spacing: 1px;
+        }
+
+        @keyframes shimmer {
+            0%,100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 0.7rem; color: var(--muted);
+            margin-top: 6px; letter-spacing: 2px;
+            line-height: 1.5;
+        }
+
+        /* ── RESUMEN DE SESIÓN ── */
+        .session-summary {
+            background: rgba(5,10,5,0.7);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .summary-title {
+            font-size: 0.58rem; letter-spacing: 3px;
+            color: var(--gold); text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .summary-row {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 7px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.72rem;
+        }
+
+        .summary-row:last-child { border-bottom: none; }
+        .summary-label { color: var(--muted); }
+        .summary-value { color: var(--text); font-weight: 500; }
+        .summary-value.good { color: var(--green); }
+        .summary-value.gold { color: var(--gold); }
+
+        /* ── MENSAJE PERSONALIZADO ── */
+        .message-box {
+            background: linear-gradient(135deg, rgba(200,140,30,0.06), rgba(240,136,62,0.04));
+            border: 1px solid rgba(200,168,75,0.2);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 10px 10px 0;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            font-size: 0.78rem;
+            color: #b8a882;
+            line-height: 1.7;
+            font-style: italic;
+        }
+
+        .message-box strong {
+            color: var(--gold2);
+            font-style: normal;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ── ESTRELLA RATING ── */
+        .rating-box {
+            background: rgba(5,10,5,0.6);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .rating-label {
+            font-size: 0.62rem; letter-spacing: 3px;
+            color: var(--muted); text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            display: flex; justify-content: center;
+            gap: 8px; margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 1.8rem; cursor: pointer;
+            filter: grayscale(1) opacity(0.3);
+            transition: all 0.2s;
+            transform: scale(1);
+        }
+
+        .star:hover,
+        .star.active {
+            filter: grayscale(0) opacity(1);
+            transform: scale(1.15);
+        }
+
+        .star.active { animation: starPop 0.3s ease-out; }
+
+        @keyframes starPop {
+            0%   { transform: scale(0.8); }
+            60%  { transform: scale(1.3); }
+            100% { transform: scale(1.15); }
+        }
+
+        .rating-feedback {
+            font-size: 0.68rem; color: var(--muted);
+            min-height: 20px; transition: 0.3s;
+            letter-spacing: 1px;
+        }
+
+        /* ── BOTONES ── */
+        .btn-reconnect {
+            display: block; width: 100%; padding: 13px;
+            background: linear-gradient(135deg, #1a5a10, var(--green));
+            border: none; border-radius: 8px; color: #05080d;
+            font-family: 'Cinzel', serif; font-size: 0.85rem;
+            font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; cursor: pointer;
+            text-align: center; text-decoration: none;
+            transition: 0.3s; margin-bottom: 8px;
+        }
+
+        .btn-reconnect:hover {
+            background: linear-gradient(135deg, var(--green), #6be490);
+            box-shadow: 0 4px 20px rgba(63,185,80,0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-menu {
+            display: block; width: 100%; padding: 12px;
+            background: transparent;
+            border: 1px solid rgba(200,168,75,0.3);
+            border-radius: 8px; color: var(--gold);
+            font-family: 'DM Mono', monospace; font-size: 0.72rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; text-align: center;
+            text-decoration: none; transition: 0.25s; margin-bottom: 8px;
+        }
+
+        .btn-menu:hover { background: rgba(200,168,75,0.07); border-color: rgba(200,168,75,0.5); }
+
+        .btn-wa {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; width: 100%; padding: 12px;
+            background: rgba(37,211,102,0.07);
+            border: 1px solid rgba(37,211,102,0.22);
+            border-radius: 8px; color: #25d366;
+            font-family: 'DM Mono', monospace; font-size: 0.7rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; text-align: center;
+            text-decoration: none; transition: 0.25s; margin-bottom: 18px;
+        }
+
+        .btn-wa:hover { background: rgba(37,211,102,0.13); border-color: rgba(37,211,102,0.4); }
+
+        /* ── AUSTRALIA STRIP ── */
+        .aus-strip {
+            background: linear-gradient(135deg, rgba(0,50,100,0.15), rgba(0,80,40,0.1));
+            border: 1px solid rgba(88,166,255,0.2);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        .aus-flag { font-size: 2rem; flex-shrink: 0; }
+
+        .aus-text { flex: 1; }
+
+        .aus-title-sm {
+            font-family: 'Cinzel', serif; font-size: 0.8rem;
+            font-weight: 700; color: var(--blue); margin-bottom: 3px;
+        }
+
+        .aus-desc {
+            font-size: 0.62rem; color: var(--muted); line-height: 1.5;
+        }
+
+        .aus-propina {
+            background: rgba(88,166,255,0.1);
+            border: 1px solid rgba(88,166,255,0.25);
+            border-radius: 6px; padding: 6px 10px;
+            color: var(--blue); font-family: 'Cinzel', serif;
+            font-size: 0.7rem; font-weight: 700;
+            text-decoration: none; white-space: nowrap;
+            transition: 0.2s; flex-shrink: 0;
+        }
+
+        .aus-propina:hover { background: rgba(88,166,255,0.18); }
+
+        /* ── ENIGMA PROMO ── */
+        .enigma-strip {
+            background: rgba(200,168,75,0.04);
+            border: 1px dashed rgba(200,168,75,0.25);
+            border-radius: 10px; padding: 12px 14px;
+            margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .enigma-strip-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+        .enigma-strip-text { flex: 1; }
+
+        .enigma-strip-title {
+            font-size: 0.72rem; color: var(--gold);
+            margin-bottom: 2px; font-weight: 500;
+        }
+
+        .enigma-strip-desc {
+            font-size: 0.6rem; color: var(--muted); line-height: 1.4;
+        }
+
+        .enigma-strip-btn {
+            font-size: 0.65rem; color: var(--gold);
+            text-decoration: none; letter-spacing: 1px;
+            flex-shrink: 0; opacity: 0.8;
+        }
+
+        .enigma-strip-btn:hover { opacity: 1; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center; font-size: 0.58rem;
+            color: var(--muted); line-height: 2; letter-spacing: 1px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+    localStorage.setItem('arauco-last-online', new Date().toISOString());
+  });
+}
+</script>
+
+
+<body>
+
+<div id="particles"></div>
+
+<div class="wrap">
+<div class="card">
+
+    <!-- Ícono -->
+    <div class="farewell-icon">
+        <div class="icon-ring">👋</div>
+    </div>
+
+    <!-- Título -->
+    <div class="title-block">
+        <div class="eyebrow">// sesión cerrada //</div>
+        <h1>¡HASTA LUEGO,<br>PEREGRINO!</h1>
+        <div class="subtitle">
+            Tu sesión en el Arauco Hub fue cerrada correctamente.<br>
+            Volvé cuando quieras 🛰️
+        </div>
+    </div>
+
+    <!-- Resumen de sesión -->
+    <div class="session-summary">
+        <div class="summary-title">▸ Resumen de tu sesión</div>
+        <div class="summary-row">
+            <span class="summary-label">⏱️ Tiempo usado</span>
+            <span class="summary-value good" id="s-uptime">—</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">📶 Plan contratado</span>
+            <span class="summary-value gold" id="s-plan">—</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">🕐 Hora de cierre</span>
+            <span class="summary-value" id="s-time">—</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">🛰️ Red utilizada</span>
+            <span class="summary-value good">Starlink Satelital</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">📍 Ubicación</span>
+            <span class="summary-value">Barrial de Arauco</span>
+        </div>
+    </div>
+
+    <!-- Mensaje cálido -->
+    <div class="message-box">
+        <strong>✦ Del equipo del Hub</strong>
+        Gracias por elegirnos en el Señor de la Peña.
+        Este emprendimiento nació del desierto para conectar
+        a los peregrinos con el mundo. Si el Hub te fue útil,
+        contáselo a otros 🙏
+    </div>
+
+    <!-- Rating -->
+    <div class="rating-box">
+        <div class="rating-label">¿Cómo fue tu experiencia?</div>
+        <div class="stars">
+            <span class="star" data-val="1" onclick="rate(1)">⭐</span>
+            <span class="star" data-val="2" onclick="rate(2)">⭐</span>
+            <span class="star" data-val="3" onclick="rate(3)">⭐</span>
+            <span class="star" data-val="4" onclick="rate(4)">⭐</span>
+            <span class="star" data-val="5" onclick="rate(5)">⭐</span>
+        </div>
+        <div class="rating-feedback" id="rating-feedback">Tocá una estrella para calificar</div>
+    </div>
+
+    <!-- Botones principales -->
+    <a href="$(link-login-only)" class="btn-reconnect">
+        ↺ Comprar otro voucher
+    </a>
+
+    <a href="menu.html" class="btn-menu">
+        🍔 Ver menú del Hub
+    </a>
+
+    <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Acabo%20de%20usar%20el%20Hub%20%F0%9F%9B%B0%EF%B8%8F%20Gracias%21"
+       class="btn-wa" target="_blank">
+        💬 Mandanos un mensaje
+    </a>
+
+    <!-- Strip Australia -->
+    <div class="aus-strip">
+        <div class="aus-flag">🇦🇺</div>
+        <div class="aus-text">
+            <div class="aus-title-sm">Camino a Australia</div>
+            <div class="aus-desc">Matías lleva este proyecto al mundo.<br>¿Te suma dejarle una propina?</div>
+        </div>
+        <a class="aus-propina"
+           href="https://wa.me/5493827432108?text=Hola%20Mati!%20Quiero%20dejarte%20una%20propina%20por%20el%20Hub%20%F0%9F%87%A6%F0%9F%87%BA"
+           target="_blank">
+            Propinar ›
+        </a>
+    </div>
+
+    <!-- Strip Enigma -->
+    <div class="enigma-strip">
+        <div class="enigma-strip-icon">📜</div>
+        <div class="enigma-strip-text">
+            <div class="enigma-strip-title">¿Completaste el Enigma del Historiador?</div>
+            <div class="enigma-strip-desc">3 niveles · descuento real · solo en el Hub</div>
+        </div>
+        <a href="pista1.html" class="enigma-strip-btn">Jugar ›</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        ARAUCO DIGITAL HUB · Matías E. Peralta<br>
+        🛰️ Starlink · Señor de la Peña · Semana Santa<br>
+        <span style="color:var(--gold); font-size:0.55rem;">
+            Sesión cerrada: <span id="footer-time">--</span>
+        </span>
+    </div>
+
+</div>
+</div>
+
+<script>
+    // ── HORA DE CIERRE ─────────────────────────────────────────
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const timeStr = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ' hs';
+
+    document.getElementById('s-time').textContent    = timeStr;
+    document.getElementById('footer-time').textContent = timeStr;
+
+    // ── DATOS DE SESIÓN (MikroTik los inyecta) ─────────────────
+    const RAW_UPTIME = "$(uptime)";
+    const isPreview  = RAW_UPTIME.includes('$') || RAW_UPTIME === '';
+
+    function parseTime(str) {
+        if (!str || str.includes('$')) return null;
+        const p = str.split(':').map(Number);
+        if (p.length === 3) return p[0]*3600 + p[1]*60 + p[2];
+        if (p.length === 2) return p[0]*60 + p[1];
+        return 0;
+    }
+
+    function formatTime(s) {
+        if (!s || s < 0) s = 0;
+        const h = Math.floor(s/3600);
+        const m = Math.floor((s%3600)/60);
+        const ss = s % 60;
+        if (h > 0) return `${h}h ${String(m).padStart(2,'0')}m`;
+        if (m > 0) return `${m}m ${String(ss).padStart(2,'0')}s`;
+        return `${ss}s`;
+    }
+
+    function getPlanName(totalMin) {
+        if (totalMin <= 32)  return 'Express 30 Min';
+        if (totalMin <= 65)  return '1 Hora Full';
+        if (totalMin <= 185) return '3 Horas Relax';
+        return 'Día Comerciante';
+    }
+
+    if (isPreview) {
+        document.getElementById('s-uptime').textContent = '42m 17s';
+        document.getElementById('s-plan').textContent   = '1 Hora Full';
+    } else {
+        const secs = parseTime(RAW_UPTIME) || 0;
+        document.getElementById('s-uptime').textContent = formatTime(secs);
+        document.getElementById('s-plan').textContent   = getPlanName(Math.round(secs/60));
+    }
+
+    // ── SISTEMA DE RATING ──────────────────────────────────────
+    const feedbacks = {
+        1: '😔 Lamentamos eso — avisanos por WhatsApp',
+        2: '😐 Gracias por la honestidad, vamos a mejorar',
+        3: '🙂 Bien! Seguimos trabajando para mejorar',
+        4: '😄 ¡Muy bien! Gracias por confiar en el Hub',
+        5: '🔥 ¡Sos un crack! Gracias por la valoración',
+    };
+
+    function rate(val) {
+        document.querySelectorAll('.star').forEach((s, i) => {
+            s.classList.toggle('active', i < val);
+        });
+        document.getElementById('rating-feedback').textContent = feedbacks[val];
+        document.getElementById('rating-feedback').style.color = val >= 4 ? 'var(--green)' : val <= 2 ? 'var(--ember)' : 'var(--muted)';
+
+        // Si calificó 5 estrellas, animar
+        if (val === 5) spawnParticles(12);
+    }
+
+    // ── PARTÍCULAS DE DESPEDIDA ────────────────────────────────
+    function spawnParticles(count) {
+        const container = document.getElementById('particles');
+        const colors = ['var(--gold)', 'var(--green)', 'var(--blue)', 'var(--ember)', '#f0d878'];
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 8 + 4;
+            p.style.cssText = `
+                left: ${Math.random() * 100}vw;
+                width: ${size}px; height: ${size}px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                animation-duration: ${Math.random() * 3 + 2}s;
+                animation-delay: ${Math.random() * 0.5}s;
+            `;
+            container.appendChild(p);
+            setTimeout(() => p.remove(), 6000);
+        }
+    }
+
+    // Partículas suaves de entrada
+    setTimeout(() => spawnParticles(6), 400);
+    setTimeout(() => spawnParticles(4), 1200);
+</script>
+
+</body>
+</html>

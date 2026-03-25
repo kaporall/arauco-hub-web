@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#58a6ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arauco Hub">
+<link rel="icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú — Arauco Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #080a06;
+            --surface:   rgba(18, 22, 14, 0.95);
+            --surface2:  rgba(28, 34, 20, 0.9);
+            --border:    rgba(180, 140, 60, 0.15);
+            --gold:      #c8a84b;
+            --gold2:     #f0d878;
+            --ember:     #f0883e;
+            --green:     #3a7a2a;
+            --green2:    #5aaa3a;
+            --blue:      #58a6ff;
+            --text:      #e8dfc8;
+            --muted:     #7a7060;
+            --red:       #c0392b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* ── Fondo textura desierto ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(200,140,40,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 0% 100%, rgba(58,122,42,0.05) 0%, transparent 50%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(200,168,75,0.012) 40px,
+                    rgba(200,168,75,0.012) 41px
+                );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(8, 10, 6, 0.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px 0;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(200,168,75,0.4);
+        }
+
+        .brand span {
+            font-size: 0.65rem;
+            color: var(--muted);
+            display: block;
+            font-family: 'DM Mono', monospace;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 1px;
+        }
+
+        .header-badge {
+            background: rgba(58,122,42,0.15);
+            border: 1px solid rgba(90,170,58,0.3);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.6rem;
+            color: var(--green2);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Nav tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .nav-tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            padding: 8px 14px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        .tab:hover { color: var(--text); }
+
+        /* ── CONTENIDO ── */
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px 14px 0;
+        }
+
+        /* Secciones */
+        .section {
+            display: none;
+            animation: fadeUp 0.35s ease-out;
+        }
+
+        .section.active { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── HERO de sección ── */
+        .section-hero {
+            text-align: center;
+            padding: 20px 0 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .section-emoji {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 0 12px rgba(200,168,75,0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-6px); }
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--gold2);
+            text-shadow: 0 0 30px rgba(200,168,75,0.3);
+            line-height: 1.1;
+        }
+
+        .section-sub {
+            font-size: 0.68rem;
+            color: var(--muted);
+            margin-top: 5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ── CARDS de item ── */
+        .item-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: var(--gold);
+            transform: scaleY(0);
+            transition: transform 0.25s;
+            transform-origin: bottom;
+        }
+
+        .item-card:hover { border-color: rgba(200,168,75,0.35); }
+        .item-card:hover::before { transform: scaleY(1); }
+
+        /* Variantes de color por categoría */
+        .item-card.green::before { background: var(--green2); }
+        .item-card.blue::before  { background: var(--blue); }
+        .item-card.ember::before { background: var(--ember); }
+        .item-card.red::before   { background: var(--red); }
+
+        .item-left { flex: 1; }
+
+        .item-emoji {
+            font-size: 1.6rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .item-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .item-desc {
+            font-size: 0.68rem;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 7px;
+        }
+
+        .tag {
+            font-size: 0.55rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 10px;
+            border: 1px solid;
+        }
+
+        .tag-hot  { color: #ff6b4a; border-color: rgba(255,107,74,0.3); background: rgba(255,107,74,0.07); }
+        .tag-pop  { color: var(--gold); border-color: rgba(200,168,75,0.3); background: rgba(200,168,75,0.07); }
+        .tag-new  { color: var(--green2); border-color: rgba(90,170,58,0.3); background: rgba(90,170,58,0.07); }
+        .tag-wifi { color: var(--blue); border-color: rgba(88,166,255,0.3); background: rgba(88,166,255,0.07); }
+        .tag-free { color: #3fb950; border-color: rgba(63,185,80,0.3); background: rgba(63,185,80,0.07); }
+
+        /* Precio */
+        .item-right { text-align: right; flex-shrink: 0; }
+
+        .item-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--ember);
+            line-height: 1;
+        }
+
+        .item-price-sub {
+            font-size: 0.55rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+
+        .item-price.free-price { color: var(--green2); }
+
+        /* ── COMBO CARD (especial) ── */
+        .combo-card {
+            background: linear-gradient(135deg, rgba(200,140,30,0.08), rgba(240,136,62,0.05));
+            border: 1px solid rgba(200,168,75,0.3);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.25s;
+        }
+
+        .combo-card:hover {
+            border-color: rgba(200,168,75,0.5);
+            box-shadow: 0 0 25px rgba(200,168,75,0.08);
+        }
+
+        .combo-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--gold);
+            color: #080a06;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .combo-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--gold2);
+            margin-bottom: 4px;
+        }
+
+        .combo-sub {
+            font-size: 0.68rem;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .combo-items {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 14px;
+        }
+
+        .combo-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text);
+        }
+
+        .combo-item::before {
+            content: '›';
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .combo-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid rgba(200,168,75,0.1);
+            padding-top: 12px;
+        }
+
+        .combo-savings {
+            font-size: 0.62rem;
+            color: var(--green2);
+            line-height: 1.5;
+        }
+
+        .combo-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--ember);
+        }
+
+        /* ── PLAN WIFI CARD ── */
+        .plan-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            transition: 0.25s;
+            position: relative;
+        }
+
+        .plan-card.featured {
+            border-color: rgba(88,166,255,0.4);
+            background: rgba(88,166,255,0.04);
+        }
+
+        .plan-card.featured::after {
+            content: '★ MÁS VENDIDO';
+            position: absolute;
+            top: -1px;
+            right: 14px;
+            background: var(--blue);
+            color: #05080d;
+            font-size: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 2px 8px;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .plan-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .plan-time {
+            font-size: 0.65rem;
+            color: var(--blue);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .plan-speed {
+            font-size: 0.62rem;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .plan-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--ember);
+            text-align: right;
+            align-self: center;
+        }
+
+        .plan-price span {
+            display: block;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.55rem;
+            color: var(--muted);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        /* ── SEPARADOR de categoría ── */
+        .cat-label {
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin: 20px 0 10px;
+            padding-left: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cat-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── INFO SECTION ── */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .info-box-title {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.75rem;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+
+        .info-label { color: var(--muted); }
+        .info-value { color: var(--text); text-align: right; }
+        .info-value.good { color: var(--green2); }
+        .info-value.warn { color: var(--ember); }
+
+        /* ── BOTÓN FLOTANTE WA ── */
+        .wa-float {
+            position: fixed;
+            bottom: 20px;
+            right: 16px;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 50px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+            animation: waPulse 2.5s ease-in-out infinite;
+            transition: 0.3s;
+        }
+
+        .wa-float:hover {
+            background: #20bd5a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(37,211,102,0.5);
+        }
+
+        @keyframes waPulse {
+            0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+            50%      { box-shadow: 0 4px 30px rgba(37,211,102,0.7); }
+        }
+
+        /* ── CINE CARD ── */
+        .cine-card {
+            background: var(--surface2);
+            border: 1px solid rgba(88,166,255,0.2);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cine-day {
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .cine-movie {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        .cine-hora {
+            text-align: right;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gold);
+        }
+
+        .cine-hora span {
+            display: block;
+            font-size: 0.55rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+    localStorage.setItem('arauco-last-online', new Date().toISOString());
+  });
+}
+</script>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-top">
+        <div class="brand">
+            ARAUCO HUB
+            <span>🛰️ starlink satelital · desierto del barrial</span>
+        </div>
+        <div class="header-badge">● EN VIVO</div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab active" onclick="showSection('combos', this)">🍔 Combos</button>
+        <button class="tab" onclick="showSection('carta', this)">🥤 Carta</button>
+        <button class="tab" onclick="showSection('wifi', this)">📶 WiFi</button>
+        <button class="tab" onclick="showSection('cine', this)">🎬 Cine</button>
+        <button class="tab" onclick="showSection('info', this)">📍 Info</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- SECCIÓN: COMBOS                -->
+<!-- ═══════════════════════════════ -->
+<div class="content">
+<div id="sec-combos" class="section active">
+
+    <div class="section-hero">
+        <span class="section-emoji">🍔</span>
+        <div class="section-title">Combos del Hub</div>
+        <div class="section-sub">Gastronomía + Conectividad · Todo en uno</div>
+    </div>
+
+    <!-- Combo estrella -->
+    <div class="combo-card">
+        <div class="combo-badge">★ ESTRELLA</div>
+        <div class="combo-title">Combo Arauco</div>
+        <div class="combo-sub">El combo completo del peregrino</div>
+        <div class="combo-items">
+            <div class="combo-item">Hamburguesa artesanal con papas</div>
+            <div class="combo-item">Soda helada 500ml</div>
+            <div class="combo-item">WiFi 1 hora incluido</div>
+            <div class="combo-item">Entrada al Cine 4K</div>
+        </div>
+        <div class="combo-price-row">
+            <div class="combo-savings">
+                🔥 Ahorrás más de $10.000<br>
+                vs precio individual
+            </div>
+            <div class="combo-price">$19.500</div>
+        </div>
+    </div>
+
+    <!-- Combo Mate -->
+    <div class="combo-card">
+        <div class="combo-title">Combo Mate</div>
+        <div class="combo-sub">Para el peregrino que viaja liviano</div>
+        <div class="combo-items">
+            <div class="combo-item">Agua caliente (termo)</div>
+            <div class="combo-item">WiFi 30 minutos incluido</div>
+        </div>
+        <div class="combo-price-row">
+            <div class="combo-savings">
+                ✓ Ideal para trabajar<br>
+                ✓ Recarga disponible
+            </div>
+            <div class="combo-price">$5.500</div>
+        </div>
+    </div>
+
+    <!-- Combo Noche -->
+    <div class="combo-card" style="background: linear-gradient(135deg, rgba(30,50,100,0.12), rgba(88,166,255,0.04)); border-color: rgba(88,166,255,0.25);">
+        <div class="combo-badge" style="background: var(--blue);">🌙 NOCHE</div>
+        <div class="combo-title" style="color: var(--blue);">Combo Cine</div>
+        <div class="combo-sub">Función 4K bajo las estrellas · 21:30 hs</div>
+        <div class="combo-items">
+            <div class="combo-item">Entrada al Cine 4K (1 persona)</div>
+            <div class="combo-item">Soda o agua 500ml</div>
+        </div>
+        <div class="combo-price-row">
+            <div class="combo-savings" style="color: var(--blue);">
+                ★ Pantalla 55" al aire libre<br>
+                ★ Proyección full HD
+            </div>
+            <div class="combo-price" style="color: var(--blue);">$7.000</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- SECCIÓN: CARTA                 -->
+<!-- ═══════════════════════════════ -->
+<div id="sec-carta" class="section">
+
+    <div class="section-hero">
+        <span class="section-emoji">🌶️</span>
+        <div class="section-title">Carta del Desierto</div>
+        <div class="section-sub">Gastronomía regional · Hecho con dedicación</div>
+    </div>
+
+    <div class="cat-label">Platos principales</div>
+
+    <div class="item-card ember">
+        <div class="item-left">
+            <span class="item-emoji">🍔</span>
+            <div class="item-name">Hamburguesa Artesanal</div>
+            <div class="item-desc">Pan casero · medallón de carne · lechuga · tomate · salsa de la casa</div>
+            <div class="item-tags">
+                <span class="tag tag-hot">🔥 Popular</span>
+                <span class="tag tag-pop">★ Estrella</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$12.500</div>
+            <div class="item-price-sub">c/papas fritas</div>
+        </div>
+    </div>
+
+    <div class="cat-label">Bebidas frías</div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🥤</span>
+            <div class="item-name">Licuados Frutales</div>
+            <div class="item-desc">Frutas de estación · naturales · sin conservantes</div>
+            <div class="item-tags">
+                <span class="tag tag-hot">🌿 Natural</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$5.000</div>
+            <div class="item-price-sub">vaso grande</div>
+        </div>
+    </div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🫧</span>
+            <div class="item-name">Soda / Agua Mineral</div>
+            <div class="item-desc">Fría · 500ml · helada en verano riojano</div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$3.000</div>
+            <div class="item-price-sub">500 ml</div>
+        </div>
+    </div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🧊</span>
+            <div class="item-name">Bolsa de Hielo</div>
+            <div class="item-desc">Para tus bebidas · hielera · termo</div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$3.000</div>
+            <div class="item-price-sub">por bolsa</div>
+        </div>
+    </div>
+
+    <div class="cat-label">Bebidas calientes</div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">☕</span>
+            <div class="item-name">Café / Té</div>
+            <div class="item-desc">Caliente · en taza · acompañá el mate o el frío de la noche</div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$3.500</div>
+            <div class="item-price-sub">por taza</div>
+        </div>
+    </div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🫖</span>
+            <div class="item-name">Agua Caliente</div>
+            <div class="item-desc">Para tu mate · termo disponible</div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$2.000</div>
+            <div class="item-price-sub">por carga</div>
+        </div>
+    </div>
+
+    <div class="cat-label">Tech & Logística</div>
+
+    <div class="item-card blue">
+        <div class="item-left">
+            <span class="item-emoji">🔋</span>
+            <div class="item-name">Carga de Celular</div>
+            <div class="item-desc">Cable USB-C / Lightning disponible · en puesto seguro</div>
+            <div class="item-tags">
+                <span class="tag tag-wifi">⚡ Rápida</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$4.000</div>
+            <div class="item-price-sub">hasta 100%</div>
+        </div>
+    </div>
+
+    <div class="item-card blue">
+        <div class="item-left">
+            <span class="item-emoji">🖨️</span>
+            <div class="item-name">Oficina Digital</div>
+            <div class="item-desc">Impresiones · Trámites · Formularios · Escaneo</div>
+            <div class="item-tags">
+                <span class="tag tag-new">📋 Trámites</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$6.000</div>
+            <div class="item-price-sub">por gestión</div>
+        </div>
+    </div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">⛺</span>
+            <div class="item-name">Carpas VIP</div>
+            <div class="item-desc">Sombra · privacidad · mesa asegurada · consultar disponibilidad</div>
+            <div class="item-tags">
+                <span class="tag tag-pop">★ Limitado</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price" style="font-size: 0.85rem; color: var(--gold);">Consultar</div>
+            <div class="item-price-sub">en caja</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- SECCIÓN: WIFI                  -->
+<!-- ═══════════════════════════════ -->
+<div id="sec-wifi" class="section">
+
+    <div class="section-hero">
+        <span class="section-emoji">🛰️</span>
+        <div class="section-title">WiFi Satelital</div>
+        <div class="section-sub">Starlink · Señal donde no hay nada</div>
+    </div>
+
+    <div class="info-box" style="border-color: rgba(88,166,255,0.3); margin-bottom: 16px;">
+        <div class="info-box-title">▸ Estado de red ahora</div>
+        <div class="info-row">
+            <span class="info-label">Proveedor</span>
+            <span class="info-value good">Starlink Satelital</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Latencia</span>
+            <span class="info-value good">&lt; 50 ms</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Señal 4G en zona</span>
+            <span class="info-value warn">CRÍTICA / SIN SEÑAL</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Nuestra cobertura</span>
+            <span class="info-value good">ÓPTIMA ●</span>
+        </div>
+    </div>
+
+    <div class="plan-card">
+        <div>
+            <div class="plan-name">⚡ Express 30 Min</div>
+            <div class="plan-time">30 minutos</div>
+            <div class="plan-speed">Bajada: 5 Mbps · Subida: 2 Mbps<br>Ideal para WhatsApp y redes</div>
+        </div>
+        <div class="plan-price">$4.000<span>ARS</span></div>
+    </div>
+
+    <div class="plan-card featured">
+        <div>
+            <div class="plan-name">📶 1 Hora Full</div>
+            <div class="plan-time">60 minutos</div>
+            <div class="plan-speed">Bajada: 10 Mbps · Subida: 5 Mbps<br>Video, correo, gestiones</div>
+        </div>
+        <div class="plan-price">$7.000<span>ARS</span></div>
+    </div>
+
+    <div class="plan-card">
+        <div>
+            <div class="plan-name">🌐 3 Horas Relax</div>
+            <div class="plan-time">180 minutos</div>
+            <div class="plan-speed">Bajada: 10 Mbps · Subida: 5 Mbps<br>Trabajo y contenido</div>
+        </div>
+        <div class="plan-price">$15.000<span>ARS</span></div>
+    </div>
+
+    <div class="plan-card" style="border-color: rgba(200,168,75,0.3);">
+        <div>
+            <div class="plan-name">🏆 Día Comerciante</div>
+            <div class="plan-time">24 horas</div>
+            <div class="plan-speed">Bajada: 15 Mbps · Subida: 8 Mbps<br>Para puestos y vendedores</div>
+        </div>
+        <div class="plan-price" style="color: var(--gold);">$45.000<span>ARS</span></div>
+    </div>
+
+    <div class="info-box" style="margin-top: 8px; border-color: rgba(63,185,80,0.2);">
+        <div class="info-box-title">▸ ¿Cómo conectarse?</div>
+        <div class="info-row">
+            <span class="info-label">1. Conectate al WiFi</span>
+            <span class="info-value good">"ARAUCO HUB"</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">2. Abre el browser</span>
+            <span class="info-value">Se abre el portal</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">3. Ingresá tu código</span>
+            <span class="info-value">Del voucher comprado</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">4. ¡Listo!</span>
+            <span class="info-value good">Internet satelital</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- SECCIÓN: CINE                  -->
+<!-- ═══════════════════════════════ -->
+<div id="sec-cine" class="section">
+
+    <div class="section-hero">
+        <span class="section-emoji">🎬</span>
+        <div class="section-title">Cine 4K</div>
+        <div class="section-sub">Bajo las estrellas · TV 55" · 21:30 hs</div>
+    </div>
+
+    <div class="info-box" style="border-color: rgba(88,166,255,0.2); margin-bottom: 16px; text-align: center;">
+        <div style="font-size: 0.7rem; color: var(--muted); margin-bottom: 6px; letter-spacing: 2px; text-transform: uppercase;">Entrada</div>
+        <div style="font-size: 0.8rem; color: var(--green2); margin-bottom: 4px;">✓ GRATIS con Combo Arauco</div>
+        <div style="font-size: 0.8rem; color: var(--text);">Individual: <strong style="color: var(--ember);">$4.000</strong></div>
+    </div>
+
+    <div class="cine-card">
+        <div>
+            <div class="cine-day">Jueves</div>
+            <div class="cine-movie">MUCHACHOS</div>
+        </div>
+        <div class="cine-hora">21:30<span>hs · hoy</span></div>
+    </div>
+
+    <div class="cine-card">
+        <div>
+            <div class="cine-day">Viernes</div>
+            <div class="cine-movie">LA PASIÓN DE CRISTO</div>
+        </div>
+        <div class="cine-hora">21:30<span>hs</span></div>
+    </div>
+
+    <div class="cine-card">
+        <div>
+            <div class="cine-day">Sábado</div>
+            <div class="cine-movie">COCO / ESPERANDO LA CARROZA</div>
+        </div>
+        <div class="cine-hora">21:30<span>hs</span></div>
+    </div>
+
+    <div class="cine-card">
+        <div>
+            <div class="cine-day">Domingo</div>
+            <div class="cine-movie">PROJECT HAIL MARY</div>
+        </div>
+        <div class="cine-hora">21:30<span>hs</span></div>
+    </div>
+
+    <div class="info-box" style="margin-top: 12px;">
+        <div class="info-box-title">▸ Detalles técnicos</div>
+        <div class="info-row">
+            <span class="info-label">Pantalla</span>
+            <span class="info-value">TV Samsung 55" 4K</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Audio</span>
+            <span class="info-value">Sistema de parlantes</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Capacidad</span>
+            <span class="info-value">Limitada · llegar temprano</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Lugar</span>
+            <span class="info-value good">Al aire libre · Arauco Hub</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- SECCIÓN: INFO                  -->
+<!-- ═══════════════════════════════ -->
+<div id="sec-info" class="section">
+
+    <div class="section-hero">
+        <span class="section-emoji">📍</span>
+        <div class="section-title">Información</div>
+        <div class="section-sub">Señor de la Peña · Semana Santa · Arauco</div>
+    </div>
+
+    <div class="info-box">
+        <div class="info-box-title">▸ Servicios del predio</div>
+        <div class="info-row">
+            <span class="info-label">⏰ Misa central</span>
+            <span class="info-value good">10:00 / 17:00 hs</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🚌 Colectivos</span>
+            <span class="info-value">Cada 30 min</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🚑 Sanitario</span>
+            <span class="info-value">400 mts · frente comisaría</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📡 Señal 4G</span>
+            <span class="info-value warn">Sin señal en la zona</span>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <div class="info-box-title">▸ Historia del lugar</div>
+        <div style="font-size: 0.75rem; line-height: 1.7; color: #9a907a;">
+            Esta formación rocosa era venerada por los pueblos originarios bajo el nombre de 
+            <strong style="color: var(--gold);">Llastay</strong> — dios tutelar de los cerros. 
+            Con la evangelización, la fe cristiana se sincretizó con la geografía local, 
+            convirtiéndolo en el punto de peregrinación más importante de la región.
+        </div>
+    </div>
+
+    <div class="info-box" style="border-color: rgba(200,168,75,0.3);">
+        <div class="info-box-title">▸ El Enigma del Historiador</div>
+        <div style="font-size: 0.75rem; line-height: 1.7; color: #9a907a; margin-bottom: 12px;">
+            Completá los 3 niveles del desafío y ganá descuentos + Cine gratis. 
+            Buscá la primera pista en el cartel del Hub.
+        </div>
+        <a href="pista1.html" style="display: block; text-align: center; background: rgba(200,168,75,0.1); border: 1px solid rgba(200,168,75,0.3); border-radius: 8px; padding: 10px; color: var(--gold); text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;">
+            📜 Empezar el Enigma ›
+        </a>
+    </div>
+
+    <div class="info-box">
+        <div class="info-box-title">▸ Ubicación del Hub</div>
+        <a href="https://www.google.com/maps/search/?api=1&query=-28.82527094332069,-66.75592481914413"
+           target="_blank"
+           style="display: block; text-align: center; background: rgba(234,67,53,0.08); border: 1px solid rgba(234,67,53,0.25); border-radius: 8px; padding: 12px; color: #ff6b55; text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">
+            📍 Ver en Google Maps ›
+        </a>
+    </div>
+
+    <div style="text-align: center; font-size: 0.6rem; color: var(--muted); margin-top: 20px; line-height: 2; letter-spacing: 1px;">
+        ARAUCO DIGITAL HUB · Matías E. Peralta<br>
+        🛰️ Conectado por Starlink · 🇦🇺 Camino a Australia
+    </div>
+
+</div>
+</div><!-- /content -->
+
+<!-- BOTÓN WA FLOTANTE -->
+<a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Vi%20el%20men%C3%BA%20y%20quiero%20hacer%20un%20pedido%20%F0%9F%94%A5"
+   class="wa-float"
+   target="_blank">
+   💬 Pedir ahora
+</a>
+
+<script>
+    function showSection(name, btn) {
+        // Ocultar todas las secciones
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+        // Mostrar la sección elegida
+        document.getElementById('sec-' + name).classList.add('active');
+        btn.classList.add('active');
+
+        // Scroll al top del contenido
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Clima dinámico en la sección wifi
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=-28.83&longitude=-66.75&current_weather=true")
+        .then(r => r.json())
+        .then(d => {
+            const temp = d.current_weather.temperature;
+            // Si hace calor, resaltamos licuados
+            if (temp >= 28) {
+                document.querySelectorAll('.item-card').forEach(card => {
+                    if (card.querySelector('.item-name')?.textContent.includes('Licuado')) {
+                        card.style.borderColor = 'rgba(240,136,62,0.4)';
+                        const tags = card.querySelector('.item-tags');
+                        if (tags) {
+                            const tag = document.createElement('span');
+                            tag.className = 'tag tag-hot';
+                            tag.textContent = `🌡️ ${temp}°C HOY`;
+                            tags.appendChild(tag);
+                        }
+                    }
+                });
+            }
+        }).catch(() => {});
+</script>
+
+</body>
+</html>

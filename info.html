@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#58a6ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arauco Hub">
+<link rel="icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info del Predio — Arauco Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #07060a;
+            --surface: rgba(16,14,24,0.96);
+            --surface2:rgba(22,20,32,0.9);
+            --border:  rgba(200,168,75,0.12);
+            --gold:    #c8a84b;
+            --gold2:   #f0d878;
+            --green:   #3fb950;
+            --blue:    #58a6ff;
+            --ember:   #f0883e;
+            --purple:  #bc8cff;
+            --red:     #ea4335;
+            --text:    #e8dfc8;
+            --muted:   #7a7060;
+            --glow:    rgba(200,168,75,0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 90px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(200,168,75,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 70%, rgba(88,166,255,0.04) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 100%, rgba(63,185,80,0.03) 0%, transparent 40%);
+            pointer-events: none; z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0, transparent 3px,
+                rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+            );
+            pointer-events: none; z-index: 1;
+        }
+
+        .wrap {
+            position: relative; z-index: 2;
+            max-width: 440px; margin: 0 auto;
+            padding: 0 14px;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(7,6,10,0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 14px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin: 0 -14px;
+        }
+
+        .brand {
+            font-family: 'Cinzel', serif; font-size: 0.9rem;
+            font-weight: 700; color: var(--gold); letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        .brand small {
+            display: block; font-family: 'DM Mono', monospace;
+            font-size: 0.52rem; color: var(--muted);
+            letter-spacing: 3px; font-weight: 400; margin-top: 1px;
+        }
+
+        .semana-badge {
+            background: rgba(200,168,75,0.1);
+            border: 1px solid rgba(200,168,75,0.3);
+            border-radius: 20px; padding: 4px 10px;
+            font-size: 0.58rem; color: var(--gold);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        /* ── TABS NAV ── */
+        .nav-tabs {
+            display: flex; overflow-x: auto;
+            scrollbar-width: none;
+            background: rgba(7,6,10,0.97);
+            border-bottom: 1px solid var(--border);
+            padding: 0 14px;
+            margin: 0 -14px;
+            position: sticky; top: 52px; z-index: 99;
+        }
+
+        .nav-tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            padding: 9px 14px; font-size: 0.62rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--muted); border: none;
+            background: transparent; cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap; transition: 0.2s;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+        .tab:hover  { color: var(--text); }
+
+        /* ── SECCIONES ── */
+        .section { display: none; padding-top: 20px; animation: fadeUp 0.3s ease-out; }
+        .section.active { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(10px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        /* ── HERO HISTORIA ── */
+        .historia-hero {
+            text-align: center; padding: 20px 0 22px;
+            border-bottom: 1px solid var(--border); margin-bottom: 20px;
+        }
+
+        .historia-icon {
+            font-size: 3rem; display: block; margin-bottom: 10px;
+            filter: drop-shadow(0 0 14px rgba(200,168,75,0.35));
+            animation: float 3.5s ease-in-out infinite;
+        }
+
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+        .historia-title {
+            font-family: 'Cinzel', serif; font-size: 1.5rem;
+            font-weight: 900; color: var(--gold2);
+            text-shadow: 0 0 25px rgba(200,168,75,0.3); line-height: 1.15;
+        }
+
+        .historia-sub {
+            font-size: 0.68rem; color: var(--muted);
+            margin-top: 6px; letter-spacing: 2px; line-height: 1.5;
+        }
+
+        /* ── LORE BLOCKS ── */
+        .lore-block {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 18px;
+            margin-bottom: 14px; position: relative;
+        }
+
+        .lore-eyebrow {
+            font-size: 0.55rem; letter-spacing: 4px;
+            color: var(--gold); text-transform: uppercase;
+            margin-bottom: 10px; opacity: 0.7;
+        }
+
+        .lore-title {
+            font-family: 'Cinzel', serif; font-size: 1rem;
+            font-weight: 700; color: var(--gold2);
+            margin-bottom: 10px; line-height: 1.2;
+        }
+
+        .lore-text {
+            font-size: 0.75rem; color: #b0a888;
+            line-height: 1.8;
+        }
+
+        .lore-text strong { color: var(--gold); }
+        .lore-text em { color: var(--text); font-style: normal; }
+
+        /* Cita destacada */
+        .quote-block {
+            background: rgba(200,168,75,0.04);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            padding: 14px 16px; margin: 14px 0;
+            font-size: 0.78rem; color: #c8b890;
+            font-style: italic; line-height: 1.7;
+        }
+
+        /* Timeline */
+        .timeline { margin: 16px 0; }
+
+        .timeline-item {
+            display: flex; gap: 14px;
+            padding-bottom: 16px; position: relative;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-line {
+            display: flex; flex-direction: column;
+            align-items: center; flex-shrink: 0; width: 24px;
+        }
+
+        .timeline-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--gold); flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(200,168,75,0.4);
+            margin-top: 3px;
+        }
+
+        .timeline-connector {
+            flex: 1; width: 1px;
+            background: rgba(200,168,75,0.15);
+            margin-top: 4px;
+        }
+
+        .timeline-item:last-child .timeline-connector { display: none; }
+
+        .timeline-content { flex: 1; }
+
+        .timeline-year {
+            font-size: 0.58rem; letter-spacing: 3px;
+            color: var(--gold); text-transform: uppercase; margin-bottom: 4px;
+        }
+
+        .timeline-text {
+            font-size: 0.72rem; color: #a89878; line-height: 1.6;
+        }
+
+        .timeline-text strong { color: var(--text); }
+
+        /* ── MAPA MENTAL DEL PREDIO ── */
+        .mapa-hero {
+            text-align: center; padding: 20px 0 22px;
+            border-bottom: 1px solid var(--border); margin-bottom: 20px;
+        }
+
+        /* Mapa ASCII visual */
+        .mapa-ascii {
+            background: rgba(5,8,5,0.9);
+            border: 1px solid rgba(63,185,80,0.2);
+            border-radius: 12px; padding: 18px;
+            margin-bottom: 16px; font-size: 0.65rem;
+            line-height: 2; text-align: center;
+            color: rgba(63,185,80,0.7);
+            font-family: 'DM Mono', monospace;
+            position: relative; overflow: hidden;
+        }
+
+        .mapa-ascii::before {
+            content: 'MAPA_PREDIO.svg';
+            position: absolute; top: 8px; right: 12px;
+            font-size: 0.5rem; color: rgba(63,185,80,0.2); letter-spacing: 2px;
+        }
+
+        .mapa-ascii .node-gold   { color: var(--gold); font-weight: bold; }
+        .mapa-ascii .node-green  { color: var(--green); }
+        .mapa-ascii .node-blue   { color: var(--blue); }
+        .mapa-ascii .node-red    { color: var(--red); }
+        .mapa-ascii .node-purple { color: var(--purple); }
+        .mapa-ascii .node-ember  { color: var(--ember); }
+
+        /* POI cards */
+        .poi-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 8px; margin-bottom: 14px;
+        }
+
+        .poi-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px; padding: 14px 12px;
+            transition: 0.25s;
+        }
+
+        .poi-card:hover { border-color: rgba(200,168,75,0.3); }
+
+        .poi-icon { font-size: 1.4rem; margin-bottom: 6px; display: block; }
+
+        .poi-name {
+            font-size: 0.72rem; color: var(--text);
+            font-weight: 500; margin-bottom: 3px;
+        }
+
+        .poi-dist {
+            font-size: 0.6rem; color: var(--gold);
+            letter-spacing: 1px;
+        }
+
+        .poi-desc { font-size: 0.6rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+        /* ── SERVICIOS ── */
+        .servicios-hero {
+            text-align: center; padding: 20px 0 22px;
+            border-bottom: 1px solid var(--border); margin-bottom: 20px;
+        }
+
+        .info-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .info-card-title {
+            font-size: 0.58rem; letter-spacing: 3px;
+            color: var(--gold); text-transform: uppercase; margin-bottom: 12px;
+        }
+
+        .info-row {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.72rem;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+
+        .info-label { color: var(--muted); display: flex; align-items: center; gap: 6px; }
+        .info-value { color: var(--text); text-align: right; }
+        .info-value.good   { color: var(--green); }
+        .info-value.gold   { color: var(--gold); }
+        .info-value.warn   { color: var(--ember); }
+        .info-value.danger { color: var(--red); font-weight: 500; }
+
+        /* Alerta sanitaria */
+        .alert-card {
+            background: rgba(88,166,255,0.05);
+            border: 1px solid rgba(88,166,255,0.2);
+            border-left: 3px solid var(--blue);
+            border-radius: 0 10px 10px 0;
+            padding: 14px; margin-bottom: 12px;
+            font-size: 0.72rem; line-height: 1.7; color: #8ab0d0;
+        }
+
+        .alert-card strong { color: var(--blue); display: block; margin-bottom: 4px; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* ── BOTONES ── */
+        .btn-maps {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; width: 100%; padding: 13px;
+            background: linear-gradient(135deg, #a02020, var(--red));
+            border: none; border-radius: 8px; color: white;
+            font-family: 'Cinzel', serif; font-size: 0.85rem;
+            font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; text-decoration: none; transition: 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn-maps:hover { box-shadow: 0 4px 20px rgba(234,67,53,0.35); transform: translateY(-1px); }
+
+        .btn-wa-full {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; width: 100%; padding: 12px;
+            background: rgba(37,211,102,0.08);
+            border: 1px solid rgba(37,211,102,0.25);
+            border-radius: 8px; color: #25d366;
+            font-family: 'DM Mono', monospace; font-size: 0.72rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            text-decoration: none; text-align: center; transition: 0.25s;
+        }
+
+        .btn-wa-full:hover { background: rgba(37,211,102,0.14); border-color: rgba(37,211,102,0.4); }
+
+        /* ── WA FLOTANTE ── */
+        .wa-float {
+            position: fixed; bottom: 20px; right: 16px; z-index: 200;
+            display: flex; align-items: center; gap: 8px;
+            background: #25d366; color: white; text-decoration: none;
+            padding: 12px 18px; border-radius: 50px;
+            font-family: 'DM Mono', monospace; font-size: 0.72rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+            animation: waPulse 2.5s ease-in-out infinite; transition: 0.3s;
+        }
+
+        .wa-float:hover { transform: translateY(-2px); }
+
+        @keyframes waPulse {
+            0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+            50%      { box-shadow: 0 4px 30px rgba(37,211,102,0.7); }
+        }
+
+        /* ── FOOTER ── */
+        .footer-strip {
+            text-align: center; font-size: 0.58rem;
+            color: var(--muted); line-height: 2; letter-spacing: 1px;
+            padding: 16px 0 4px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js');
+    localStorage.setItem('arauco-last-online', new Date().toISOString());
+  });
+}
+</script>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="brand">
+        ARAUCO HUB
+        <small>📍 señor de la peña · semana santa</small>
+    </div>
+    <div class="semana-badge">Semana Santa</div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+    <button class="tab active" onclick="showTab('historia', this)">📜 Historia</button>
+    <button class="tab" onclick="showTab('mapa', this)">🗺️ Mapa</button>
+    <button class="tab" onclick="showTab('servicios', this)">🚑 Servicios</button>
+    <button class="tab" onclick="showTab('hub', this)">🛰️ El Hub</button>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB: HISTORIA                  -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-historia" class="section active">
+
+    <div class="historia-hero">
+        <span class="historia-icon">⛰️</span>
+        <div class="historia-title">EL SEÑOR<br>DE LA PEÑA</div>
+        <div class="historia-sub">Barrial de Arauco · La Rioja · Argentina</div>
+    </div>
+
+    <div class="lore-block">
+        <div class="lore-eyebrow">// Época precolombina</div>
+        <div class="lore-title">El Llastay — Antes del Cristo</div>
+        <div class="lore-text">
+            Mucho antes de la llegada de los conquistadores españoles, 
+            los pueblos originarios de la región —<strong>Diaguitas, Capayanes y 
+            Sanagastas</strong>— consideraban sagrada esta singular formación rocosa 
+            del desierto de Arauco.<br><br>
+            La llamaban <strong>LLASTAY</strong>: el Dios tutelar de los cerros. 
+            Una deidad protectora de la montaña, los animales y los cazadores.
+        </div>
+        <div class="quote-block">
+            "La piedra no fue tallada por manos humanas. El viento, el tiempo 
+            y la fe la convirtieron en imagen sagrada. Primero fue Llastay. 
+            Luego fue Cristo."
+        </div>
+        <div class="lore-text">
+            El perfil de la roca, visto desde cierto ángulo, <em>semeja 
+            el rostro de un hombre con barba</em> — lo que facilitó la 
+            identificación con la imagen de Jesucristo durante la evangelización.
+        </div>
+    </div>
+
+    <div class="lore-block">
+        <div class="lore-eyebrow">// Sincretismo religioso</div>
+        <div class="lore-title">La Fusión de dos Fe</div>
+        <div class="lore-text">
+            Con la llegada de los jesuitas y franciscanos al NOA, la 
+            evangelización encontró en esta roca un puente perfecto: 
+            los indígenas ya la veneraban, y la imagen recordaba al Cristo.
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-line">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-connector"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-year">Siglos XIV–XV</div>
+                    <div class="timeline-text">Los pueblos originarios veneran la roca como <strong>Llastay</strong>. Punto de ritual y ofrenda.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-line">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-connector"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-year">Siglo XVII</div>
+                    <div class="timeline-text">Evangelización jesuita. La roca se convierte en <strong>imagen de Cristo crucificado</strong>.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-line">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-connector"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-year">Siglo XIX</div>
+                    <div class="timeline-text">La peregrinación de Semana Santa se consolida como <strong>tradición regional</strong>.</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-line">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-connector"></div>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-year">Actualidad</div>
+                    <div class="timeline-text">Más de <strong>60.000 peregrinos</strong> llegan cada Semana Santa desde toda la región.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lore-block">
+        <div class="lore-eyebrow">// Geología</div>
+        <div class="lore-title">La Piedra que no fue tallada</div>
+        <div class="lore-text">
+            La formación es resultado de millones de años de <strong>erosión 
+            eólica e hídrica</strong> sobre la roca sedimentaria del desierto riojano. 
+            La arenisca, moldeada por el viento del oeste durante siglos, 
+            generó accidentalmente el perfil que hoy millones veneran.<br><br>
+            Coordenadas exactas: <strong style="color:var(--gold);">28°49'31.0"S 66°45'21.3"W</strong><br>
+            Altitud aproximada: <em>1.200 msnm</em>
+        </div>
+    </div>
+
+    <div class="footer-strip">
+        Información compilada por Matías E. Peralta — Historiador<br>
+        Arauco Digital Hub · Semana Santa
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB: MAPA                      -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-mapa" class="section">
+
+    <div class="mapa-hero">
+        <span class="historia-icon">🗺️</span>
+        <div class="historia-title">MAPA<br>DEL PREDIO</div>
+        <div class="historia-sub">Puntos de interés · Referencia visual</div>
+    </div>
+
+    <!-- Mapa ASCII -->
+    <div class="mapa-ascii">
+        <span class="node-purple">⛰️ LA PIEDRA (LLASTAY/CRISTO)</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  500 mts al norte<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+        ·—————————————·<br>
+        &nbsp;<span class="node-green">⛺ VÍA CRUCIS</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="node-blue">🚻 BAÑOS</span><br>
+        &nbsp;(sendero oeste)&nbsp;&nbsp;&nbsp;&nbsp;(sector central)<br>
+        ·—————————————·<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+        &nbsp;<span class="node-gold">★ ARAUCO HUB ← VOS ESTÁS ACÁ</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+        ·—————————————·<br>
+        <span class="node-red">🚑 SANITARIO</span>&nbsp;&nbsp;<span class="node-ember">🚌 COLECTIVOS</span><br>
+        (400 mts este)&nbsp;&nbsp;&nbsp;(acceso principal)
+    </div>
+
+    <!-- POIs -->
+    <div class="poi-grid">
+        <div class="poi-card">
+            <span class="poi-icon">⛰️</span>
+            <div class="poi-name">La Piedra</div>
+            <div class="poi-dist">↑ 500 mts norte</div>
+            <div class="poi-desc">El Señor de la Peña. Formación rocosa sagrada. Acceso por sendero.</div>
+        </div>
+        <div class="poi-card">
+            <span class="poi-icon">✝️</span>
+            <div class="poi-name">Vía Crucis</div>
+            <div class="poi-dist">← Sendero oeste</div>
+            <div class="poi-desc">14 estaciones. Procesión los días centrales de Semana Santa.</div>
+        </div>
+        <div class="poi-card">
+            <span class="poi-icon">🚻</span>
+            <div class="poi-name">Baños y Agua</div>
+            <div class="poi-dist">⊙ Sector central</div>
+            <div class="poi-desc">Sanitarios del predio. Agua potable disponible.</div>
+        </div>
+        <div class="poi-card">
+            <span class="poi-icon">⛪</span>
+            <div class="poi-name">Altar Principal</div>
+            <div class="poi-dist">↑ 200 mts norte</div>
+            <div class="poi-desc">Misas a las 10:00 y 17:00 hs. Capacidad para miles de personas.</div>
+        </div>
+        <div class="poi-card">
+            <span class="poi-icon">🚑</span>
+            <div class="poi-name">Puesto Sanitario</div>
+            <div class="poi-dist">→ 400 mts este</div>
+            <div class="poi-desc">Frente a la Comisaría. Atención de emergencias las 24 hs.</div>
+        </div>
+        <div class="poi-card">
+            <span class="poi-icon">🚌</span>
+            <div class="poi-name">Parada de Colectivos</div>
+            <div class="poi-dist">↓ Acceso principal</div>
+            <div class="poi-desc">Salidas a la ciudad cada 30 min. Sector de estacionamiento.</div>
+        </div>
+        <div class="poi-card">
+            <span class="poi-icon">🛰️</span>
+            <div class="poi-name">Arauco Digital Hub</div>
+            <div class="poi-dist">⊙ Tu ubicación</div>
+            <div class="poi-desc">WiFi Starlink, comida, cine, carga de celular y más.</div>
+        </div>
+        <div class="poi-card">
+            <span class="poi-icon">🅿️</span>
+            <div class="poi-name">Estacionamiento</div>
+            <div class="poi-dist">↓ Sur del predio</div>
+            <div class="poi-desc">Vigilado. Capacidad limitada en días pico.</div>
+        </div>
+    </div>
+
+    <!-- Botón Google Maps -->
+    <a href="https://www.google.com/maps/search/?api=1&query=-28.82527094332069,-66.75592481914413"
+       target="_blank" class="btn-maps">
+        📍 Abrir en Google Maps
+    </a>
+
+    <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20No%20encuentro%20el%20Hub%2C%20%C2%BFme%20ays%3F%20%F0%9F%93%8D"
+       class="btn-wa-full" target="_blank">
+        💬 Me perdí — mandame ubicación por WhatsApp
+    </a>
+
+    <div class="footer-strip">
+        Mapa orientativo · No a escala<br>
+        Arauco Digital Hub · Barrial de Arauco
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB: SERVICIOS                 -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-servicios" class="section">
+
+    <div class="servicios-hero">
+        <span class="historia-icon">🚑</span>
+        <div class="historia-title">SERVICIOS<br>DEL PREDIO</div>
+        <div class="historia-sub">Todo lo que necesitás saber para estar bien</div>
+    </div>
+
+    <div class="alert-card">
+        <strong>📡 Estado de señal 4G/5G</strong>
+        La señal de telefonía celular en el Barrial de Arauco está 
+        <span style="color:var(--red); font-weight:500;">CRÍTICA o sin señal</span> durante 
+        el evento por saturación de las antenas. 
+        El WiFi Starlink del Hub es la única conectividad confiable de la zona.
+    </div>
+
+    <div class="info-card">
+        <div class="info-card-title">▸ Horarios litúrgicos</div>
+        <div class="info-row">
+            <span class="info-label">⏰ Misa central</span>
+            <span class="info-value good">10:00 hs / 17:00 hs</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">✝️ Vía Crucis</span>
+            <span class="info-value">Viernes · 08:00 hs</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🕯️ Procesión nocturna</span>
+            <span class="info-value">Viernes Santo · 20:00 hs</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🎉 Misa de Pascua</span>
+            <span class="info-value gold">Domingo · 10:00 hs</span>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-card-title">▸ Transporte</div>
+        <div class="info-row">
+            <span class="info-label">🚌 Frecuencia</span>
+            <span class="info-value good">Cada 30 minutos</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📍 Parada</span>
+            <span class="info-value">Sector principal · acceso sur</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🕐 Horario</span>
+            <span class="info-value">06:00 a 02:00 hs</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🅿️ Estacionamiento</span>
+            <span class="info-value">Sur del predio · vigilado</span>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-card-title">▸ Salud y emergencias</div>
+        <div class="info-row">
+            <span class="info-label">🚑 Puesto sanitario</span>
+            <span class="info-value good">400 mts · frente comisaría</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🏥 Atención</span>
+            <span class="info-value good">24 hs durante el evento</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">💊 Medicamentos</span>
+            <span class="info-value">Primeros auxilios en el puesto</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🌡️ Riesgo calor</span>
+            <span class="info-value warn">Hidratarse constantemente</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📞 Emergencias</span>
+            <span class="info-value danger">911 (cobertura limitada)</span>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-card-title">▸ Recomendaciones del peregrino</div>
+        <div class="info-row">
+            <span class="info-label">💧 Agua</span>
+            <span class="info-value">Llevá mínimo 2 litros por persona</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🧴 Protector solar</span>
+            <span class="info-value">FPS 50+ obligatorio en verano</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">👟 Calzado</span>
+            <span class="info-value">Cerrado y cómodo para caminata</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🔋 Batería celular</span>
+            <span class="info-value gold">Cargá en el Hub · $4.000</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📶 WiFi</span>
+            <span class="info-value gold">Starlink en el Hub · desde $4.000</span>
+        </div>
+    </div>
+
+    <div class="footer-strip">
+        Información provista por el Arauco Digital Hub<br>
+        Actualizada por Matías E. Peralta · Semana Santa
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- TAB: EL HUB                    -->
+<!-- ═══════════════════════════════ -->
+<div id="tab-hub" class="section">
+
+    <div class="servicios-hero">
+        <span class="historia-icon">🛰️</span>
+        <div class="historia-title">ARAUCO<br>DIGITAL HUB</div>
+        <div class="historia-sub">El nodo tecnológico del desierto</div>
+    </div>
+
+    <div class="info-card" style="border-color: rgba(88,166,255,0.25);">
+        <div class="info-card-title" style="color:var(--blue);">▸ Stack tecnológico</div>
+        <div class="info-row">
+            <span class="info-label">🛰️ Internet</span>
+            <span class="info-value good">Starlink Mini satelital</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📡 Antena</span>
+            <span class="info-value">TP-Link EAP610 WiFi 6</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📶 Altura de antena</span>
+            <span class="info-value gold">Mástil de 5 metros</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">⚙️ Router</span>
+            <span class="info-value">MikroTik hEX</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🖥️ Gestión</span>
+            <span class="info-value">Mikhmon · Sistema de vouchers</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📺 Cine</span>
+            <span class="info-value">Samsung TV 55" 4K</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">⚡ Energía</span>
+            <span class="info-value">Generador + Estabilizador</span>
+        </div>
+    </div>
+
+    <div class="lore-block" style="border-color: rgba(200,168,75,0.25);">
+        <div class="lore-eyebrow">// Sobre el emprendedor</div>
+        <div class="lore-title">Matías E. Peralta</div>
+        <div class="lore-text">
+            <strong>26 años · Aimogasta, La Rioja, Argentina</strong><br><br>
+            Historiador, analista geopolítico, programador y teólogo. 
+            El Hub es su emprendimiento para financiar su próximo objetivo: 
+            viajar y estudiar en Australia con la 
+            <strong>Visa Work & Holiday 462 ya aprobada</strong>.<br><br>
+            Este nodo tecnológico en el desierto es la prueba de que 
+            con creatividad, tecnología y determinación se puede crear 
+            valor donde menos se espera.
+        </div>
+    </div>
+
+    <div class="info-card" style="border-color: rgba(63,185,80,0.2);">
+        <div class="info-card-title" style="color:var(--green);">▸ Servicios del Hub</div>
+        <div class="info-row">
+            <span class="info-label">📶 WiFi Starlink</span>
+            <span class="info-value gold">Desde $4.000</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🍔 Hamburguesas</span>
+            <span class="info-value gold">$12.500</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🎬 Cine 4K</span>
+            <span class="info-value gold">$4.000 / Gratis con combo</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🔋 Carga celular</span>
+            <span class="info-value gold">$4.000</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">🖨️ Oficina digital</span>
+            <span class="info-value gold">$6.000</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">📜 Enigma del Historiador</span>
+            <span class="info-value good">GRATIS · Premio real</span>
+        </div>
+    </div>
+
+    <a href="pista1.html" style="display:block; background: rgba(200,168,75,0.07); border: 1px dashed rgba(200,168,75,0.3); border-radius:10px; padding:14px; text-align:center; color:var(--gold); text-decoration:none; font-size:0.72rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; transition:0.2s;">
+        📜 Jugar el Enigma del Historiador ›
+    </a>
+
+    <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Quer%C3%ADa%20contactarme%20con%20el%20Arauco%20Hub%20%F0%9F%9B%B0%EF%B8%8F"
+       class="btn-wa-full" target="_blank">
+        💬 Contactar al Hub por WhatsApp
+    </a>
+
+    <div class="footer-strip">
+        ARAUCO DIGITAL HUB · Matías E. Peralta<br>
+        🛰️ Starlink · 🇦🇺 Camino a Australia · Visa 462 aprobada
+    </div>
+
+</div>
+
+</div><!-- /wrap -->
+
+<!-- WA FLOTANTE -->
+<a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Tengo%20una%20consulta%20sobre%20el%20Hub%20%F0%9F%93%8D"
+   class="wa-float" target="_blank">
+   💬 Consultar
+</a>
+
+<script>
+    function showTab(name, btn) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        btn.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
