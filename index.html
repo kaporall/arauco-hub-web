@@ -1,668 +1,343 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arauco Digital Hub — Semana Santa 2026</title>
-
-    <!-- OG Meta para cuando se comparte por WhatsApp/Instagram -->
     <meta property="og:title" content="🛰️ Arauco Digital Hub — Señor de la Peña 2026">
-    <meta property="og:description" content="WiFi Satelital Starlink · Parrilla · Cine 4K bajo las estrellas · Barrial de Arauco · Semana Santa">
+    <meta property="og:description" content="WiFi Satelital Starlink · Gastronomía · Productos Regionales · Transporte · Cine 4K · Barrial de Arauco">
     <meta property="og:image" content="https://i.imgur.com/placeholder.png">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg:      #05080d;
-            --gold:    #c8a84b;
-            --gold2:   #f0d878;
-            --blue:    #58a6ff;
-            --green:   #3fb950;
-            --ember:   #f0883e;
-            --fire:    #ff4500;
-            --text:    #e8dfc8;
-            --muted:   #6b7060;
-            --surface: rgba(18,22,14,0.9);
-            --border:  rgba(200,168,75,0.15);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* ── FONDO ANIMADO ── */
-        body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background:
-                radial-gradient(ellipse at 20% 20%, rgba(200,168,75,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 60%, rgba(88,166,255,0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 100%, rgba(63,185,80,0.04) 0%, transparent 40%),
-                repeating-linear-gradient(
-                    -45deg,
-                    transparent 0, transparent 60px,
-                    rgba(200,168,75,0.01) 60px, rgba(200,168,75,0.01) 61px
-                );
-            pointer-events: none; z-index: 0;
-            animation: bgShift 15s ease-in-out infinite alternate;
-        }
-
-        @keyframes bgShift {
-            from { opacity: 1; }
-            to   { opacity: 0.6; }
-        }
-
-        /* Estrellas */
-        .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .star {
-            position: absolute; border-radius: 50%; background: white;
-            animation: twinkle linear infinite;
-        }
-        @keyframes twinkle {
-            0%,100% { opacity:0.8; } 50% { opacity:0.1; }
-        }
-
-        .wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 16px; }
-
-        /* ── COUNTDOWN BANNER ── */
-        .countdown-bar {
-            background: var(--fire);
-            padding: 8px 16px;
-            text-align: center;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            color: white;
-            position: relative; z-index: 10;
-            animation: barPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes barPulse {
-            0%,100% { background: #ff4500; }
-            50%      { background: #ff6020; }
-        }
-
-        /* ── HERO ── */
-        .hero {
-            padding: 40px 16px 30px;
-            text-align: center;
-            position: relative; z-index: 1;
-        }
-
-        .hero-eyebrow {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(200,168,75,0.1);
-            border: 1px solid rgba(200,168,75,0.3);
-            border-radius: 20px; padding: 5px 14px;
-            font-size: 0.65rem; font-weight: 800;
-            letter-spacing: 3px; text-transform: uppercase;
-            color: var(--gold); margin-bottom: 16px;
-            animation: fadeDown 0.5s ease-out both;
-        }
-
-        @keyframes fadeDown {
-            from { opacity:0; transform:translateY(-10px); }
-            to   { opacity:1; transform:translateY(0); }
-        }
-
-        .hero-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3.5rem, 16vw, 5.5rem);
-            line-height: 0.9; letter-spacing: 3px;
-            color: var(--gold2);
-            text-shadow:
-                0 0 30px rgba(200,168,75,0.5),
-                0 0 60px rgba(200,168,75,0.2),
-                4px 4px 0 rgba(200,100,0,0.3);
-            animation: titleEntry 0.6s ease-out 0.1s both;
-        }
-
-        @keyframes titleEntry {
-            from { opacity:0; transform:scale(0.8); }
-            to   { opacity:1; transform:scale(1); }
-        }
-
-        .hero-title-sub {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
-            letter-spacing: 8px; color: var(--blue);
-            margin-top: 4px;
-            animation: titleEntry 0.6s ease-out 0.2s both;
-        }
-
-        .hero-desc {
-            font-size: 0.85rem; color: var(--muted);
-            line-height: 1.7; margin: 16px 0 20px;
-            animation: titleEntry 0.6s ease-out 0.3s both;
-        }
-
-        /* ── COUNTDOWN WIDGET ── */
-        .countdown-widget {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px; padding: 20px 16px;
-            margin-bottom: 24px;
-            box-shadow: 0 0 40px rgba(200,168,75,0.08), inset 0 1px 0 rgba(200,168,75,0.1);
-            animation: titleEntry 0.6s ease-out 0.35s both;
-        }
-
-        .countdown-label {
-            font-size: 0.6rem; letter-spacing: 4px;
-            color: var(--muted); text-transform: uppercase; margin-bottom: 14px;
-        }
-
-        .countdown-digits {
-            display: flex; justify-content: center;
-            gap: 6px; align-items: center;
-        }
-
-        .cd-block {
-            text-align: center; flex: 1;
-        }
-
-        .cd-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.2rem, 10vw, 3rem);
-            color: var(--gold2); line-height: 1;
-            text-shadow: 0 0 20px rgba(200,168,75,0.4);
-            display: block;
-            animation: cdPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes cdPulse {
-            0%,100% { text-shadow: 0 0 15px rgba(200,168,75,0.3); }
-            50%      { text-shadow: 0 0 30px rgba(200,168,75,0.6); }
-        }
-
-        .cd-label {
-            font-size: 0.52rem; color: var(--muted);
-            letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;
-        }
-
-        .cd-sep {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem; color: rgba(200,168,75,0.3);
-            line-height: 1; margin-bottom: 18px;
-            animation: sepBlink 1s step-end infinite;
-        }
-
-        @keyframes sepBlink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-        /* ── FECHA BANNER ── */
-        .date-banner {
-            background: linear-gradient(135deg, rgba(200,100,0,0.15), rgba(200,168,75,0.08));
-            border: 1px solid rgba(200,168,75,0.3);
-            border-radius: 12px; padding: 14px 16px;
-            text-align: center; margin-bottom: 20px;
-            animation: titleEntry 0.6s ease-out 0.4s both;
-        }
-
-        .date-banner-main {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem; letter-spacing: 4px; color: var(--gold2);
-        }
-
-        .date-banner-sub {
-            font-size: 0.7rem; color: var(--muted); letter-spacing: 2px; margin-top: 3px;
-        }
-
-        /* ── FEATURE CARDS ── */
-        .features {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 10px; margin-bottom: 24px;
-            animation: titleEntry 0.6s ease-out 0.45s both;
-        }
-
-        .feature-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px; padding: 16px 14px;
-            text-align: center; transition: 0.2s;
-            position: relative; overflow: hidden;
-        }
-
-        .feature-card:hover {
-            border-color: rgba(200,168,75,0.3);
-            transform: translateY(-2px);
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0;
-            height: 2px;
-        }
-
-        .feature-card.blue::before   { background: var(--blue); }
-        .feature-card.gold::before   { background: var(--gold); }
-        .feature-card.green::before  { background: var(--green); }
-        .feature-card.ember::before  { background: var(--ember); }
-        .feature-card.fire::before   { background: var(--fire); }
-        .feature-card.purple::before { background: #bc8cff; }
-
-        .feature-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
-        .feature-title { font-size: 0.78rem; font-weight: 900; color: var(--text); margin-bottom: 3px; }
-        .feature-desc  { font-size: 0.6rem; color: var(--muted); line-height: 1.5; }
-
-        /* ── CINE PREVIEW ── */
-        .cine-preview {
-            background: linear-gradient(135deg, rgba(10,14,28,0.9), rgba(4,6,15,0.95));
-            border: 1px solid rgba(88,166,255,0.2);
-            border-radius: 16px; padding: 18px;
-            margin-bottom: 20px;
-            animation: titleEntry 0.6s ease-out 0.5s both;
-        }
-
-        .cine-title-row {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-        }
-
-        .cine-title-icon { font-size: 1.5rem; }
-
-        .cine-title-text {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem; letter-spacing: 3px; color: var(--blue);
-        }
-
-        .cine-title-sub { font-size: 0.58rem; color: var(--muted); letter-spacing: 2px; }
-
-        .movie-row {
-            display: flex; justify-content: space-between;
-            align-items: center; padding: 9px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.75rem;
-        }
-
-        .movie-row:last-child { border-bottom: none; }
-        .movie-day { color: var(--muted); font-size: 0.65rem; letter-spacing: 1px; width: 50px; }
-        .movie-name { color: var(--blue); font-weight: 800; flex: 1; margin: 0 8px; }
-        .movie-time { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; }
-
-        /* ── PRECIOS PREVIEW ── */
-        .precios-preview {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px; padding: 18px;
-            margin-bottom: 20px;
-            animation: titleEntry 0.6s ease-out 0.55s both;
-        }
-
-        .precios-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem; letter-spacing: 3px;
-            color: var(--gold); margin-bottom: 14px;
-        }
-
-        .precio-row {
-            display: flex; justify-content: space-between;
-            align-items: center; padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            font-size: 0.75rem;
-        }
-
-        .precio-row:last-child { border-bottom: none; }
-        .precio-label { color: var(--muted); }
-        .precio-val   { color: var(--ember); font-weight: 800; font-family: 'Share Tech Mono', monospace; }
-        .precio-val.free { color: var(--green); }
-
-        /* ── MAPA MINI ── */
-        .mapa-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px; overflow: hidden;
-            margin-bottom: 20px;
-            animation: titleEntry 0.6s ease-out 0.6s both;
-        }
-
-        .mapa-header {
-            padding: 14px 16px 10px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem; letter-spacing: 3px; color: var(--text);
-        }
-
-        .mapa-ascii {
-            background: rgba(5,10,5,0.8);
-            padding: 14px 16px; font-family: 'Share Tech Mono', monospace;
-            font-size: 0.62rem; line-height: 1.9; color: rgba(63,185,80,0.6);
-        }
-
-        .mapa-ascii .node { color: var(--gold); font-weight: bold; }
-        .mapa-ascii .you  { color: var(--green); font-weight: bold; animation: blinkYou 1s step-end infinite; }
-        @keyframes blinkYou { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-        .mapa-footer {
-            padding: 12px 16px;
-        }
-
-        .btn-maps {
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; width: 100%; padding: 11px;
-            background: rgba(234,67,53,0.1);
-            border: 1px solid rgba(234,67,53,0.3);
-            border-radius: 8px; color: #ff6b55;
-            text-decoration: none; font-weight: 800;
-            font-size: 0.75rem; letter-spacing: 1px; transition: 0.2s;
-        }
-
-        .btn-maps:hover { background: rgba(234,67,53,0.18); }
-
-        /* ── CTA PRINCIPAL ── */
-        .cta-section {
-            background: linear-gradient(135deg, rgba(200,100,0,0.1), rgba(200,168,75,0.06));
-            border: 1px solid rgba(200,168,75,0.25);
-            border-radius: 18px; padding: 24px 20px;
-            text-align: center; margin-bottom: 24px;
-            animation: titleEntry 0.6s ease-out 0.65s both;
-        }
-
-        .cta-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem; letter-spacing: 3px;
-            color: var(--gold2); margin-bottom: 6px;
-        }
-
-        .cta-sub {
-            font-size: 0.72rem; color: var(--muted);
-            line-height: 1.6; margin-bottom: 18px;
-        }
-
-        .btn-wa-big {
-            display: flex; align-items: center; justify-content: center;
-            gap: 10px; width: 100%; padding: 15px;
-            background: linear-gradient(135deg, #128c7e, #25d366);
-            border: none; border-radius: 12px;
-            color: white; font-family: 'Nunito', sans-serif;
-            font-size: 0.95rem; font-weight: 900;
-            letter-spacing: 1px; cursor: pointer;
-            text-decoration: none; transition: 0.3s;
-            box-shadow: 0 4px 25px rgba(37,211,102,0.35);
-            margin-bottom: 10px;
-        }
-
-        .btn-wa-big:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(37,211,102,0.5); }
-
-        .btn-share {
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; width: 100%; padding: 12px;
-            background: rgba(88,166,255,0.08);
-            border: 1px solid rgba(88,166,255,0.25);
-            border-radius: 10px; color: var(--blue);
-            font-family: 'Nunito', sans-serif; font-size: 0.82rem;
-            font-weight: 800; cursor: pointer; transition: 0.2s;
-            letter-spacing: 1px;
-        }
-
-        .btn-share:hover { background: rgba(88,166,255,0.15); }
-
-        /* ── HISTORIA MINI ── */
-        .historia-card {
-            background: var(--surface);
-            border: 1px solid rgba(200,168,75,0.15);
-            border-left: 3px solid var(--gold);
-            border-radius: 0 14px 14px 0;
-            padding: 16px; margin-bottom: 20px;
-            font-size: 0.75rem; color: #b0a080;
-            line-height: 1.8;
-            animation: titleEntry 0.6s ease-out 0.7s both;
-        }
-
-        .historia-card strong { color: var(--gold); }
-        .historia-card h3 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem; letter-spacing: 3px;
-            color: var(--gold2); margin-bottom: 8px;
-        }
-
-        /* ── MATIAS BIO ── */
-        .bio-card {
-            background: linear-gradient(135deg, rgba(0,50,100,0.12), rgba(0,80,40,0.08));
-            border: 1px solid rgba(88,166,255,0.18);
-            border-radius: 16px; padding: 18px;
-            margin-bottom: 24px;
-            animation: titleEntry 0.6s ease-out 0.75s both;
-        }
-
-        .bio-header {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
-        }
-
-        .bio-avatar {
-            width: 48px; height: 48px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue), var(--green));
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; flex-shrink: 0;
-            border: 2px solid rgba(88,166,255,0.3);
-        }
-
-        .bio-name {
-            font-weight: 900; font-size: 0.9rem; color: var(--text);
-        }
-
-        .bio-role {
-            font-size: 0.6rem; color: var(--blue); letter-spacing: 2px;
-            text-transform: uppercase; margin-top: 2px;
-        }
-
-        .bio-text {
-            font-size: 0.72rem; color: var(--muted); line-height: 1.7;
-        }
-
-        .bio-aus {
-            display: inline-flex; align-items: center; gap: 5px;
-            background: rgba(88,166,255,0.1);
-            border: 1px solid rgba(88,166,255,0.2);
-            border-radius: 20px; padding: 4px 10px;
-            font-size: 0.62rem; color: var(--blue);
-            font-weight: 800; margin-top: 10px;
-        }
-
-        /* ── FOOTER ── */
-        .footer {
-            text-align: center; font-size: 0.6rem;
-            color: var(--muted); line-height: 2.2; letter-spacing: 1px;
-            padding: 20px 16px 40px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        :root{--bg:#05080d;--gold:#c8a84b;--gold2:#f0d878;--blue:#58a6ff;--green:#3fb950;--ember:#f0883e;--fire:#ff4500;--purple:#bc8cff;--pink:#ff7eb3;--teal:#2ec4b6;--text:#e8dfc8;--muted:#6b7060;--surface:rgba(18,22,14,0.9);--border:rgba(200,168,75,0.15)}
+        *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+        body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+        body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(200,168,75,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 60%,rgba(88,166,255,0.05) 0%,transparent 50%),radial-gradient(ellipse at 50% 100%,rgba(63,185,80,0.04) 0%,transparent 40%),repeating-linear-gradient(-45deg,transparent 0,transparent 60px,rgba(200,168,75,0.01) 60px,rgba(200,168,75,0.01) 61px);pointer-events:none;z-index:0;animation:bgShift 15s ease-in-out infinite alternate}
+        @keyframes bgShift{from{opacity:1}to{opacity:0.6}}
+        .stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+        .star{position:absolute;border-radius:50%;background:white;animation:twinkle linear infinite}
+        @keyframes twinkle{0%,100%{opacity:0.8}50%{opacity:0.1}}
+        .wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 16px}
+        .countdown-bar{background:var(--fire);padding:8px 16px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:2px;color:white;position:relative;z-index:10;animation:barPulse 2s ease-in-out infinite}
+        @keyframes barPulse{0%,100%{background:#ff4500}50%{background:#ff6020}}
+        .hero{padding:40px 16px 30px;text-align:center;position:relative;z-index:1}
+        .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.3);border-radius:20px;padding:5px 14px;font-size:0.65rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;animation:fadeDown 0.5s ease-out both}
+        @keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+        .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,16vw,5.5rem);line-height:0.9;letter-spacing:3px;color:var(--gold2);text-shadow:0 0 30px rgba(200,168,75,0.5),0 0 60px rgba(200,168,75,0.2),4px 4px 0 rgba(200,100,0,0.3);animation:titleEntry 0.6s ease-out 0.1s both}
+        @keyframes titleEntry{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+        .hero-title-sub{font-family:'Bebas Neue',sans-serif;font-size:clamp(0.9rem,3.5vw,1.3rem);letter-spacing:5px;color:var(--blue);margin-top:4px;animation:titleEntry 0.6s ease-out 0.2s both}
+        .hero-desc{font-size:0.85rem;color:var(--muted);line-height:1.7;margin:16px 0 20px;animation:titleEntry 0.6s ease-out 0.3s both}
+        .countdown-widget{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 16px;margin-bottom:24px;box-shadow:0 0 40px rgba(200,168,75,0.08),inset 0 1px 0 rgba(200,168,75,0.1);animation:titleEntry 0.6s ease-out 0.35s both}
+        .countdown-label{font-size:0.6rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+        .countdown-digits{display:flex;justify-content:center;gap:6px;align-items:center}
+        .cd-block{text-align:center;flex:1}
+        .cd-number{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,10vw,3rem);color:var(--gold2);line-height:1;display:block;animation:cdPulse 1s ease-in-out infinite}
+        @keyframes cdPulse{0%,100%{text-shadow:0 0 15px rgba(200,168,75,0.3)}50%{text-shadow:0 0 30px rgba(200,168,75,0.6)}}
+        .cd-label{font-size:0.52rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+        .cd-sep{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:rgba(200,168,75,0.3);line-height:1;margin-bottom:18px;animation:sepBlink 1s step-end infinite}
+        @keyframes sepBlink{0%,100%{opacity:1}50%{opacity:0.2}}
+        .date-banner{background:linear-gradient(135deg,rgba(200,100,0,0.15),rgba(200,168,75,0.08));border:1px solid rgba(200,168,75,0.3);border-radius:12px;padding:14px 16px;text-align:center;margin-bottom:20px;animation:titleEntry 0.6s ease-out 0.4s both}
+        .date-banner-main{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:4px;color:var(--gold2)}
+        .date-banner-sub{font-size:0.7rem;color:var(--muted);letter-spacing:2px;margin-top:3px}
+        .features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;animation:titleEntry 0.6s ease-out 0.45s both}
+        .feature-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 14px;text-align:center;transition:0.2s;position:relative;overflow:hidden}
+        .feature-card:hover{border-color:rgba(200,168,75,0.3);transform:translateY(-2px)}
+        .feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+        .fc-blue::before{background:var(--blue)}.fc-gold::before{background:var(--gold)}.fc-green::before{background:var(--green)}.fc-ember::before{background:var(--ember)}.fc-fire::before{background:var(--fire)}.fc-purple::before{background:var(--purple)}.fc-pink::before{background:var(--pink)}.fc-teal::before{background:var(--teal)}
+        .feature-icon{font-size:2rem;margin-bottom:8px;display:block}
+        .feature-title{font-size:0.78rem;font-weight:900;color:var(--text);margin-bottom:3px}
+        .feature-desc{font-size:0.6rem;color:var(--muted);line-height:1.5}
+        .section-card{border-radius:16px;padding:18px;margin-bottom:20px}
+        .section-title-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+        .section-icon{font-size:1.6rem}
+        .section-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px}
+        .section-sub{font-size:0.58rem;color:var(--muted);letter-spacing:2px}
+        .wifi-plans{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .wifi-plan{background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.15);border-radius:10px;padding:12px 10px;text-align:center;position:relative}
+        .wifi-plan.pop{border-color:rgba(200,168,75,0.4);background:rgba(200,168,75,0.06)}
+        .wifi-plan.pop::after{content:'★ POPULAR';position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--gold);color:#05080d;font-size:0.45rem;font-weight:900;letter-spacing:1.5px;padding:2px 8px;border-radius:10px}
+        .wifi-plan.wide{grid-column:1/-1}
+        .plan-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold2);margin-bottom:2px}
+        .plan-t{font-size:0.6rem;color:var(--blue);letter-spacing:1px;margin-bottom:2px}
+        .plan-d{font-size:0.55rem;color:var(--muted);margin-bottom:6px}
+        .plan-p{font-family:'Share Tech Mono',monospace;font-size:1.1rem;color:var(--ember);font-weight:800}
+        .plan-p.g{color:var(--gold)}
+        .subsec{font-size:0.55rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin:12px 0 6px;font-weight:800;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.05)}
+        .prow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.75rem}
+        .prow:last-child{border-bottom:none}
+        .plabel{color:var(--muted);flex:1}
+        .pval{color:var(--ember);font-weight:800;font-family:'Share Tech Mono',monospace;white-space:nowrap;margin-left:8px}
+        .pval.g{color:var(--gold)}.pval.gr{color:var(--green)}
+        .reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+        .reg-card{background:rgba(200,168,75,0.06);border:1px solid rgba(200,168,75,0.15);border-radius:10px;padding:12px 10px;text-align:center}
+        .reg-icon{font-size:1.6rem;margin-bottom:6px}
+        .reg-name{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--gold)}
+        .reg-p{font-size:0.58rem;color:var(--muted);margin-top:4px;line-height:1.7}
+        .reg-p span{color:var(--ember);font-family:'Share Tech Mono',monospace;font-weight:800}
+        .trx-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+        .trx-card{background:rgba(188,140,255,0.06);border:1px solid rgba(188,140,255,0.15);border-radius:10px;padding:12px 10px;text-align:center}
+        .trx-icon{font-size:1.4rem;margin-bottom:4px}
+        .trx-dir{font-size:0.6rem;color:var(--muted);letter-spacing:1px;margin-bottom:4px}
+        .trx-p{font-family:'Share Tech Mono',monospace;font-size:1.1rem;color:var(--purple);font-weight:800}
+        .trx-combo{background:rgba(188,140,255,0.08);border:1px solid rgba(188,140,255,0.25);border-radius:10px;padding:12px;text-align:center}
+        .trx-combo-l{font-size:0.65rem;color:var(--purple);font-weight:800;letter-spacing:1px;margin-bottom:4px}
+        .trx-combo-p{font-family:'Share Tech Mono',monospace;font-size:1.3rem;color:var(--gold);font-weight:800}
+        .trx-combo-s{font-size:0.58rem;color:var(--muted);margin-top:2px}
+        .cine-preview{background:linear-gradient(135deg,rgba(10,14,28,0.9),rgba(4,6,15,0.95));border:1px solid rgba(88,166,255,0.2);border-radius:16px;padding:18px;margin-bottom:20px}
+        .movie-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.75rem}
+        .movie-row:last-child{border-bottom:none}
+        .mday{color:var(--muted);font-size:0.65rem;letter-spacing:1px;width:50px}
+        .mname{color:var(--blue);font-weight:800;flex:1;margin:0 8px}
+        .mtime{color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1rem}
+        .mapa-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px}
+        .mapa-header{padding:14px 16px 10px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--text)}
+        .mapa-ascii{background:rgba(5,10,5,0.8);padding:14px 16px;font-family:'Share Tech Mono',monospace;font-size:0.62rem;line-height:1.9;color:rgba(63,185,80,0.6)}
+        .mnode{color:var(--gold);font-weight:bold}
+        .myou{color:var(--green);font-weight:bold;animation:blinkYou 1s step-end infinite}
+        @keyframes blinkYou{0%,100%{opacity:1}50%{opacity:0.3}}
+        .mapa-footer{padding:12px 16px}
+        .btn-maps{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:rgba(234,67,53,0.1);border:1px solid rgba(234,67,53,0.3);border-radius:8px;color:#ff6b55;text-decoration:none;font-weight:800;font-size:0.75rem;letter-spacing:1px;transition:0.2s}
+        .btn-maps:hover{background:rgba(234,67,53,0.18)}
+        .historia-card{background:var(--surface);border:1px solid rgba(200,168,75,0.15);border-left:3px solid var(--gold);border-radius:0 14px 14px 0;padding:16px;margin-bottom:20px;font-size:0.75rem;color:#b0a080;line-height:1.8}
+        .historia-card strong{color:var(--gold)}
+        .historia-card h3{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:var(--gold2);margin-bottom:8px}
+        .bio-card{background:linear-gradient(135deg,rgba(0,50,100,0.12),rgba(0,80,40,0.08));border:1px solid rgba(88,166,255,0.18);border-radius:16px;padding:18px;margin-bottom:24px}
+        .bio-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+        .bio-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;border:2px solid rgba(88,166,255,0.3)}
+        .bio-name{font-weight:900;font-size:0.9rem;color:var(--text)}
+        .bio-role{font-size:0.6rem;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+        .bio-text{font-size:0.72rem;color:var(--muted);line-height:1.7}
+        .bio-aus{display:inline-flex;align-items:center;gap:5px;background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.2);border-radius:20px;padding:4px 10px;font-size:0.62rem;color:var(--blue);font-weight:800;margin-top:10px}
+        .explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+        .explore-card{border-radius:14px;padding:18px 14px;text-align:center;transition:0.2s;text-decoration:none;display:block}
+        .explore-card:hover{transform:translateY(-2px)}
+        .cta-section{background:linear-gradient(135deg,rgba(200,100,0,0.1),rgba(200,168,75,0.06));border:1px solid rgba(200,168,75,0.25);border-radius:18px;padding:24px 20px;text-align:center;margin-bottom:24px}
+        .cta-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--gold2);margin-bottom:6px}
+        .cta-sub{font-size:0.72rem;color:var(--muted);line-height:1.6;margin-bottom:18px}
+        .btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:linear-gradient(135deg,#128c7e,#25d366);border:none;border-radius:12px;color:white;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:900;letter-spacing:1px;cursor:pointer;text-decoration:none;transition:0.3s;box-shadow:0 4px 25px rgba(37,211,102,0.35);margin-bottom:10px}
+        .btn-wa:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(37,211,102,0.5)}
+        .btn-share{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:rgba(88,166,255,0.08);border:1px solid rgba(88,166,255,0.25);border-radius:10px;color:var(--blue);font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;cursor:pointer;transition:0.2s;letter-spacing:1px}
+        .btn-share:hover{background:rgba(88,166,255,0.15)}
+        .footer{text-align:center;font-size:0.6rem;color:var(--muted);line-height:2.2;letter-spacing:1px;padding:20px 16px 40px;border-top:1px solid rgba(255,255,255,0.05)}
     </style>
 </head>
 <body>
-
-<!-- ESTRELLAS -->
 <div class="stars" id="stars"></div>
 
-<!-- COUNTDOWN BAR -->
 <div class="countdown-bar" id="top-bar">
     🔥 SEMANA SANTA 2026 · BARRIAL DE ARAUCO · <span id="bar-count">Calculando...</span>
 </div>
 
 <div class="wrap">
 
-    <!-- HERO -->
     <div class="hero">
-        <div class="hero-eyebrow">
-            🛰️ Señor de la Peña · Semana Santa
-        </div>
+        <div class="hero-eyebrow">🛰️ Señor de la Peña · Semana Santa 2026</div>
         <div class="hero-title">ARAUCO<br>DIGITAL<br>HUB</div>
-        <div class="hero-title-sub">Tecnología · Historia · Gastronomía</div>
+        <div class="hero-title-sub">Tecnología · Historia · Gastronomía · Turismo</div>
         <div class="hero-desc">
             El primer nodo tecnológico del Barrial de Arauco.<br>
-            WiFi Satelital Starlink donde no hay señal,<br>
-            parrilla, cine 4K y mucho más.
+            WiFi Satelital Starlink · Gastronomía · Productos Riojanos<br>
+            Transporte · Cine 4K · Oficina Digital
         </div>
     </div>
 
-    <!-- COUNTDOWN -->
     <div class="countdown-widget">
         <div class="countdown-label">⏳ Empieza en</div>
         <div class="countdown-digits">
-            <div class="cd-block">
-                <span class="cd-number" id="cd-days">--</span>
-                <div class="cd-label">días</div>
-            </div>
+            <div class="cd-block"><span class="cd-number" id="cd-days">--</span><div class="cd-label">días</div></div>
             <div class="cd-sep">:</div>
-            <div class="cd-block">
-                <span class="cd-number" id="cd-hours">--</span>
-                <div class="cd-label">horas</div>
-            </div>
+            <div class="cd-block"><span class="cd-number" id="cd-hours">--</span><div class="cd-label">horas</div></div>
             <div class="cd-sep">:</div>
-            <div class="cd-block">
-                <span class="cd-number" id="cd-mins">--</span>
-                <div class="cd-label">min</div>
-            </div>
+            <div class="cd-block"><span class="cd-number" id="cd-mins">--</span><div class="cd-label">min</div></div>
             <div class="cd-sep">:</div>
-            <div class="cd-block">
-                <span class="cd-number" id="cd-secs">--</span>
-                <div class="cd-label">seg</div>
-            </div>
+            <div class="cd-block"><span class="cd-number" id="cd-secs">--</span><div class="cd-label">seg</div></div>
         </div>
     </div>
 
-    <!-- FECHA -->
     <div class="date-banner">
         <div class="date-banner-main">JUEVES 2 AL DOMINGO 5</div>
-        <div class="date-banner-sub">📅 Abril 2026 · Barrial de Arauco · La Rioja</div>
+        <div class="date-banner-sub">📅 Abril 2026 · Barrial de Arauco · La Rioja · Argentina</div>
     </div>
 
-    <!-- FEATURES -->
     <div class="features">
-        <div class="feature-card blue">
-            <span class="feature-icon">🛰️</span>
-            <div class="feature-title">WiFi Satelital</div>
-            <div class="feature-desc">Starlink donde la 4G no llega. Desde $4.000</div>
+        <div class="feature-card fc-blue"><span class="feature-icon">🛰️</span><div class="feature-title">WiFi Satelital</div><div class="feature-desc">Starlink donde la 4G no llega. Desde $5.000</div></div>
+        <div class="feature-card fc-gold"><span class="feature-icon">🍔</span><div class="feature-title">Gastronomía</div><div class="feature-desc">Hamburguesas, combos y panchos</div></div>
+        <div class="feature-card fc-ember"><span class="feature-icon">🎬</span><div class="feature-title">Cine 4K</div><div class="feature-desc">Bajo las estrellas · TV 55" · 21:30</div></div>
+        <div class="feature-card fc-green"><span class="feature-icon">🫒</span><div class="feature-title">Prod. Riojanos</div><div class="feature-desc">Aceitunas · Nueces · Pack Regional</div></div>
+        <div class="feature-card fc-purple"><span class="feature-icon">🚌</span><div class="feature-title">Transporte</div><div class="feature-desc">Aimogasta ↔ La Peña</div></div>
+        <div class="feature-card fc-pink"><span class="feature-icon">🖨️</span><div class="feature-title">Oficina Digital</div><div class="feature-desc">Trámites e impresiones · $6.000</div></div>
+        <div class="feature-card fc-fire"><span class="feature-icon">📜</span><div class="feature-title">El Enigma</div><div class="feature-desc">Juego del Historiador · Ganá descuentos</div></div>
+        <div class="feature-card fc-teal"><span class="feature-icon">🔋</span><div class="feature-title">Carga Celular</div><div class="feature-desc">Punto seguro en el desierto · $4.000</div></div>
+    </div>
+
+    <!-- WIFI PLANES -->
+    <div class="section-card" style="background:linear-gradient(135deg,rgba(88,166,255,0.07),rgba(0,30,70,0.1));border:1px solid rgba(88,166,255,0.2);">
+        <div class="section-title-row">
+            <span class="section-icon">📶</span>
+            <div>
+                <div class="section-title" style="color:var(--blue)">PLANES WIFI SATELITAL</div>
+                <div class="section-sub">Starlink · La única conexión en el Barrial</div>
+            </div>
         </div>
-        <div class="feature-card gold">
-            <span class="feature-icon">🥩</span>
-            <div class="feature-title">Parrilla & Combos</div>
-            <div class="feature-desc">Hamburguesas, combos y gastronomía regional</div>
+        <div class="wifi-plans">
+            <div class="wifi-plan">
+                <div class="plan-name">EXPRESS</div>
+                <div class="plan-t">⏱ 1 Hora</div>
+                <div class="plan-d">1 dispositivo</div>
+                <div class="plan-p">$5.000</div>
+            </div>
+            <div class="wifi-plan pop">
+                <div class="plan-name">FULL</div>
+                <div class="plan-t">⏱ 3 Horas</div>
+                <div class="plan-d">1 dispositivo</div>
+                <div class="plan-p">$12.000</div>
+            </div>
+            <div class="wifi-plan">
+                <div class="plan-name">PEREGRINO</div>
+                <div class="plan-t">⏱ 8 Horas</div>
+                <div class="plan-d">1 dispositivo</div>
+                <div class="plan-p">$22.000</div>
+            </div>
+            <div class="wifi-plan">
+                <div class="plan-name">FAMILIA</div>
+                <div class="plan-t">⏱ 4 Horas</div>
+                <div class="plan-d">3 dispositivos</div>
+                <div class="plan-p g">$25.000</div>
+            </div>
+            <div class="wifi-plan wide" style="background:rgba(200,168,75,0.08);border-color:rgba(200,168,75,0.3)">
+                <div class="plan-name" style="color:var(--gold)">COMERCIANTE</div>
+                <div class="plan-t" style="color:var(--gold)">⏱ 24 Horas completas</div>
+                <div class="plan-d">1 dispositivo · Para vendedores del predio</div>
+                <div class="plan-p g" style="font-size:1.4rem">$45.000</div>
+            </div>
         </div>
-        <div class="feature-card ember">
-            <span class="feature-icon">🎬</span>
-            <div class="feature-title">Cine 4K</div>
-            <div class="feature-desc">Bajo las estrellas · TV 55" · Cada noche 21:30</div>
+        <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:12px;letter-spacing:1px">🛰️ Tecnología Starlink · Sin 4G en la zona · Solo acá tenés internet</div>
+    </div>
+
+    <!-- GASTRONOMÍA -->
+    <div class="section-card" style="background:linear-gradient(135deg,rgba(240,136,62,0.07),rgba(200,60,0,0.05));border:1px solid rgba(240,136,62,0.2)">
+        <div class="section-title-row">
+            <span class="section-icon">🍔</span>
+            <div>
+                <div class="section-title" style="color:var(--ember)">GASTRONOMÍA</div>
+                <div class="section-sub">Combos, panchos y bebidas</div>
+            </div>
         </div>
-        <div class="feature-card green">
-            <span class="feature-icon">🔋</span>
-            <div class="feature-title">Carga Celular</div>
-            <div class="feature-desc">Punto de carga seguro en el desierto</div>
+        <div class="subsec">⭐ Combos Especiales</div>
+        <div class="prow"><span class="plabel">🍔 Combo Arauco (Burga + Soda + WiFi 1h + Cine)</span><span class="pval">$19.500</span></div>
+        <div class="prow"><span class="plabel">🧉 Combo Mate (Agua caliente + WiFi 1h)</span><span class="pval">$5.500</span></div>
+        <div class="subsec">🥩 Platos</div>
+        <div class="prow"><span class="plabel">🍔 Hamburguesa completa</span><span class="pval">$12.500</span></div>
+        <div class="prow"><span class="plabel">🌭 Pancho clásico</span><span class="pval">$2.500</span></div>
+        <div class="prow"><span class="plabel">🌭 Pancho doble</span><span class="pval">$3.800</span></div>
+        <div class="subsec">☕ Bebidas y otros</div>
+        <div class="prow"><span class="plabel">🥤 Licuados</span><span class="pval">$5.000</span></div>
+        <div class="prow"><span class="plabel">☕ Café</span><span class="pval">$3.500</span></div>
+        <div class="prow"><span class="plabel">🧊 Hielo</span><span class="pval">$3.000</span></div>
+    </div>
+
+    <!-- PRODUCTOS REGIONALES -->
+    <div class="section-card" style="background:linear-gradient(135deg,rgba(200,168,75,0.07),rgba(100,80,0,0.05));border:1px solid rgba(200,168,75,0.2)">
+        <div class="section-title-row">
+            <span class="section-icon">🫒</span>
+            <div>
+                <div class="section-title" style="color:var(--gold)">PRODUCTOS RIOJANOS</div>
+                <div class="section-sub">Directo del campo · Calidad Aimogasta</div>
+            </div>
         </div>
-        <div class="feature-card fire">
-            <span class="feature-icon">📜</span>
-            <div class="feature-title">El Enigma</div>
-            <div class="feature-desc">Juego digital · Ganá descuentos reales</div>
+        <div class="reg-grid">
+            <div class="reg-card">
+                <div class="reg-icon">🫒</div>
+                <div class="reg-name">ACEITUNAS</div>
+                <div class="reg-p">500g → <span>$3.500</span><br>1 kg &nbsp;→ <span>$6.500</span><br>2 kg &nbsp;→ <span>$12.000</span></div>
+            </div>
+            <div class="reg-card">
+                <div class="reg-icon">🥜</div>
+                <div class="reg-name">NUECES</div>
+                <div class="reg-p">500g → <span>$4.000</span><br>1 kg &nbsp;→ <span>$7.500</span><br>&nbsp;</div>
+            </div>
         </div>
-        <div class="feature-card purple">
-            <span class="feature-icon">🖨️</span>
-            <div class="feature-title">Oficina Digital</div>
-            <div class="feature-desc">Trámites, impresiones y escaneos</div>
+        <div class="prow" style="background:rgba(200,168,75,0.06);border-radius:10px;padding:12px;border:1px solid rgba(200,168,75,0.2);margin-top:4px">
+            <span class="plabel">🎁 Pack Riojano (aceitunas + nueces)</span>
+            <span class="pval g">$7.000</span>
         </div>
+        <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:10px;letter-spacing:1px">🌿 Producción local · Aimogasta, La Rioja</div>
+    </div>
+
+    <!-- TRANSPORTE -->
+    <div class="section-card" style="background:linear-gradient(135deg,rgba(188,140,255,0.07),rgba(80,0,150,0.05));border:1px solid rgba(188,140,255,0.2)">
+        <div class="section-title-row">
+            <span class="section-icon">🚌</span>
+            <div>
+                <div class="section-title" style="color:var(--purple)">TRANSPORTE</div>
+                <div class="section-sub">Aimogasta ↔ La Peña · Semana Santa</div>
+            </div>
+        </div>
+        <div class="trx-cards">
+            <div class="trx-card">
+                <div class="trx-icon">➡️</div>
+                <div class="trx-dir">Aimogasta → La Peña</div>
+                <div class="trx-p">$10.000</div>
+                <div style="font-size:0.55rem;color:var(--muted);margin-top:3px">Solo ida</div>
+            </div>
+            <div class="trx-card">
+                <div class="trx-icon">⬅️</div>
+                <div class="trx-dir">La Peña → Aimogasta</div>
+                <div class="trx-p">$10.000</div>
+                <div style="font-size:0.55rem;color:var(--muted);margin-top:3px">Solo vuelta</div>
+            </div>
+        </div>
+        <div class="trx-combo">
+            <div class="trx-combo-l">🎫 COMBO IDA + VUELTA</div>
+            <div class="trx-combo-p">$18.000</div>
+            <div class="trx-combo-s">Ahorrás $2.000 combinando</div>
+        </div>
+        <div style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:10px;letter-spacing:1px">📞 Consultá horarios por WhatsApp</div>
     </div>
 
     <!-- CINE -->
     <div class="cine-preview">
-        <div class="cine-title-row">
-            <span class="cine-title-icon">🎬</span>
+        <div class="section-title-row">
+            <span class="section-icon">🎬</span>
             <div>
-                <div class="cine-title-text">CARTELERA 4K</div>
-                <div class="cine-title-sub">Cada noche · 21:30 hs · Al aire libre</div>
+                <div class="section-title" style="color:var(--blue)">CARTELERA 4K</div>
+                <div class="section-sub">Cada noche · 21:30 hs · Al aire libre</div>
             </div>
         </div>
-        <div class="movie-row">
-            <span class="movie-day">JUEVES</span>
-            <span class="movie-name">MUCHACHOS</span>
-            <span class="movie-time">21:30</span>
-        </div>
-        <div class="movie-row">
-            <span class="movie-day">VIERNES</span>
-            <span class="movie-name">LA PASIÓN DE CRISTO</span>
-            <span class="movie-time">21:30</span>
-        </div>
-        <div class="movie-row">
-            <span class="movie-day">SÁBADO</span>
-            <span class="movie-name">COCO / ESP. LA CARROZA</span>
-            <span class="movie-time">21:30</span>
-        </div>
-        <div class="movie-row">
-            <span class="movie-day">DOMINGO</span>
-            <span class="movie-name">PROJECT HAIL MARY</span>
-            <span class="movie-time">21:30</span>
-        </div>
-        <div style="font-size:0.62rem; color:var(--muted); text-align:center; margin-top:10px; letter-spacing:1px;">
-            ✓ Gratis con Combo Arauco &nbsp;·&nbsp; Individual $4.000
-        </div>
-    </div>
-
-    <!-- PRECIOS -->
-    <div class="precios-preview">
-        <div class="precios-title">💰 PRECIOS DEL HUB</div>
-        <div class="precio-row">
-            <span class="precio-label">📶 WiFi 30 minutos</span>
-            <span class="precio-val">$4.000</span>
-        </div>
-        <div class="precio-row">
-            <span class="precio-label">📶 WiFi 1 hora</span>
-            <span class="precio-val">$7.000</span>
-        </div>
-        <div class="precio-row">
-            <span class="precio-label">📶 WiFi 3 horas</span>
-            <span class="precio-val">$15.000</span>
-        </div>
-        <div class="precio-row">
-            <span class="precio-label">🍔 Combo Arauco (Burga+Soda+WiFi+Cine)</span>
-            <span class="precio-val">$19.500</span>
-        </div>
-        <div class="precio-row">
-            <span class="precio-label">🎬 Entrada Cine 4K</span>
-            <span class="precio-val">$4.000</span>
-        </div>
-        <div class="precio-row">
-            <span class="precio-label">🔋 Carga de celular</span>
-            <span class="precio-val">$4.000</span>
-        </div>
-        <div class="precio-row">
-            <span class="precio-label">🧉 Combo Mate (Agua caliente+WiFi)</span>
-            <span class="precio-val">$5.500</span>
-        </div>
+        <div class="movie-row"><span class="mday">JUEVES</span><span class="mname">MUCHACHOS</span><span class="mtime">21:30</span></div>
+        <div class="movie-row"><span class="mday">VIERNES</span><span class="mname">LA PASIÓN DE CRISTO</span><span class="mtime">21:30</span></div>
+        <div class="movie-row"><span class="mday">SÁBADO</span><span class="mname">COCO / ESP. LA CARROZA</span><span class="mtime">21:30</span></div>
+        <div class="movie-row"><span class="mday">DOMINGO</span><span class="mname">PROJECT HAIL MARY</span><span class="mtime">21:30</span></div>
+        <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-top:10px;letter-spacing:1px">✓ Gratis con Combo Arauco &nbsp;·&nbsp; Individual $4.000</div>
     </div>
 
     <!-- MAPA -->
     <div class="mapa-card">
         <div class="mapa-header">📍 DÓNDE ESTAMOS</div>
         <div class="mapa-ascii">
-<span class="node">⛰️ La Piedra (500m →)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
-<span class="you">★ ARAUCO HUB ← ACÁ ESTAMOS</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
-🚑 Sanitario (400m →)<br>
-🚌 Colectivos (↓ acceso)
-        </div>
+<span class="mnode">⛰️ La Piedra (500m →)</span>
+     |
+<span class="myou">★ ARAUCO HUB ← ACÁ ESTAMOS</span>
+     |
+🚑 Sanitario (400m →)
+🚌 Colectivos (↓ acceso)</div>
         <div class="mapa-footer">
-            <a class="btn-maps"
-               href="https://www.google.com/maps/search/?api=1&query=-28.82527094332069,-66.75592481914413"
-               target="_blank">
-                📍 Abrir en Google Maps
-            </a>
+            <a class="btn-maps" href="https://www.google.com/maps/search/?api=1&query=-28.82527094332069,-66.75592481914413" target="_blank">📍 Abrir en Google Maps</a>
         </div>
     </div>
 
     <!-- HISTORIA -->
     <div class="historia-card">
         <h3>⛰️ EL SEÑOR DE LA PEÑA</h3>
-        Antes de ser cristiano, fue <strong>Llastay</strong> — el dios tutelar de los cerros 
-        para los pueblos originarios. La roca, moldeada por siglos de viento del desierto, 
-        parece el perfil de Cristo. Hoy, más de <strong>60.000 peregrinos</strong> llegan 
+        Antes de ser cristiano, fue <strong>Llastay</strong> — el dios tutelar de los cerros
+        para los pueblos originarios. La roca, moldeada por siglos de viento del desierto,
+        parece el perfil de Cristo. Hoy, más de <strong>60.000 peregrinos</strong> llegan
         cada Semana Santa para encontrarse con esa misma fe que lleva siglos en estas piedras.
     </div>
 
-    <!-- BIO MATI -->
+    <!-- BIO -->
     <div class="bio-card">
         <div class="bio-header">
             <div class="bio-avatar">👨‍💻</div>
@@ -671,296 +346,115 @@
                 <div class="bio-role">Historiador · Programador · Fundador del Hub</div>
             </div>
         </div>
-        <div class="bio-text">
-            26 años, Aimogasta. Llevé internet satelital al desierto para que ningún peregrino 
-            se quede sin señal. El Hub es mi proyecto para financiar el próximo capítulo: 
-            estudiar y trabajar en Australia.
-        </div>
+        <div class="bio-text">26 años, Aimogasta. Llevé internet satelital al desierto para que ningún peregrino se quede sin señal. El Hub es mi proyecto para financiar el próximo capítulo: estudiar y trabajar en Australia.</div>
         <div class="bio-aus">🇦🇺 Visa Work & Holiday 462 aprobada</div>
     </div>
 
-    <!-- EXPLORAR EL HUB -->
-    <div style="margin-bottom:20px;">
-        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:3px; color:var(--gold2); text-align:center; margin-bottom:4px;">
-            🗺️ EXPLORÁ EL HUB
+    <!-- EXPLORAR -->
+    <div style="margin-bottom:20px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;color:var(--gold2);text-align:center;margin-bottom:4px">🗺️ EXPLORÁ EL HUB</div>
+        <div style="font-size:0.65rem;color:var(--muted);text-align:center;letter-spacing:2px;margin-bottom:14px;text-transform:uppercase">Todo lo que vas a encontrar en el Barrial</div>
+        <div class="explore-grid">
+            <a class="explore-card" href="menu.html" style="background:linear-gradient(135deg,rgba(240,136,62,0.12),rgba(200,100,0,0.06));border:1px solid rgba(240,136,62,0.3)">
+                <div style="font-size:2.2rem;margin-bottom:8px">🍔</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--ember)">MENÚ</div>
+                <div style="font-size:0.6rem;color:var(--muted);margin-top:3px;line-height:1.4">Parrilla · Combos<br>Precios y promociones</div>
+            </a>
+            <a class="explore-card" href="cine.html" style="background:linear-gradient(135deg,rgba(88,166,255,0.1),rgba(30,60,100,0.08));border:1px solid rgba(88,166,255,0.3)">
+                <div style="font-size:2.2rem;margin-bottom:8px">🎬</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--blue)">CINE 4K</div>
+                <div style="font-size:0.6rem;color:var(--muted);margin-top:3px;line-height:1.4">Cartelera completa<br>Cada noche 21:30 hs</div>
+            </a>
+            <a class="explore-card" href="info.html" style="background:linear-gradient(135deg,rgba(200,168,75,0.1),rgba(150,100,0,0.06));border:1px solid rgba(200,168,75,0.3)">
+                <div style="font-size:2.2rem;margin-bottom:8px">📍</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold)">INFO</div>
+                <div style="font-size:0.6rem;color:var(--muted);margin-top:3px;line-height:1.4">Historia · Mapa<br>Servicios del predio</div>
+            </a>
+            <a class="explore-card" href="pista1.html" style="background:linear-gradient(135deg,rgba(63,185,80,0.1),rgba(0,80,20,0.06));border:1px solid rgba(63,185,80,0.3)">
+                <div style="font-size:2.2rem;margin-bottom:8px">📜</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--green)">ENIGMA</div>
+                <div style="font-size:0.6rem;color:var(--muted);margin-top:3px;line-height:1.4">Juego del Historiador<br>Ganá descuentos reales</div>
+            </a>
         </div>
-        <div style="font-size:0.65rem; color:var(--muted); text-align:center; letter-spacing:2px; margin-bottom:14px; text-transform:uppercase;">
-            Todo lo que vas a encontrar en el Barrial
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-
-            <a href="menu.html" style="text-decoration:none;">
-                <div style="background:linear-gradient(135deg,rgba(240,136,62,0.12),rgba(200,100,0,0.06)); border:1px solid rgba(240,136,62,0.3); border-radius:14px; padding:18px 14px; text-align:center; transition:0.2s;">
-                    <div style="font-size:2.2rem; margin-bottom:8px;">🍔</div>
-                    <div style="font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:2px; color:var(--ember);">MENÚ</div>
-                    <div style="font-size:0.6rem; color:var(--muted); margin-top:3px; line-height:1.4;">Parrilla · Combos<br>Precios y promociones</div>
-                </div>
+        <div class="explore-grid" style="margin-top:10px">
+            <a class="explore-card" href="https://wa.me/5493827432108?text=Hola%20Mati!%20Quiero%20hacer%20un%20pedido%20%F0%9F%9B%B0%EF%B8%8F" target="_blank" style="background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.25)">
+                <div style="font-size:1.8rem;margin-bottom:6px">💬</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#25d366">WHATSAPP</div>
+                <div style="font-size:0.6rem;color:var(--muted);margin-top:3px">Pedidos y consultas</div>
             </a>
-
-            <a href="cine.html" style="text-decoration:none;">
-                <div style="background:linear-gradient(135deg,rgba(88,166,255,0.1),rgba(30,60,100,0.08)); border:1px solid rgba(88,166,255,0.3); border-radius:14px; padding:18px 14px; text-align:center; transition:0.2s;">
-                    <div style="font-size:2.2rem; margin-bottom:8px;">🎬</div>
-                    <div style="font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:2px; color:var(--blue);">CINE 4K</div>
-                    <div style="font-size:0.6rem; color:var(--muted); margin-top:3px; line-height:1.4;">Cartelera completa<br>Cada noche 21:30 hs</div>
-                </div>
+            <a class="explore-card" href="https://www.google.com/maps/search/?api=1&query=-28.82527094332069,-66.75592481914413" target="_blank" style="background:rgba(234,67,53,0.08);border:1px solid rgba(234,67,53,0.25)">
+                <div style="font-size:1.8rem;margin-bottom:6px">🗺️</div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#ff6b55">UBICACIÓN</div>
+                <div style="font-size:0.6rem;color:var(--muted);margin-top:3px">Ver en Google Maps</div>
             </a>
-
-            <a href="info.html" style="text-decoration:none;">
-                <div style="background:linear-gradient(135deg,rgba(200,168,75,0.1),rgba(150,100,0,0.06)); border:1px solid rgba(200,168,75,0.3); border-radius:14px; padding:18px 14px; text-align:center; transition:0.2s;">
-                    <div style="font-size:2.2rem; margin-bottom:8px;">📍</div>
-                    <div style="font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:2px; color:var(--gold);">INFO</div>
-                    <div style="font-size:0.6rem; color:var(--muted); margin-top:3px; line-height:1.4;">Historia · Mapa<br>Servicios del predio</div>
-                </div>
-            </a>
-
-            <a href="pista1.html" style="text-decoration:none;">
-                <div style="background:linear-gradient(135deg,rgba(63,185,80,0.1),rgba(0,80,20,0.06)); border:1px solid rgba(63,185,80,0.3); border-radius:14px; padding:18px 14px; text-align:center; transition:0.2s;">
-                    <div style="font-size:2.2rem; margin-bottom:8px;">📜</div>
-                    <div style="font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:2px; color:var(--green);">ENIGMA</div>
-                    <div style="font-size:0.6rem; color:var(--muted); margin-top:3px; line-height:1.4;">Juego del Historiador<br>Ganá descuentos reales</div>
-                </div>
-            </a>
-
-        </div>
-
-        <!-- Segunda fila -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
-
-            <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Quiero%20hacer%20un%20pedido%20%F0%9F%9B%B0%EF%B8%8F" target="_blank" style="text-decoration:none;">
-                <div style="background:rgba(37,211,102,0.08); border:1px solid rgba(37,211,102,0.25); border-radius:14px; padding:14px; text-align:center;">
-                    <div style="font-size:1.8rem; margin-bottom:6px;">💬</div>
-                    <div style="font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:2px; color:#25d366;">WHATSAPP</div>
-                    <div style="font-size:0.6rem; color:var(--muted); margin-top:3px;">Pedidos y consultas</div>
-                </div>
-            </a>
-
-            <a href="https://www.google.com/maps/search/?api=1&query=-28.82527094332069,-66.75592481914413" target="_blank" style="text-decoration:none;">
-                <div style="background:rgba(234,67,53,0.08); border:1px solid rgba(234,67,53,0.25); border-radius:14px; padding:14px; text-align:center;">
-                    <div style="font-size:1.8rem; margin-bottom:6px;">🗺️</div>
-                    <div style="font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:2px; color:#ff6b55;">UBICACIÓN</div>
-                    <div style="font-size:0.6rem; color:var(--muted); margin-top:3px;">Ver en Google Maps</div>
-                </div>
-            </a>
-
         </div>
     </div>
 
-    <!-- INSTALAR APP -->
-    <div style="background:rgba(88,166,255,0.06); border:1px solid rgba(88,166,255,0.25); border-radius:18px; padding:22px 18px; margin-bottom:20px; text-align:center;">
-
-        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:3px; color:var(--blue); margin-bottom:6px;">
-            📲 INSTALÁ LA APP
+    <!-- INSTALAR -->
+    <div style="background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.25);border-radius:18px;padding:22px 18px;margin-bottom:20px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:var(--blue);margin-bottom:6px">📲 INSTALÁ LA APP</div>
+        <div style="font-size:0.72rem;color:var(--muted);line-height:1.7;margin-bottom:16px">Guardala en tu celular antes de ir al Barrial.<br>Sin señal 4G — la app funciona sin internet.</div>
+        <button id="btn-install" onclick="installPWA()" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a5fa8,var(--blue));border:none;border-radius:10px;color:#05080d;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:900;letter-spacing:1px;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 20px rgba(88,166,255,0.35)">⬇️ Instalar App Gratis</button>
+        <div id="install-android" style="display:none;background:rgba(63,185,80,0.07);border:1px solid rgba(63,185,80,0.2);border-radius:10px;padding:14px;margin-bottom:10px;text-align:left">
+            <div style="font-size:0.65rem;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:8px;font-weight:800">🤖 Android — Chrome o Brave</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.7);line-height:2">1. Tocá los <strong style="color:white">3 puntitos ⋮</strong> arriba a la derecha<br>2. Tocá <strong style="color:white">"Agregar a pantalla de inicio"</strong><br>3. Tocá <strong style="color:white">"Agregar"</strong> → ícono en tu home ✅</div>
         </div>
-        <div style="font-size:0.72rem; color:var(--muted); line-height:1.7; margin-bottom:16px;">
-            Guardala en tu celular antes de ir al Barrial.<br>
-            Sin señal 4G — la app funciona sin internet.
+        <div id="install-ios" style="display:none;background:rgba(88,166,255,0.07);border:1px solid rgba(88,166,255,0.2);border-radius:10px;padding:14px;margin-bottom:10px;text-align:left">
+            <div style="font-size:0.65rem;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:8px;font-weight:800">🍎 iPhone — Safari</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.7);line-height:2">1. Abrí esta página en <strong style="color:white">Safari</strong><br>2. Tocá el botón compartir <strong style="color:white">📤</strong> abajo al centro<br>3. Tocá <strong style="color:white">"Agregar a pantalla de inicio"</strong><br>4. Tocá <strong style="color:white">"Agregar"</strong> → ícono en tu home ✅</div>
         </div>
-
-        <!-- Botón instalar (aparece solo si el browser lo soporta) -->
-        <button id="btn-install" onclick="installPWA()" style="display:none; width:100%; padding:14px; background:linear-gradient(135deg,#1a5fa8,var(--blue)); border:none; border-radius:10px; color:#05080d; font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:900; letter-spacing:1px; cursor:pointer; margin-bottom:10px; box-shadow:0 4px 20px rgba(88,166,255,0.35);">
-            ⬇️ Instalar App Gratis
-        </button>
-
-        <!-- Instrucciones Android -->
-        <div id="install-android" style="display:none; background:rgba(63,185,80,0.07); border:1px solid rgba(63,185,80,0.2); border-radius:10px; padding:14px; margin-bottom:10px; text-align:left;">
-            <div style="font-size:0.65rem; letter-spacing:2px; color:var(--green); text-transform:uppercase; margin-bottom:8px; font-weight:800;">🤖 Android — Chrome o Brave</div>
-            <div style="font-size:0.72rem; color:rgba(255,255,255,0.7); line-height:2;">
-                1. Tocá los <strong style="color:white;">3 puntitos ⋮</strong> arriba a la derecha<br>
-                2. Tocá <strong style="color:white;">"Agregar a pantalla de inicio"</strong><br>
-                3. Tocá <strong style="color:white;">"Agregar"</strong> → ícono en tu home ✅
-            </div>
+        <div id="already-installed" style="display:none;background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.3);border-radius:10px;padding:12px;margin-bottom:10px">
+            <div style="color:var(--green);font-size:0.85rem;font-weight:800">✅ App instalada correctamente</div>
+            <div style="color:var(--muted);font-size:0.65rem;margin-top:3px">Buscá el ícono en tu pantalla de inicio</div>
         </div>
-
-        <!-- Instrucciones iPhone -->
-        <div id="install-ios" style="display:none; background:rgba(88,166,255,0.07); border:1px solid rgba(88,166,255,0.2); border-radius:10px; padding:14px; margin-bottom:10px; text-align:left;">
-            <div style="font-size:0.65rem; letter-spacing:2px; color:var(--blue); text-transform:uppercase; margin-bottom:8px; font-weight:800;">🍎 iPhone — Safari</div>
-            <div style="font-size:0.72rem; color:rgba(255,255,255,0.7); line-height:2;">
-                1. Abrí esta página en <strong style="color:white;">Safari</strong> (no Chrome)<br>
-                2. Tocá el botón compartir <strong style="color:white;">📤</strong> abajo al centro<br>
-                3. Tocá <strong style="color:white;">"Agregar a pantalla de inicio"</strong><br>
-                4. Tocá <strong style="color:white;">"Agregar"</strong> → ícono en tu home ✅
-            </div>
-        </div>
-
-        <!-- Ya instalada -->
-        <div id="already-installed" style="display:none; background:rgba(63,185,80,0.1); border:1px solid rgba(63,185,80,0.3); border-radius:10px; padding:12px; margin-bottom:10px;">
-            <div style="color:var(--green); font-size:0.85rem; font-weight:800;">✅ App instalada correctamente</div>
-            <div style="color:var(--muted); font-size:0.65rem; margin-top:3px;">Buscá el ícono en tu pantalla de inicio</div>
-        </div>
-
-        <div style="font-size:0.6rem; color:var(--muted); letter-spacing:1px; margin-top:8px;">
-            📵 Funciona sin internet · Gratis · Sin Play Store
-        </div>
+        <div style="font-size:0.6rem;color:var(--muted);letter-spacing:1px;margin-top:8px">📵 Funciona sin internet · Gratis · Sin Play Store</div>
     </div>
 
     <!-- CTA -->
     <div class="cta-section">
         <div class="cta-title">¿VENÍS AL BARRIAL?</div>
-        <div class="cta-sub">
-            Instalá la app y avisanos que vas.<br>
-            Sin señal 4G, el Hub es tu única conexión al mundo.
-        </div>
-        <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Ya%20instal%C3%A9%20la%20app%20del%20Hub%20%F0%9F%9B%B0%EF%B8%8F%20Nos%20vemos%20en%20el%20Barrial!"
-           class="btn-wa-big" target="_blank">
-            💬 Avisarle a Matías que voy
-        </a>
-        <button class="btn-share" onclick="shareApp()">
-            📤 Compartir con quien va al Barrial
-        </button>
+        <div class="cta-sub">Instalá la app y avisanos que vas.<br>Sin señal 4G, el Hub es tu única conexión al mundo.</div>
+        <a href="https://wa.me/5493827432108?text=Hola%20Mati!%20Ya%20instal%C3%A9%20la%20app%20del%20Hub%20%F0%9F%9B%B0%EF%B8%8F%20Nos%20vemos%20en%20el%20Barrial!" class="btn-wa" target="_blank">💬 Avisarle a Matías que voy</a>
+        <button class="btn-share" onclick="shareApp()">📤 Compartir con quien va al Barrial</button>
     </div>
 
-    <!-- FOOTER -->
     <div class="footer">
-        <strong style="color:var(--gold); font-family:'Bebas Neue'; font-size:1.1rem; letter-spacing:3px;">
-            ARAUCO DIGITAL HUB
-        </strong><br>
+        <strong style="color:var(--gold);font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:3px">ARAUCO DIGITAL HUB</strong><br>
         Matías E. Peralta · Aimogasta · La Rioja · Argentina<br>
-        🛰️ Starlink Satelital · 🎬 Cine 4K · 🥩 Parrilla<br>
-        <span style="color:var(--gold); font-size:0.62rem;">🇦🇺 Camino a Australia — Visa 462 aprobada</span><br>
-        <span style="font-size:0.55rem; opacity:0.4;">
-            Página diseñada por Matías E. Peralta · Arauco Digital Hub 2026
-        </span>
+        🛰️ Starlink · 🎬 Cine 4K · 🍔 Gastronomía · 🫒 Productos Riojanos · 🚌 Transporte<br>
+        <span style="color:var(--gold);font-size:0.62rem">🇦🇺 Camino a Australia — Visa 462 aprobada</span><br>
+        <span style="font-size:0.55rem;opacity:0.4">Página diseñada por Matías E. Peralta · Arauco Digital Hub 2026</span>
     </div>
 
-</div><!-- /wrap -->
+</div>
 
 <script>
-    // ── ESTRELLAS ───────────────────────────────────────────────
-    const starsEl = document.getElementById('stars');
-    for (let i = 0; i < 100; i++) {
-        const s = document.createElement('div');
-        s.className = 'star';
-        const size = Math.random() * 2.5 + 0.5;
-        s.style.cssText = `
-            left:${Math.random()*100}vw; top:${Math.random()*100}vh;
-            width:${size}px; height:${size}px;
-            animation-duration:${Math.random()*4+1.5}s;
-            animation-delay:${Math.random()*4}s;
-            opacity:${Math.random()*0.5+0.1};
-        `;
-        starsEl.appendChild(s);
-    }
+const starsEl=document.getElementById('stars');
+for(let i=0;i<100;i++){const s=document.createElement('div');s.className='star';const z=Math.random()*2.5+0.5;s.style.cssText=`left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${z}px;height:${z}px;animation-duration:${Math.random()*4+1.5}s;animation-delay:${Math.random()*4}s;opacity:${Math.random()*0.5+0.1}`;starsEl.appendChild(s)}
 
-    // ── COUNTDOWN ───────────────────────────────────────────────
-    // Cambiar esta fecha al inicio real del evento
-    const TARGET = new Date('2026-04-02T00:00:00-03:00');
+const TARGET=new Date('2026-04-02T00:00:00-03:00');
+function pad(n){return String(Math.max(0,n)).padStart(2,'0')}
+function updateCountdown(){
+    const diff=TARGET-new Date();
+    if(diff<=0){['days','hours','mins','secs'].forEach(id=>document.getElementById('cd-'+id).textContent='00');document.getElementById('bar-count').textContent='🔥 EL HUB ESTÁ ACTIVO AHORA';return}
+    const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    document.getElementById('cd-days').textContent=pad(d);document.getElementById('cd-hours').textContent=pad(h);document.getElementById('cd-mins').textContent=pad(m);document.getElementById('cd-secs').textContent=pad(s);
+    document.getElementById('bar-count').textContent=`⏳ ${d}d ${pad(h)}h ${pad(m)}m`;
+}
+updateCountdown();setInterval(updateCountdown,1000);
 
-    function pad(n) { return String(Math.max(0,n)).padStart(2,'0'); }
+let deferredPrompt=null;
+const isInstalled=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+if(isInstalled){document.getElementById('already-installed').style.display='block'}
+else{const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream,isAndroid=/Android/.test(navigator.userAgent);
+if(isIOS)document.getElementById('install-ios').style.display='block';
+else document.getElementById('install-android').style.display='block'}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('btn-install').style.display='block';document.getElementById('install-android').style.display='none'});
+function installPWA(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted'){document.getElementById('btn-install').style.display='none';document.getElementById('already-installed').style.display='block'}deferredPrompt=null})}
+window.addEventListener('appinstalled',()=>{['btn-install','install-android','install-ios'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('already-installed').style.display='block';deferredPrompt=null});
 
-    function updateCountdown() {
-        const diff = TARGET - new Date();
-
-        if (diff <= 0) {
-            document.getElementById('cd-days').textContent  = '00';
-            document.getElementById('cd-hours').textContent = '00';
-            document.getElementById('cd-mins').textContent  = '00';
-            document.getElementById('cd-secs').textContent  = '00';
-            document.getElementById('bar-count').textContent = '🔥 EL HUB ESTÁ ACTIVO AHORA';
-            return;
-        }
-
-        const days  = Math.floor(diff / 86400000);
-        const hours = Math.floor((diff % 86400000) / 3600000);
-        const mins  = Math.floor((diff % 3600000) / 60000);
-        const secs  = Math.floor((diff % 60000) / 1000);
-
-        document.getElementById('cd-days').textContent  = pad(days);
-        document.getElementById('cd-hours').textContent = pad(hours);
-        document.getElementById('cd-mins').textContent  = pad(mins);
-        document.getElementById('cd-secs').textContent  = pad(secs);
-        document.getElementById('bar-count').textContent = `⏳ ${days}d ${pad(hours)}h ${pad(mins)}m`;
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // ── PWA INSTALL ─────────────────────────────────────────────
-    let deferredPrompt = null;
-
-    // Detectar si ya está instalada
-    const isInstalled = window.matchMedia('(display-mode: standalone)').matches
-        || window.navigator.standalone === true;
-
-    if (isInstalled) {
-        document.getElementById('already-installed').style.display = 'block';
-    } else {
-        // Detectar sistema operativo
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAndroid = /Android/.test(navigator.userAgent);
-
-        if (isIOS) {
-            document.getElementById('install-ios').style.display = 'block';
-        } else if (isAndroid) {
-            document.getElementById('install-android').style.display = 'block';
-        } else {
-            // Desktop o desconocido — mostrar ambas instrucciones
-            document.getElementById('install-android').style.display = 'block';
-        }
-    }
-
-    // Capturar el evento de instalación nativo (Chrome/Android)
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        // Mostrar el botón de instalación nativo
-        const btnInstall = document.getElementById('btn-install');
-        btnInstall.style.display = 'block';
-        // Ocultar instrucciones manuales si hay botón nativo
-        document.getElementById('install-android').style.display = 'none';
-    });
-
-    function installPWA() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((result) => {
-                if (result.outcome === 'accepted') {
-                    document.getElementById('btn-install').style.display = 'none';
-                    document.getElementById('already-installed').style.display = 'block';
-                }
-                deferredPrompt = null;
-            });
-        }
-    }
-
-    // Confirmar cuando se instala
-    window.addEventListener('appinstalled', () => {
-        document.getElementById('btn-install').style.display = 'none';
-        document.getElementById('install-android').style.display = 'none';
-        document.getElementById('install-ios').style.display = 'none';
-        document.getElementById('already-installed').style.display = 'block';
-        deferredPrompt = null;
-    });
-
-    // ── SHARE ───────────────────────────────────────────────────
-    function shareApp() {
-        const data = {
-            title: '🛰️ Arauco Digital Hub — Señor de la Peña',
-            text:  '¡WiFi Satelital en el Barrial de Arauco! Cine 4K, parrilla y más. Guardá esta página antes de ir, no hay señal 4G.',
-            url:   window.location.href,
-        };
-
-        if (navigator.share) {
-            navigator.share(data).catch(() => copyFallback());
-        } else {
-            copyFallback();
-        }
-    }
-
-    function copyFallback() {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-            const btn = document.querySelector('.btn-share');
-            btn.textContent = '✓ Link copiado — mandalo por WhatsApp';
-            btn.style.color = 'var(--green)';
-            btn.style.borderColor = 'rgba(63,185,80,0.4)';
-            setTimeout(() => {
-                btn.textContent = '📤 Compartir con quien va al Barrial';
-                btn.style.color = '';
-                btn.style.borderColor = '';
-            }, 2500);
-        });
-    }
+function shareApp(){const d={title:'🛰️ Arauco Digital Hub — Señor de la Peña',text:'WiFi Satelital, gastronomía, productos riojanos y transporte en el Barrial de Arauco. Guardá esta página antes de ir!',url:window.location.href};if(navigator.share)navigator.share(d).catch(()=>copyFallback());else copyFallback()}
+function copyFallback(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.querySelector('.btn-share');b.textContent='✓ Link copiado — mandalo por WhatsApp';b.style.color='var(--green)';b.style.borderColor='rgba(63,185,80,0.4)';setTimeout(()=>{b.textContent='📤 Compartir con quien va al Barrial';b.style.color='';b.style.borderColor=''},2500)})}
 </script>
-
 </body>
 </html>
