@@ -615,6 +615,8 @@ if ('serviceWorker' in navigator) {
     <div class="nav-tabs">
         <button class="tab active" onclick="showSection('combos', this)">🍔 Combos</button>
         <button class="tab" onclick="showSection('carta', this)">🥤 Carta</button>
+        <button class="tab" onclick="showSection('productos', this)">🫒 Productos</button>
+        <button class="tab" onclick="showSection('transporte', this)">🚌 Transporte</button>
         <button class="tab" onclick="showSection('wifi', this)">📶 WiFi</button>
         <button class="tab" onclick="showSection('cine', this)">🎬 Cine</button>
         <button class="tab" onclick="showSection('info', this)">📍 Info</button>
@@ -786,6 +788,38 @@ if ('serviceWorker' in navigator) {
         </div>
     </div>
 
+    <div class="cat-label">Panchos & Snacks</div>
+
+    <div class="item-card ember">
+        <div class="item-left">
+            <span class="item-emoji">🌭</span>
+            <div class="item-name">Pancho Clásico</div>
+            <div class="item-desc">Salchicha · pan · salsa · mostaza</div>
+            <div class="item-tags">
+                <span class="tag tag-hot">🔥 Rápido</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$2.500</div>
+            <div class="item-price-sub">c/condimentos</div>
+        </div>
+    </div>
+
+    <div class="item-card ember">
+        <div class="item-left">
+            <span class="item-emoji">🌭</span>
+            <div class="item-name">Pancho Doble</div>
+            <div class="item-desc">Doble salchicha · queso derretido · salsa especial</div>
+            <div class="item-tags">
+                <span class="tag tag-pop">★ Popular</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$3.800</div>
+            <div class="item-price-sub">con queso</div>
+        </div>
+    </div>
+
     <div class="cat-label">Tech & Logística</div>
 
     <div class="item-card blue">
@@ -836,6 +870,180 @@ if ('serviceWorker' in navigator) {
 </div>
 
 <!-- ═══════════════════════════════ -->
+<!-- SECCIÓN: PRODUCTOS REGIONALES  -->
+<!-- ═══════════════════════════════ -->
+<div id="sec-productos" class="section">
+
+    <div class="section-hero">
+        <span class="section-emoji">🫒</span>
+        <div class="section-title">Productos Regionales</div>
+        <div class="section-sub">Aceitunas y nueces del Dpto. Arauco · Directas del productor</div>
+    </div>
+
+    <div class="cat-label">🫒 Aceitunas Arauco</div>
+
+    <div class="item-card green">
+        <div class="item-left">
+            <span class="item-emoji">🫒</span>
+            <div class="item-name">Aceitunas 500g</div>
+            <div class="item-desc">Variedad Arauco · curadas en salamuera artesanal · sin conservantes</div>
+            <div class="item-tags">
+                <span class="tag tag-hot">🌿 Artesanal</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$3.500</div>
+            <div class="item-price-sub">500 gramos</div>
+        </div>
+    </div>
+
+    <div class="item-card green">
+        <div class="item-left">
+            <span class="item-emoji">🫒</span>
+            <div class="item-name">Aceitunas 1kg</div>
+            <div class="item-desc">Variedad Arauco · curadas en salamuera artesanal · ideal para llevar</div>
+            <div class="item-tags">
+                <span class="tag tag-pop">★ Más vendido</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$6.500</div>
+            <div class="item-price-sub">1 kilogramo</div>
+        </div>
+    </div>
+
+    <div class="item-card green">
+        <div class="item-left">
+            <span class="item-emoji">🫒</span>
+            <div class="item-name">Aceitunas 2kg</div>
+            <div class="item-desc">Variedad Arauco · pack familiar · precio especial por volumen</div>
+            <div class="item-tags">
+                <span class="tag tag-new">💰 Mejor precio</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$12.000</div>
+            <div class="item-price-sub">2 kilogramos</div>
+        </div>
+    </div>
+
+    <div class="cat-label">🌰 Nueces de Mazán</div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🌰</span>
+            <div class="item-name">Nueces 500g</div>
+            <div class="item-desc">Variedad Chandler · secadas al sol · Villa Mazán, La Rioja</div>
+            <div class="item-tags">
+                <span class="tag tag-hot">☀️ Sol riojano</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$4.000</div>
+            <div class="item-price-sub">500 gramos</div>
+        </div>
+    </div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🌰</span>
+            <div class="item-name">Nueces 1kg</div>
+            <div class="item-desc">Variedad Chandler · secadas al sol · exportación calidad premium</div>
+            <div class="item-tags">
+                <span class="tag tag-pop">★ Premium</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$7.500</div>
+            <div class="item-price-sub">1 kilogramo</div>
+        </div>
+    </div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🎁</span>
+            <div class="item-name">Pack Riojano</div>
+            <div class="item-desc">Aceitunas 500g + Nueces 500g · ideal como regalo o recuerdo del evento</div>
+            <div class="item-tags">
+                <span class="tag tag-new">🎁 Regalo</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$7.000</div>
+            <div class="item-price-sub">pack combo</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- SECCIÓN: TRANSPORTE            -->
+<!-- ═══════════════════════════════ -->
+<div id="sec-transporte" class="section">
+
+    <div class="section-hero">
+        <span class="section-emoji">🚌</span>
+        <div class="section-title">Transporte</div>
+        <div class="section-sub">Servicio Aimogasta ↔ La Peña · Cómodo y seguro</div>
+    </div>
+
+    <div class="cat-label">🎫 Pasajes disponibles</div>
+
+    <div class="item-card blue">
+        <div class="item-left">
+            <span class="item-emoji">🚌</span>
+            <div class="item-name">Ida — Aimogasta → La Peña</div>
+            <div class="item-desc">Salidas programadas · asiento garantizado · consultar horario en caja</div>
+            <div class="item-tags">
+                <span class="tag tag-wifi">📍 Salida Aimogasta</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$10.000</div>
+            <div class="item-price-sub">por persona</div>
+        </div>
+    </div>
+
+    <div class="item-card blue">
+        <div class="item-left">
+            <span class="item-emoji">🔄</span>
+            <div class="item-name">Vuelta — La Peña → Aimogasta</div>
+            <div class="item-desc">Regreso nocturno · salidas según demanda · reservar con anticipación</div>
+            <div class="item-tags">
+                <span class="tag tag-pop">🌙 Regreso nocturno</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$10.000</div>
+            <div class="item-price-sub">por persona</div>
+        </div>
+    </div>
+
+    <div class="item-card">
+        <div class="item-left">
+            <span class="item-emoji">🎫</span>
+            <div class="item-name">Combo Ida + Vuelta</div>
+            <div class="item-desc">Pasaje completo · ida y regreso asegurado · ahorrás $2.000</div>
+            <div class="item-tags">
+                <span class="tag tag-new">💰 Ahorro</span>
+                <span class="tag tag-hot">🔥 Recomendado</span>
+            </div>
+        </div>
+        <div class="item-right">
+            <div class="item-price">$18.000</div>
+            <div class="item-price-sub">ida + vuelta</div>
+        </div>
+    </div>
+
+    <div style="background:rgba(88,166,255,0.08);border:1px solid rgba(88,166,255,0.2);border-radius:10px;padding:14px;margin-top:12px;font-size:0.82rem;color:#8b949e;line-height:1.7;">
+        🕐 <b style="color:#c9d1d9;">Horarios de salida:</b> Consultar en caja del Hub<br>
+        📞 <b style="color:#c9d1d9;">Reservas:</b> <a href="https://wa.me/5493827432108" style="color:#58a6ff;">WhatsApp del Hub</a><br>
+        ⚠️ <b style="color:#c9d1d9;">Importante:</b> Reservar lugar con anticipación — cupos limitados
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════ -->
 <!-- SECCIÓN: WIFI                  -->
 <!-- ═══════════════════════════════ -->
 <div id="sec-wifi" class="section">
@@ -868,36 +1076,45 @@ if ('serviceWorker' in navigator) {
 
     <div class="plan-card">
         <div>
-            <div class="plan-name">⚡ Express 30 Min</div>
-            <div class="plan-time">30 minutos</div>
-            <div class="plan-speed">Bajada: 5 Mbps · Subida: 2 Mbps<br>Ideal para WhatsApp y redes</div>
+            <div class="plan-name">⚡ Express 1 Hora</div>
+            <div class="plan-time">60 minutos</div>
+            <div class="plan-speed">Bajada: 5 Mbps · Subida: 5 Mbps<br>Ideal para WhatsApp y redes</div>
         </div>
-        <div class="plan-price">$4.000<span>ARS</span></div>
+        <div class="plan-price">$5.000<span>ARS</span></div>
     </div>
 
     <div class="plan-card featured">
         <div>
-            <div class="plan-name">📶 1 Hora Full</div>
-            <div class="plan-time">60 minutos</div>
-            <div class="plan-speed">Bajada: 10 Mbps · Subida: 5 Mbps<br>Video, correo, gestiones</div>
+            <div class="plan-name">📶 3 Horas Full</div>
+            <div class="plan-time">180 minutos</div>
+            <div class="plan-speed">Bajada: 8 Mbps · Subida: 8 Mbps<br>Video, correo, gestiones</div>
         </div>
-        <div class="plan-price">$7.000<span>ARS</span></div>
+        <div class="plan-price">$12.000<span>ARS</span></div>
     </div>
 
-    <div class="plan-card">
+    <div class="plan-card" style="border-color: rgba(88,166,255,0.3);">
         <div>
-            <div class="plan-name">🌐 3 Horas Relax</div>
-            <div class="plan-time">180 minutos</div>
-            <div class="plan-speed">Bajada: 10 Mbps · Subida: 5 Mbps<br>Trabajo y contenido</div>
+            <div class="plan-name">🙏 8 Horas Peregrino</div>
+            <div class="plan-time">480 minutos</div>
+            <div class="plan-speed">Bajada: 6 Mbps · Subida: 6 Mbps<br>Para quedarte todo el día</div>
         </div>
-        <div class="plan-price">$15.000<span>ARS</span></div>
+        <div class="plan-price" style="color:#58a6ff;">$22.000<span>ARS</span></div>
+    </div>
+
+    <div class="plan-card" style="border-color: rgba(63,185,80,0.3);">
+        <div>
+            <div class="plan-name">👨‍👩‍👧 4 Horas Familia</div>
+            <div class="plan-time">240 minutos · 3 dispositivos</div>
+            <div class="plan-speed">Bajada: 4 Mbps · Subida: 4 Mbps<br>Para toda la familia</div>
+        </div>
+        <div class="plan-price" style="color:var(--green2);">$25.000<span>ARS</span></div>
     </div>
 
     <div class="plan-card" style="border-color: rgba(200,168,75,0.3);">
         <div>
-            <div class="plan-name">🏆 Día Comerciante</div>
+            <div class="plan-name">🏪 Día Comerciante</div>
             <div class="plan-time">24 horas</div>
-            <div class="plan-speed">Bajada: 15 Mbps · Subida: 8 Mbps<br>Para puestos y vendedores</div>
+            <div class="plan-speed">Bajada: 10 Mbps · Subida: 10 Mbps<br>Para puestos y vendedores</div>
         </div>
         <div class="plan-price" style="color: var(--gold);">$45.000<span>ARS</span></div>
     </div>
